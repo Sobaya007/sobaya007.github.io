@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>そばやのブログ</title>
+    <link>https://sobaya007.github.io/</link>
+    <description>Recent content on そばやのブログ</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 10 Apr 2019 16:27:25 +0900</lastBuildDate>
+    
+	<atom:link href="https://sobaya007.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ブログ始めました</title>
+      <link>https://sobaya007.github.io/2019/04/10/%E3%83%96%E3%83%AD%E3%82%B0%E5%A7%8B%E3%82%81%E3%81%BE%E3%81%97%E3%81%9F/</link>
+      <pubDate>Wed, 10 Apr 2019 16:27:25 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/04/10/%E3%83%96%E3%83%AD%E3%82%B0%E5%A7%8B%E3%82%81%E3%81%BE%E3%81%97%E3%81%9F/</guid>
+      <description>ご挨拶 誰に向けての挨拶なのかって話ですが、最初に挨拶を入れておくと収まりが良さそうなのでしておきます。
+はじめましての方ははじめまして、そばやと申します。
+2019年現在、東工大の修士1年生でCGH(Computer Generated Hologram)の研究をしております。
+本ブログは日常の進捗中に思ったことをメモ書き程度に残しておこうというかんじで作られた技術系のものであります。
+思ったことが特になければ何も書かれないかもしれませんが、そういうものということよろしくお願い致します。</description>
+    </item>
+    
+  </channel>
+</rss>
