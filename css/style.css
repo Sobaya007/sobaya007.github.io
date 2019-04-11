@@ -949,8 +949,9 @@ code {
   overflow: hidden;
 }
 .article-banner {
-  width: 100%;
-  height: auto;
+  height: 20vh;
+  float: left;
+  padding: 20px 20px 0;
 }
 .article-header {
   padding: 20px 20px 0;
