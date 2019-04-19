@@ -32,7 +32,7 @@
     
 
 
-<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/vs2015.min.css' rel='stylesheet' type='text/css' />
 
 
 
@@ -43,7 +43,7 @@
     <meta property="og:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について" />
 <meta property="og:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
 今回のバグはこんなかんじで発生します。
-interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
  あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
@@ -55,7 +55,7 @@ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[]
 <meta itemprop="name" content="D言語で継承&#43;配列のバグがずっと残ってる件について">
 <meta itemprop="description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
 今回のバグはこんなかんじで発生します。
-interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
  あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。">
 
 
@@ -71,7 +71,7 @@ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[]
 <meta name="twitter:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について"/>
 <meta name="twitter:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
 今回のバグはこんなかんじで発生します。
-interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
  あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
@@ -104,7 +104,7 @@ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[]
         "headline" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
         "description" : "またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
 今回のバグはこんなかんじで発生します。
-interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
  あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。",
         "inLanguage" : "en",
         "author" : "",
@@ -566,25 +566,27 @@ interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[]
 
 <p>今回のバグはこんなかんじで発生します。</p>
 
-<pre><code class="language-c++">interface I {
-    int x();
+<blockquote>
+<pre><code class="language-d">interface I {
+   int x();
 }
 
 class C : I {
-    int x() { return 10; }
+   int x() { return 10; }
 }
 
 void main(){
 
-    I[] iList;
-    C[] cList = [new C];
+   I[] iList;
+   C[] cList = [new C];
 
-    iList ~= cList;
+   iList ~= cList;
 
-    import std.stdio : writeln;
-    writeln(iList[0].x); //私の環境では6と出た。
+   import std.stdio : writeln;
+   writeln(iList[0].x); //私の環境では6と出た。
 }
 </code></pre>
+</blockquote>
 
 <p>つまり、</p>
 
@@ -759,12 +761,13 @@ void main(){
 
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
 
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
 <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
 
 

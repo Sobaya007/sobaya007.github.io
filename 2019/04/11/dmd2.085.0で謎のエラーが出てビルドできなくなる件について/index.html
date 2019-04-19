@@ -32,7 +32,7 @@
     
 
 
-<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/vs2015.min.css' rel='stylesheet' type='text/css' />
 
 
 
@@ -45,8 +45,8 @@
 とりあえず現状報告。
 OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
 ということで見つけた最小コードがこちら↓
-app.d
-struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
+ app.d
+struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
 ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
@@ -60,8 +60,8 @@ struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェク
 とりあえず現状報告。
 OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
 ということで見つけた最小コードがこちら↓
-app.d
-struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
+ app.d
+struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
 ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;">
 
 
@@ -79,8 +79,8 @@ struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェク
 とりあえず現状報告。
 OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
 ということで見つけた最小コードがこちら↓
-app.d
-struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
+ app.d
+struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
 ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
@@ -115,8 +115,8 @@ struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェク
 とりあえず現状報告。
 OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
 ということで見つけた最小コードがこちら↓
-app.d
-struct A { float e; } struct B { this(A[1]) {} }  これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
+ app.d
+struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
 ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;",
         "inLanguage" : "en",
         "author" : "",
@@ -585,13 +585,15 @@ dmdが2.085.0になったとき、<a href="https://dlang.org/changelog/2.085.0.h
 
 <p>ということで見つけた最小コードがこちら↓</p>
 
+<blockquote>
 <p>app.d</p>
 
-<pre><code class="language-c">struct A { float e; }
+<pre><code class="language-d">struct A { float e; }
 struct B {
-    this(A[1]) {}
+   this(A[1]) {}
 }
 </code></pre>
+</blockquote>
 
 <p>これを<strong>dubのプロジェクトの中で</strong>ビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。</p>
 
@@ -753,12 +755,13 @@ struct B {
 
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
 
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
 <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
 
 
