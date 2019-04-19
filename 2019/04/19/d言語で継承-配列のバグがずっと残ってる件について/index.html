@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>バグ &middot; そばやのブログ</title>
+    <title>D言語で継承&#43;配列のバグがずっと残ってる件について &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,10 +25,7 @@
       <meta name="description" content="">
     
     
-      <link href="/https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/index.xml" rel="alternate" type="application/rss+xml" title="そばやのブログ" />
-      <link href="/https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/index.xml" rel="feed" type="application/rss+xml" title="そばやのブログ" />
-    
-    <link rel="canonical" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -43,22 +40,39 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="バグ" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/" />
-
-<meta property="og:updated_time" content="2019-04-19T22:38:06&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+    <meta property="og:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について" />
+<meta property="og:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
+今回のバグはこんなかんじで発生します。
+interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
+<meta property="article:published_time" content="2019-04-19T22:38:06&#43;09:00"/>
+<meta property="article:modified_time" content="2019-04-19T22:38:06&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="バグ">
-<meta itemprop="description" content="">
+<meta itemprop="name" content="D言語で継承&#43;配列のバグがずっと残ってる件について">
+<meta itemprop="description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
+今回のバグはこんなかんじで発生します。
+interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。">
 
+
+<meta itemprop="datePublished" content="2019-04-19T22:38:06&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-19T22:38:06&#43;09:00" />
+<meta itemprop="wordCount" content="48">
+
+
+
+<meta itemprop="keywords" content="D言語,バグ," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="バグ"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について"/>
+<meta name="twitter:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
+今回のバグはこんなかんじで発生します。
+interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -85,10 +99,13 @@
              "@type": "WebPage",
              "@id": "https://sobaya007.github.io/"
         },
-        "articleSection" : "tags",
-        "name" : "バグ",
-        "headline" : "バグ",
-        "description" : "",
+        "articleSection" : "post",
+        "name" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
+        "headline" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
+        "description" : "またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
+今回のバグはこんなかんじで発生します。
+interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }  つまり、
+ あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -98,9 +115,9 @@
         "copyrightYear" : "2019",
         "datePublished": "2019-04-19 22:38:06 &#43;0900 &#43;0900",
         "dateModified" : "2019-04-19 22:38:06 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/",
-        "wordCount" : "0",
-        "keywords" : [ "Blog" ]
+        "url" : "https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/",
+        "wordCount" : "48",
+        "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
 
@@ -114,7 +131,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/tags/%E3%83%90%E3%82%B0/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -481,25 +498,13 @@
 
     <section id="main">
     
-    
-    
-    
-<section class="archives-wrap">
-  <div class="archive-category-wrap">
-      <span class="archive-category">バグ</span>
-  </div>
-  <div class="archives">
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/dman.png" class="article-banner">
+        
+
+        <header class="article-header">
     <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
     <h1 class="article-title" itemprop="name">
         D言語で継承&#43;配列のバグがずっと残ってる件について
@@ -555,197 +560,183 @@
 
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
+        <div class="article-entry" itemprop="articleBody">
+            <p>またバグの話ですね。
+このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？</p>
 
-                <p>今回のバグはこんなかんじで発生します。
-[&hellip;] つまり、
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
+<p>今回のバグはこんなかんじで発生します。</p>
+
+<pre><code class="language-c++">interface I {
+    int x();
+}
+
+class C : I {
+    int x() { return 10; }
+}
+
+void main(){
+
+    I[] iList;
+    C[] cList = [new C];
+
+    iList ~= cList;
+
+    import std.stdio : writeln;
+    writeln(iList[0].x); //私の環境では6と出た。
+}
+</code></pre>
+
+<p>つまり、</p>
+
+<ul>
+<li>あるインターフェース<code>I</code>とそれを継承したクラス<code>C</code>がある。</li>
+<li><code>I[]</code>に対して、<code>C[]</code>を結合する(<code>C</code>でなく<code>C[]</code>!)。</li>
+<li><code>I[]</code>から取り出した<code>I</code>越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。</li>
+</ul>
+
+<p>というもの。
+いかがでしたか？
+よくわかりませんが、バグっていることがわかりました！
+最後まで見ていただきありがとうございます。</p>
+
+            
+
         </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        DMD2.085.0で謎のエラーが出てビルドできなくなる件について
-    </h1>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&text=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
     </a>
-    <div class="article-meta">
+</li>
 
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-11 20:59:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-11</time>
-            &middot;
-            29
-            words.
-            &middot;
-            1
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                
-                
-            </div>
-            
-        
 
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
-                
-                
-            </div>
-            
-        
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&description=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    
+
+
+</footer>
+
     </div>
     
 
-</header>
-
-            <div class="article-entry" itemprop="articleBody">
-                
-                
-
-                <p>とりあえず現状報告。
-[&hellip;] ということで見つけた最小コードがこちら↓
-app.d
-[&hellip;] これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題
-    </h1>
-    </a>
-    <div class="article-meta">
-
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
         
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-10 16:27:25 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-10</time>
-            &middot;
-            220
-            words.
-            &middot;
-            2
-            minute read.
-        </div>
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" class="banner-image"></span>
         
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
-                
-                
-            </div>
-            
-        
+      </a>
     </div>
+    <span class="title">
+  	  <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/">D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</div>
+    </a>
     
 
-</header>
-
-            <div class="article-entry" itemprop="articleBody">
-                
-                
-
-                <p>最近気づいた現象。(バグ？)
-あるインターフェースIがあって、これを実装したクラスCがShared library 1にある。
-これを型Iとして実行ファイル越しにShared library 2に送り、Cにダウンキャストする。
-この時、実行ファイル側にCの情報がないとダウンキャストが失敗する。
-具体的には以下のような状態。
-[&hellip;] type.d
-[&hellip;] dll1.d &hellip;</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
     
-  </div>
-</section>
-<nav id="page-nav">
-
 </nav>
 
-    
+
+</article>
+
+
+
 
     </section>
 
