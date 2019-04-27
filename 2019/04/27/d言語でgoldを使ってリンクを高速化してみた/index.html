@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>D言語で継承&#43;配列のバグがずっと残ってる件について &middot; そばやのブログ</title>
+    <title>D言語でgoldを使ってリンクを高速化してみた &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,7 +25,7 @@
       <meta name="description" content="">
     
     
-    <link rel="canonical" href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -40,39 +40,48 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について" />
-<meta property="og:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。" />
+    <meta property="og:title" content="D言語でgoldを使ってリンクを高速化してみた" />
+<meta property="og:description" content="goldとはなんぞや goldとはELFバイナリ用のリンカーで、ldより高速なやつである。binutilsに入っているので、多分インストールしなくてもほぼ勝手に入っている。
+今回のモチベーション 今回はあんまりD言語は関係ないのですが、D言語でのビルドステップを高速にしたい場面に直面したので「ビルドが遅い→どうせリンクが遅いんじゃね？」という適当な推論によりリンクを速くする術を捜しておりました。 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
+使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold
+速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
-<meta property="article:published_time" content="2019-04-19T22:38:06&#43;09:00"/>
-<meta property="article:modified_time" content="2019-04-19T22:38:06&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" />
+<meta property="article:published_time" content="2019-04-27T23:33:31&#43;09:00"/>
+<meta property="article:modified_time" content="2019-04-27T23:33:31&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="D言語で継承&#43;配列のバグがずっと残ってる件について">
-<meta itemprop="description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。">
+<meta itemprop="name" content="D言語でgoldを使ってリンクを高速化してみた">
+<meta itemprop="description" content="goldとはなんぞや goldとはELFバイナリ用のリンカーで、ldより高速なやつである。binutilsに入っているので、多分インストールしなくてもほぼ勝手に入っている。
+今回のモチベーション 今回はあんまりD言語は関係ないのですが、D言語でのビルドステップを高速にしたい場面に直面したので「ビルドが遅い→どうせリンクが遅いんじゃね？」という適当な推論によりリンクを速くする術を捜しておりました。 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
+使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold
+速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。">
 
 
-<meta itemprop="datePublished" content="2019-04-19T22:38:06&#43;09:00" />
-<meta itemprop="dateModified" content="2019-04-19T22:38:06&#43;09:00" />
-<meta itemprop="wordCount" content="48">
+<meta itemprop="datePublished" content="2019-04-27T23:33:31&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-27T23:33:31&#43;09:00" />
+<meta itemprop="wordCount" content="43">
 
 
 
-<meta itemprop="keywords" content="D言語,バグ," />
+<meta itemprop="keywords" content="D言語,linker," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について"/>
-<meta name="twitter:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。"/>
+<meta name="twitter:title" content="D言語でgoldを使ってリンクを高速化してみた"/>
+<meta name="twitter:description" content="goldとはなんぞや goldとはELFバイナリ用のリンカーで、ldより高速なやつである。binutilsに入っているので、多分インストールしなくてもほぼ勝手に入っている。
+今回のモチベーション 今回はあんまりD言語は関係ないのですが、D言語でのビルドステップを高速にしたい場面に直面したので「ビルドが遅い→どうせリンクが遅いんじゃね？」という適当な推論によりリンクを速くする術を捜しておりました。 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
+使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold
+速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -100,12 +109,15 @@
              "@id": "https://sobaya007.github.io/"
         },
         "articleSection" : "post",
-        "name" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
-        "headline" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
-        "description" : "またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。",
+        "name" : "D言語でgoldを使ってリンクを高速化してみた",
+        "headline" : "D言語でgoldを使ってリンクを高速化してみた",
+        "description" : "goldとはなんぞや goldとはELFバイナリ用のリンカーで、ldより高速なやつである。binutilsに入っているので、多分インストールしなくてもほぼ勝手に入っている。
+今回のモチベーション 今回はあんまりD言語は関係ないのですが、D言語でのビルドステップを高速にしたい場面に直面したので「ビルドが遅い→どうせリンクが遅いんじゃね？」という適当な推論によりリンクを速くする術を捜しておりました。 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
+使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold
+速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -113,11 +125,11 @@
         "accountablePerson" : "",
         "copyrightHolder" : "",
         "copyrightYear" : "2019",
-        "datePublished": "2019-04-19 22:38:06 &#43;0900 &#43;0900",
-        "dateModified" : "2019-04-19 22:38:06 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/",
-        "wordCount" : "48",
-        "keywords" : [ "D言語","バグ","Blog" ]
+        "datePublished": "2019-04-27 23:33:31 &#43;0900 &#43;0900",
+        "dateModified" : "2019-04-27 23:33:31 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/",
+        "wordCount" : "43",
+        "keywords" : [ "D言語","linker","Blog" ]
     }
 </script>
 
@@ -131,7 +143,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -538,13 +550,13 @@
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="https://sobaya007.github.io/images/dman.png" class="article-banner">
+            <img src="https://sobaya007.github.io/images/dmd.jpeg" class="article-banner">
         
 
         <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
+    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en">
     <h1 class="article-title" itemprop="name">
-        D言語で継承&#43;配列のバグがずっと残ってる件について
+        D言語でgoldを使ってリンクを高速化してみた
     </h1>
     </a>
     <div class="article-meta">
@@ -552,9 +564,9 @@
         
         <div class="article-date">
             <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-19 22:38:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-19</time>
+            <time datetime="2019-04-27 23:33:31 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-27</time>
             &middot;
-            48
+            43
             words.
             &middot;
             1
@@ -586,7 +598,7 @@
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/linker">linker</a>
                 
                 
             </div>
@@ -598,45 +610,39 @@
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>またバグの話ですね。
-このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？</p>
+            
 
-<p>今回のバグはこんなかんじで発生します。</p>
+<h1 id="goldとはなんぞや">goldとはなんぞや</h1>
 
-<blockquote>
-<pre><code class="language-d">interface I {
-   int x();
-}
+<p><a href="https://en.wikipedia.org/wiki/Gold_(linke)">gold</a>とはELFバイナリ用のリンカーで、ldより高速なやつである。binutilsに入っているので、多分インストールしなくてもほぼ勝手に入っている。</p>
 
-class C : I {
-   int x() { return 10; }
-}
+<h1 id="今回のモチベーション">今回のモチベーション</h1>
 
-void main(){
+<p>今回はあんまりD言語は関係ないのですが、D言語でのビルドステップを高速にしたい場面に直面したので「ビルドが遅い→どうせリンクが遅いんじゃね？」という適当な推論によりリンクを速くする術を捜しておりました。
+先日<a href="https://connpass.com/event/127884/">とある密会</a>に参加したところ教えていただいたのでブログに書いておこうとなりました。
+ちなみにLLVMと何やら関連の深そうな<a href="https://lld.llvm.org/">LLD</a>というのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。
+LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。</p>
 
-   I[] iList;
-   C[] cList = [new C];
+<h1 id="使い方">使い方</h1>
 
-   iList ~= cList;
+<p>goldは<code>ld.gold</code>という名前の実行ファイルになっている。
+gccでもdmdでも、リンカオプションに<code>-fuse-ld=gold</code>とすると置き換わる。</p>
 
-   import std.stdio : writeln;
-   writeln(iList[0].x); //私の環境では6と出た。
-}
+<p><code>&gt; dmd main.o sub.o -L=-fuse-ld=gold</code></p>
+
+<h1 id="速度の比較">速度の比較</h1>
+
+<p>いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。
+適当に10000個関数を<code>sub.d</code>に作って<code>main.d</code>からそれらを呼び出す、というプログラムのリンク時間を測定しました。</p>
+
+<pre><code>ld   : 4 secs, 986 ms, 351 μs, and 6 hnsecs
+gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs
 </code></pre>
-</blockquote>
 
-<p>つまり、</p>
+<p>だいたい4倍くらい速くなっている。すごい。</p>
 
-<ul>
-<li>あるインターフェース<code>I</code>とそれを継承したクラス<code>C</code>がある。</li>
-<li><code>I[]</code>に対して、<code>C[]</code>を結合する(<code>C</code>でなく<code>C[]</code>!)。</li>
-<li><code>I[]</code>から取り出した<code>I</code>越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。</li>
-</ul>
-
-<p>というもの。
-いかがでしたか？
-よくわかりませんが、バグっていることがわかりました！
-最後まで見ていただきありがとうございます。</p>
+<p>比較用のコードは<a href="https://gist.github.com/Sobaya007/fcd6d0eaee61f33e9d22dee112e155b9">こちら</a>にあります。
+LLDはもっと速いらしいのでやってみたいなぁ。</p>
 
             
 
@@ -648,7 +654,7 @@ void main(){
 
 
 <li>
-  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&text=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&via=sobaya007" target="_blank" class="share-btn twitter">
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&text=D%e8%a8%80%e8%aa%9e%e3%81%a7gold%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f&via=sobaya007" target="_blank" class="share-btn twitter">
     <i class="fab fa-twitter"></i>
     <p>Twitter</p>
     </a>
@@ -656,7 +662,7 @@ void main(){
 
 
 <li>
-  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn google-plus">
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn google-plus">
     <i class="fab fa-google-plus"></i>
     <p>Google+</p>
   </a>
@@ -664,7 +670,7 @@ void main(){
 
 
 <li>
-  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn facebook">
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn facebook">
     <i class="fab fa-facebook"></i>
     <p>Facebook</p>
     </a>
@@ -672,7 +678,7 @@ void main(){
 
 
 <li>
-  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn reddit">
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7gold%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn reddit">
     <i class="fab fa-reddit-alien"></i>
     <p>Reddit</p>
   </a>
@@ -680,7 +686,7 @@ void main(){
 
 
 <li>
-  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn linkedin">
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7gold%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn linkedin">
       <i class="fab fa-linkedin"></i>
       <p>LinkedIn</p>
     </a>
@@ -688,7 +694,7 @@ void main(){
 
 
 <li>
-  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn stumbleupon">
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7gold%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn stumbleupon">
     <i class="fab fa-stumbleupon"></i>
     <p>StumbleUpon</p>
   </a>
@@ -696,7 +702,7 @@ void main(){
 
 
 <li>
-  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&description=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn pinterest">
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&description=D%e8%a8%80%e8%aa%9e%e3%81%a7gold%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn pinterest">
     <i class="fab fa-pinterest-p"></i>
     <p>Pinterest</p>
   </a>
@@ -704,7 +710,7 @@ void main(){
 
 
 <li>
-  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn email">
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7gold%25E3%2582%2592%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn email">
     <i class="fas fa-envelope"></i>
     <p>Email</p>
   </a>
@@ -725,6 +731,19 @@ void main(){
 <h3>Related articles</h3>
 <ul>
 	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">D言語で継承&#43;配列のバグがずっと残ってる件について</a>
+  	</span>
+  	</ul>
 	
 	  <ul>
   	<div class="item-banner">
@@ -760,21 +779,14 @@ void main(){
     
 <nav id="article-nav">
     
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</div>
+      <div class="article-nav-title">D言語で継承&#43;配列のバグがずっと残ってる件について</div>
     </a>
     
 
-    
-    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">D言語でgoldを使ってリンクを高速化してみた</div>
-    </a>
     
 </nav>
 
