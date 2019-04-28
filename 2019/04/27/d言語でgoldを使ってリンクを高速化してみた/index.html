@@ -46,10 +46,13 @@
 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。
 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
 使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
-&gt; dmd main.o sub.o -L=-fuse-ld=gold
-速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold  速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
 ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
-比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。" />
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。
+追記 LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ https://t.co/BuiLfhNxYl pic.twitter.com/pijbhHVwHE
+&mdash; Shigeki Karita (@kari_tech) April 28, 2019  こんな情報を出していただきまして、もう少し調査してみました。 私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？
+実証 バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。
+&gt; dmd main.o sub.o -L-fuse-ld=gold &gt; readelf -n main Displaying notes found in: ." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" />
 <meta property="article:published_time" content="2019-04-27T23:33:31&#43;09:00"/>
@@ -63,15 +66,18 @@ ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 
 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。
 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
 使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
-&gt; dmd main.o sub.o -L=-fuse-ld=gold
-速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold  速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
 ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
-比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。">
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。
+追記 LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ https://t.co/BuiLfhNxYl pic.twitter.com/pijbhHVwHE
+&mdash; Shigeki Karita (@kari_tech) April 28, 2019  こんな情報を出していただきまして、もう少し調査してみました。 私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？
+実証 バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。
+&gt; dmd main.o sub.o -L-fuse-ld=gold &gt; readelf -n main Displaying notes found in: .">
 
 
 <meta itemprop="datePublished" content="2019-04-27T23:33:31&#43;09:00" />
 <meta itemprop="dateModified" content="2019-04-27T23:33:31&#43;09:00" />
-<meta itemprop="wordCount" content="43">
+<meta itemprop="wordCount" content="276">
 
 
 
@@ -84,10 +90,13 @@ ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 
 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。
 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
 使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
-&gt; dmd main.o sub.o -L=-fuse-ld=gold
-速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold  速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
 ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
-比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。"/>
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。
+追記 LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ https://t.co/BuiLfhNxYl pic.twitter.com/pijbhHVwHE
+&mdash; Shigeki Karita (@kari_tech) April 28, 2019  こんな情報を出していただきまして、もう少し調査してみました。 私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？
+実証 バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。
+&gt; dmd main.o sub.o -L-fuse-ld=gold &gt; readelf -n main Displaying notes found in: ."/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -122,10 +131,13 @@ ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 
 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。
 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
 使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
-&gt; dmd main.o sub.o -L=-fuse-ld=gold
-速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+&gt; dmd main.o sub.o -L=-fuse-ld=gold  速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
 ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
-比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。",
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。
+追記 LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ https://t.co/BuiLfhNxYl pic.twitter.com/pijbhHVwHE
+&mdash; Shigeki Karita (@kari_tech) April 28, 2019  こんな情報を出していただきまして、もう少し調査してみました。 私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？
+実証 バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。
+&gt; dmd main.o sub.o -L-fuse-ld=gold &gt; readelf -n main Displaying notes found in: .",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -136,7 +148,7 @@ ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 
         "datePublished": "2019-04-27 23:33:31 &#43;0900 &#43;0900",
         "dateModified" : "2019-04-27 23:33:31 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/",
-        "wordCount" : "43",
+        "wordCount" : "276",
         "keywords" : [ "D言語","linker","Blog" ]
     }
 </script>
@@ -574,10 +586,10 @@ ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 
             <i class="fas fa-calendar"></i>
             <time datetime="2019-04-27 23:33:31 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-27</time>
             &middot;
-            43
+            276
             words.
             &middot;
-            1
+            2
             minute read.
         </div>
         
@@ -638,14 +650,15 @@ LLDはなぜかDMDごしに呼び出すのはできなかったのでできた�
 <p>goldは<code>ld.gold</code>という名前の実行ファイルになっている。
 gccでもdmdでも、リンカオプションに<code>-fuse-ld=gold</code>とすると置き換わる。</p>
 
-<p><code>&gt; dmd main.o sub.o -L=-fuse-ld=gold</code></p>
+<pre><code class="language-bash">&gt; dmd main.o sub.o -L=-fuse-ld=gold
+</code></pre>
 
 <h1 id="速度の比較">速度の比較</h1>
 
 <p>いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。
 適当に10000個関数を<code>sub.d</code>に作って<code>main.d</code>からそれらを呼び出す、というプログラムのリンク時間を測定しました。</p>
 
-<pre><code>ld   : 4 secs, 986 ms, 351 μs, and 6 hnsecs
+<pre><code class="language-bash">ld   : 4 secs, 986 ms, 351 μs, and 6 hnsecs
 gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs
 </code></pre>
 
@@ -653,6 +666,111 @@ gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs
 
 <p>比較用のコードは<a href="https://gist.github.com/Sobaya007/fcd6d0eaee61f33e9d22dee112e155b9">こちら</a>にあります。
 LLDはもっと速いらしいのでやってみたいなぁ。</p>
+
+<h2 id="追記">追記</h2>
+
+<p><blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ <a href="https://t.co/BuiLfhNxYl">https://t.co/BuiLfhNxYl</a> <a href="https://t.co/pijbhHVwHE">pic.twitter.com/pijbhHVwHE</a></p>&mdash; Shigeki Karita (@kari_tech) <a href="https://twitter.com/kari_tech/status/1122335530421612544?ref_src=twsrc%5Etfw">April 28, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+こんな情報を出していただきまして、もう少し調査してみました。
+私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？</p>
+
+<h3 id="実証">実証</h3>
+
+<p>バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。</p>
+
+<pre><code class="language-bash">&gt; dmd main.o sub.o -L-fuse-ld=gold
+&gt; readelf -n main
+
+Displaying notes found in: .note.ABI-tag
+  所有者            データサイズ	説明
+  GNU                  0x00000010	NT_GNU_ABI_TAG (ABI バージョンタグ)
+    OS: Linux, ABI: 3.2.0
+
+Displaying notes found in: .note.gnu.build-id
+  所有者            データサイズ	説明
+  GNU                  0x00000014	NT_GNU_BUILD_ID (一意なビルドID ビット列)
+    ビルドID: b4391ac10edb113997363dbda7ddbb14fd635300
+
+Displaying notes found in: .note.gnu.gold-version
+  所有者            データサイズ	説明
+  GNU                  0x00000009	NT_GNU_GOLD_VERSION (gold バージョン)
+    Version: gold 1.16
+</code></pre>
+
+<p>確かに最後の方にGOLDの文字が。
+ちなみに普通にldを使うと、</p>
+
+<pre><code class="language-bash">&gt; dmd main.o sub.o
+&gt; readelf -n main
+
+Displaying notes found in: .note.ABI-tag
+  所有者            データサイズ	説明
+  GNU                  0x00000010	NT_GNU_ABI_TAG (ABI バージョンタグ)
+    OS: Linux, ABI: 3.2.0
+
+Displaying notes found in: .note.gnu.build-id
+  所有者            データサイズ	説明
+  GNU                  0x00000014	NT_GNU_BUILD_ID (一意なビルドID ビット列)
+    ビルドID: ec70ebf4a95c16c36399eccb905306bfda8a5c3d
+</code></pre>
+
+<p>確かになにも出ない。
+ちなみにlldだと？</p>
+
+<pre><code class="language-bash">&gt; dmd main.o sub.o -L-fuse-ld=lld
+&gt; readelf -n main
+
+Displaying notes found in: .note.ABI-tag
+  所有者            データサイズ	説明
+  GNU                  0x00000010	NT_GNU_ABI_TAG (ABI バージョンタグ)
+    OS: Linux, ABI: 3.2.0
+
+Displaying notes found in: .note.gnu.build-id
+  所有者            データサイズ	説明
+  GNU                  0x00000014	NT_GNU_BUILD_ID (一意なビルドID ビット列)
+    ビルドID: ec70ebf4a95c16c36399eccb905306bfda8a5c3d
+</code></pre>
+
+<p>なんかldのときと同じに見える。もしやこいつ。</p>
+
+<pre><code class="language-bash">&gt; dmd main.o sub.o -L-fuse-ld=hoge
+</code></pre>
+
+<p>なにも言わない。。。</p>
+
+<p>つまり、<strong>こいつ、指定されたリンカーが見つからなくても何も言わないのでは</strong>??</p>
+
+<p>ということで、私は「dmdごしにはlddは使用できない」という結論に至りました。</p>
+
+<p>ではldcを使った場合はどうなるでしょうか。</p>
+
+<pre><code class="language-bash">&gt; ldc main.o sub.o -L-lphobos2
+&gt; readelf -n main
+
+Displaying notes found in: .note.ABI-tag
+  所有者            データサイズ	説明
+  GNU                  0x00000010	NT_GNU_ABI_TAG (ABI バージョンタグ)
+    OS: Linux, ABI: 3.2.0
+
+Displaying notes found in: .note.gnu.build-id
+  所有者            データサイズ	説明
+  GNU                  0x00000014	NT_GNU_BUILD_ID (一意なビルドID ビット列)
+    ビルドID: 81e4f9de205641adfb2055b3319a88f6fcdf30a0
+
+Displaying notes found in: .note.gnu.gold-version
+  所有者            データサイズ	説明
+  GNU                  0x00000009	NT_GNU_GOLD_VERSION (gold バージョン)
+    Version: gold 1.16
+</code></pre>
+
+<p>あれ&hellip;何も指定していないけどgoldが使われる&hellip;
+どうも他の指定をしても全部goldが使われるっぽい。</p>
+
+<p>結論として、
+- dmdではlldは使えない
+- ldcではgoldしか使えない</p>
+
+<p>となりました。他の使い方があったら教えてほしい。。。</p>
 
             
 
@@ -834,6 +952,7 @@ LLDはもっと速いらしいのでやってみたいなぁ。</p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/bash.min.js"></script>
 <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
 
 

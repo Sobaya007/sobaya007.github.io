@@ -21,10 +21,13 @@
 先日とある密会に参加したところ教えていただいたのでブログに書いておこうとなりました。
 ちなみにLLVMと何やら関連の深そうなLLDというのもあり、こちらはgoldの2倍速いらしい。リンカ界も日進月歩なんだなぁ。 LLDはなぜかDMDごしに呼び出すのはできなかったのでできたらまた記事書きます。
 使い方 goldはld.goldという名前の実行ファイルになっている。 gccでもdmdでも、リンカオプションに-fuse-ld=goldとすると置き換わる。
-&amp;gt; dmd main.o sub.o -L=-fuse-ld=gold
-速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
+&amp;gt; dmd main.o sub.o -L=-fuse-ld=gold  速度の比較 いったい何回やられたんだよってかんじですが、一応自分でも比較してみました。 適当に10000個関数をsub.dに作ってmain.dからそれらを呼び出す、というプログラムのリンク時間を測定しました。
 ld : 4 secs, 986 ms, 351 μs, and 6 hnsecs gold : 1 sec, 699 ms, 670 μs, and 7 hnsecs  だいたい4倍くらい速くなっている。すごい。
-比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。</description>
+比較用のコードはこちらにあります。 LLDはもっと速いらしいのでやってみたいなぁ。
+追記 LDCコンパイラとかLLDリンカでもやってみたがLLDあまり速くなかった？LDCだとgoldと他が逆転？ https://t.co/BuiLfhNxYl pic.twitter.com/pijbhHVwHE
+&amp;mdash; Shigeki Karita (@kari_tech) April 28, 2019  こんな情報を出していただきまして、もう少し調査してみました。 私の手元でも同様に実行してみたところ、確かにほぼ同じ結果に。そもそも各リンカーは本当に動いているのでしょうか？
+実証 バイナリ周りは詳しくないのですが、どうもgoldを使うと実行ファイルのnote sectionにそれらしき情報が乗るらしい。
+&amp;gt; dmd main.o sub.o -L-fuse-ld=gold &amp;gt; readelf -n main Displaying notes found in: .</description>
     </item>
     
     <item>
