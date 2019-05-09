@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Language Server on そばやのブログ</title>
+    <link>https://sobaya007.github.io/categories/language-server/</link>
+    <description>Recent content in Language Server on そばやのブログ</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 09 May 2019 12:03:42 +0900</lastBuildDate>
+    
+	<atom:link href="https://sobaya007.github.io/categories/language-server/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DLSを直した話</title>
+      <link>https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/</link>
+      <pubDate>Thu, 09 May 2019 12:03:42 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/</guid>
+      <description>動機 私はD言語を書くときNeovimを使っています。
+プラグインとして以前まではdutylを使っていたのですが、昨今Language Server/なるものが流行りだしており、vim-lsp+dlsを使うようになりました。
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。
+READMEによると、DLSのサポートしている機能は
+ コード補間 シンボルの定義へジャンプ 参照を検索 シンボルの名前変更 エラーチェック フォーマット シンボルの列挙 シンボルのハイライト ホバー時のドキュメント表示  となっています。
+しかしvim-lspで例えば:LspDocumentFormatと打ってもDocument formatting not supported for dと言われてしまいます。
+多分バグだと思ったので直してみようと思いました。
+原因 LSP(Language Server Protocol)において、Language Serverの起動時にinitializeという命令が飛びます。
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。
+Micrsoft公式のドキュメントによると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。
+ドキュメント内では、clientから送るものはThe capabilities provided by the client (editor or tool)であり、serverから返すものはThe capabilities the language server providesらしいです。
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。
+しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これがnot supportedの原因でした。
+この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。 おかしいと思い各種Language Serverのコードを見に行きました。すると&amp;hellip;
+ javascript-typescript-langserverより引用
+const result: InitializeResult = { capabilities: { // Tell the client that the server works in FULL text document sync mode textDocumentSync: TextDocumentSyncKind.</description>
+    </item>
+    
+  </channel>
+</rss>

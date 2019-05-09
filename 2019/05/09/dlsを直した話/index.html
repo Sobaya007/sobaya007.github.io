@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DLSを直した話 &middot; そばやのブログ</title>
+    <meta name="generator" content="Hugo 0.54.0" />
+    
+    
+        
+    
+
+    
+
+    <link rel="apple-touch-icon-precomposed"
+        href='/favicon/favicon-250.png'>
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="32x32">
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="192x192">
+    <meta name="msapplication-TileImage" content="/favicon/favicon-300.png" />
+
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="そばや">
+    
+      <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/"/>
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
+    
+
+
+<link href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/vs2015.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="https://sobaya007.github.io/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="DLSを直した話" />
+<meta property="og:description" content="動機 私はD言語を書くときNeovimを使っています。
+プラグインとして以前まではdutylを使っていたのですが、昨今Language Server/なるものが流行りだしており、vim-lsp&#43;dlsを使うようになりました。
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。
+READMEによると、DLSのサポートしている機能は
+ コード補間 シンボルの定義へジャンプ 参照を検索 シンボルの名前変更 エラーチェック フォーマット シンボルの列挙 シンボルのハイライト ホバー時のドキュメント表示  となっています。
+しかしvim-lspで例えば:LspDocumentFormatと打ってもDocument formatting not supported for dと言われてしまいます。
+多分バグだと思ったので直してみようと思いました。
+原因 LSP(Language Server Protocol)において、Language Serverの起動時にinitializeという命令が飛びます。
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。
+Micrsoft公式のドキュメントによると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。
+ドキュメント内では、clientから送るものはThe capabilities provided by the client (editor or tool)であり、serverから返すものはThe capabilities the language server providesらしいです。
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。
+しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これがnot supportedの原因でした。
+この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。 おかしいと思い各種Language Serverのコードを見に行きました。すると&hellip;
+ javascript-typescript-langserverより引用
+const result: InitializeResult = { capabilities: { // Tell the client that the server works in FULL text document sync mode textDocumentSync: TextDocumentSyncKind." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" />
+<meta property="article:published_time" content="2019-05-09T12:03:42&#43;09:00"/>
+<meta property="article:modified_time" content="2019-05-09T12:03:42&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+
+    
+    
+<meta itemprop="name" content="DLSを直した話">
+<meta itemprop="description" content="動機 私はD言語を書くときNeovimを使っています。
+プラグインとして以前まではdutylを使っていたのですが、昨今Language Server/なるものが流行りだしており、vim-lsp&#43;dlsを使うようになりました。
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。
+READMEによると、DLSのサポートしている機能は
+ コード補間 シンボルの定義へジャンプ 参照を検索 シンボルの名前変更 エラーチェック フォーマット シンボルの列挙 シンボルのハイライト ホバー時のドキュメント表示  となっています。
+しかしvim-lspで例えば:LspDocumentFormatと打ってもDocument formatting not supported for dと言われてしまいます。
+多分バグだと思ったので直してみようと思いました。
+原因 LSP(Language Server Protocol)において、Language Serverの起動時にinitializeという命令が飛びます。
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。
+Micrsoft公式のドキュメントによると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。
+ドキュメント内では、clientから送るものはThe capabilities provided by the client (editor or tool)であり、serverから返すものはThe capabilities the language server providesらしいです。
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。
+しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これがnot supportedの原因でした。
+この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。 おかしいと思い各種Language Serverのコードを見に行きました。すると&hellip;
+ javascript-typescript-langserverより引用
+const result: InitializeResult = { capabilities: { // Tell the client that the server works in FULL text document sync mode textDocumentSync: TextDocumentSyncKind.">
+
+
+<meta itemprop="datePublished" content="2019-05-09T12:03:42&#43;09:00" />
+<meta itemprop="dateModified" content="2019-05-09T12:03:42&#43;09:00" />
+<meta itemprop="wordCount" content="250">
+
+
+
+<meta itemprop="keywords" content="Language Server,D言語," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DLSを直した話"/>
+<meta name="twitter:description" content="動機 私はD言語を書くときNeovimを使っています。
+プラグインとして以前まではdutylを使っていたのですが、昨今Language Server/なるものが流行りだしており、vim-lsp&#43;dlsを使うようになりました。
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。
+READMEによると、DLSのサポートしている機能は
+ コード補間 シンボルの定義へジャンプ 参照を検索 シンボルの名前変更 エラーチェック フォーマット シンボルの列挙 シンボルのハイライト ホバー時のドキュメント表示  となっています。
+しかしvim-lspで例えば:LspDocumentFormatと打ってもDocument formatting not supported for dと言われてしまいます。
+多分バグだと思ったので直してみようと思いました。
+原因 LSP(Language Server Protocol)において、Language Serverの起動時にinitializeという命令が飛びます。
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。
+Micrsoft公式のドキュメントによると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。
+ドキュメント内では、clientから送るものはThe capabilities provided by the client (editor or tool)であり、serverから返すものはThe capabilities the language server providesらしいです。
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。
+しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これがnot supportedの原因でした。
+この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。 おかしいと思い各種Language Serverのコードを見に行きました。すると&hellip;
+ javascript-typescript-langserverより引用
+const result: InitializeResult = { capabilities: { // Tell the client that the server works in FULL text document sync mode textDocumentSync: TextDocumentSyncKind."/>
+<meta name="twitter:site" content="@sobaya007"/>
+
+    
+
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <script type="application/ld+json">
+    {
+        "@context" : "http://schema.org",
+        "@type" : "BlogPosting",
+        "mainEntityOfPage": {
+             "@type": "WebPage",
+             "@id": "https://sobaya007.github.io/"
+        },
+        "articleSection" : "post",
+        "name" : "DLSを直した話",
+        "headline" : "DLSを直した話",
+        "description" : "動機 私はD言語を書くときNeovimを使っています。
+プラグインとして以前まではdutylを使っていたのですが、昨今Language Server/なるものが流行りだしており、vim-lsp+dlsを使うようになりました。
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。
+READMEによると、DLSのサポートしている機能は
+ コード補間 シンボルの定義へジャンプ 参照を検索 シンボルの名前変更 エラーチェック フォーマット シンボルの列挙 シンボルのハイライト ホバー時のドキュメント表示  となっています。
+しかしvim-lspで例えば:LspDocumentFormatと打ってもDocument formatting not supported for dと言われてしまいます。
+多分バグだと思ったので直してみようと思いました。
+原因 LSP(Language Server Protocol)において、Language Serverの起動時にinitializeという命令が飛びます。
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。
+Micrsoft公式のドキュメントによると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。
+ドキュメント内では、clientから送るものはThe capabilities provided by the client (editor or tool)であり、serverから返すものはThe capabilities the language server providesらしいです。
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。
+しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これがnot supportedの原因でした。
+この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。 おかしいと思い各種Language Serverのコードを見に行きました。すると&hellip;
+ javascript-typescript-langserverより引用
+const result: InitializeResult = { capabilities: { // Tell the client that the server works in FULL text document sync mode textDocumentSync: TextDocumentSyncKind.",
+        "inLanguage" : "en",
+        "author" : "",
+        "creator" : "",
+        "publisher": "",
+        "accountablePerson" : "",
+        "copyrightHolder" : "",
+        "copyrightYear" : "2019",
+        "datePublished": "2019-05-09 12:03:42 &#43;0900 &#43;0900",
+        "dateModified" : "2019-05-09 12:03:42 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/",
+        "wordCount" : "250",
+        "keywords" : [ "Language Server","D言語","Blog" ]
+    }
+</script>
+
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo">
+          
+          <span class="site-title">そばやのブログ</span>
+      </a>
+      <a href="/" id="logolong">
+        
+      </a>
+      <nav id="main-nav">
+         <div href="/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" class="navbar-collapse collapse" id="navigation">
+            <ul class="nav navbar-nav navbar-right">
+              
+              <li class="main-dropdown">
+                
+                <a href="/">Home</a>
+                
+              </li>
+              
+              <li class="main-dropdown">
+                
+                <a href="/post/">Blog</a>
+                
+              </li>
+              
+            </ul>
+          </div>
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <nav class="right-nav">
+            
+        </nav>   
+    </div>     
+  </div> 
+  <div id="main-nav-mobile" class="header-sub header-inner">
+      <div class="navbar-collapse collapse" id="navigation">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li class="main-dropdown">
+            
+            <a href="/">Home</a>
+            
+          </li>
+          
+          <li class="main-dropdown">
+            
+            <a href="/post/">Blog</a>
+            
+          </li>
+          
+        </ul>
+      </div>
+  </div>  
+</header>
+
+
+   	
+ 	<div class="outer">
+    <div id="sideleft">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+        
+        <img id="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg">
+        
+        <h2 id="name">そばや</h2>
+      
+      <h3 id="title">徒然なるそばやの感想</h3>
+      <span id="location"><i class="fas fa-map-marker"></i>Japan</span>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/Sobaya007" target="_blank" title="GitHub"><i class="fab fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/sobaya007" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></td>
+
+
+
+
+
+
+
+
+
+<li><a href="mailto:sobaya007@gmail.com" title="Email" class="fas fa-envelope"></a></li>
+
+
+
+          <td><a href="https://sobaya007.github.io/index.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+   	
+    	<aside id="sidebar">
+    
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="DLSを直した話" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="title">DLSを直した話</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/language-server">
+                        Language Server
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-05-09 12:03:42 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でgoldを使ってリンクを高速化してみた" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="title">D言語でgoldを使ってリンクを高速化してみた</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-27 23:33:31 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="title">D言語で継承&#43;配列のバグがずっと残ってる件について</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-19 22:38:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-19</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="title">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-11 20:59:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-11</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="title">D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-10 16:27:25 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-10</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/linker">
+                    linker
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">
+                    バグ
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        
+        <a href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E" style="font-size: 12px;">d言語</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/language-server" style="font-size: 12px;">language-server</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/linker" style="font-size: 12px;">linker</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0" style="font-size: 12px;">バグ</a>
+        
+    </div>
+</div>
+
+
+
+
+
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+    
+    </div>
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/dman.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en">
+    <h1 class="article-title" itemprop="name">
+        DLSを直した話
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fas fa-calendar"></i>
+            <time datetime="2019-05-09 12:03:42 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-09</time>
+            &middot;
+            250
+            words.
+            &middot;
+            2
+            minute read.
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/categories/language-server">Language Server</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/language-server">Language Server</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
+                
+                
+            </div>
+            
+        
+    </div>
+    
+
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<h1 id="動機">動機</h1>
+
+<p>私はD言語を書くとき<a href="https://neovim.io/">Neovim</a>を使っています。<br />
+プラグインとして以前までは<a href="https://github.com/idanarye/vim-dutyl">dutyl</a>を使っていたのですが、昨今<a href="https://langserver.org">Language Server</a>/なるものが流行りだしており、<a href="https://github.com/prabirshrestha/vim-lsp">vim-lsp</a>+<a href="https://github.com/d-language-server/dls">dls</a>を使うようになりました。<br />
+しかしいざ使ってみるといくつかの機能がうまく動いていないように思われます。<br />
+READMEによると、DLSのサポートしている機能は</p>
+
+<ul>
+<li>コード補間</li>
+<li>シンボルの定義へジャンプ</li>
+<li>参照を検索</li>
+<li>シンボルの名前変更</li>
+<li>エラーチェック</li>
+<li>フォーマット</li>
+<li>シンボルの列挙</li>
+<li>シンボルのハイライト</li>
+<li>ホバー時のドキュメント表示</li>
+</ul>
+
+<p>となっています。<br />
+しかしvim-lspで例えば<code>:LspDocumentFormat</code>と打っても<code>Document formatting not supported for d</code>と言われてしまいます。<br />
+多分バグだと思ったので直してみようと思いました。</p>
+
+<h1 id="原因">原因</h1>
+
+<p>LSP(Language Server Protocol)において、Language Serverの起動時に<code>initialize</code>という命令が飛びます。<br />
+この命令のDLS側のハンドリングに問題(?)があったためうまく動いていないようでした。</p>
+
+<p><a href="https://microsoft.github.io/language-server-protocol/specification">Micrsoft公式のドキュメント</a>によると、initialize時clientが送るデータの中にはcapabilitiesなるものが含まれており、server側が返す値にも同様にcapabilitiesなるものがあるようです。<br />
+ドキュメント内では、clientから送るものは<code>The capabilities provided by the client (editor or tool)</code>であり、serverから返すものは<code>The capabilities the language server provides</code>らしいです。<br />
+これを見る限り、clientの送るcapabilitiesは「以下のような機能を提供して欲しい」という意味であり、server側からのcapabilitiesは「要求された機能のうち、実際に提供できる機能は以下のものである」という意味であると考えられます。</p>
+
+<p>しかしながらvim-lspではinitialize時にcapabilitiesをほとんど送っていません。<br />
+これでは先程の解釈によると「何の機能も要求していない」ということになります。したがって、DLSは当然何も返しません。<br />
+その結果vim-lsp側からは「DLSは何の機能も持たない」と解釈されてしまいます。これが<code>not supported</code>の原因でした。</p>
+
+<p>この状況を素直に捉えれば、「仕様に則ったrequestを送っていないvim-lsp側に問題がある」となるのでしょうが、試してみたところなぜか他の言語のLanguage Serverは普通に動いてしまっています。
+おかしいと思い各種Language Serverのコードを見に行きました。すると&hellip;</p>
+
+<blockquote>
+<p><a href="https://github.com/sourcegraph/javascript-typescript-langserver">javascript-typescript-langserver</a>より引用</p>
+
+<pre><code class="language-typescript">const result: InitializeResult = {
+   capabilities: {
+       // Tell the client that the server works in FULL text document sync mode
+       textDocumentSync: TextDocumentSyncKind.Full,
+       hoverProvider: true,
+       signatureHelpProvider: {
+           triggerCharacters: ['(', ','],
+       },
+       definitionProvider: true,
+       typeDefinitionProvider: true,
+       referencesProvider: true,
+       documentSymbolProvider: true,
+       workspaceSymbolProvider: true,
+       xworkspaceReferencesProvider: true,
+       xdefinitionProvider: true,
+       xdependenciesProvider: true,
+       completionProvider: {
+           resolveProvider: true,
+           triggerCharacters: ['.'],
+       },
+       codeActionProvider: true,
+       renameProvider: true,
+       executeCommandProvider: {
+           commands: [],
+       },
+       xpackagesProvider: true,
+   },
+}
+</code></pre>
+
+<p>だの</p>
+
+<p><a href="https://github.com/rust-lang/rls">rls</a>より引用</p>
+
+<pre><code class="language-rust">ServerCapabilities {
+      text_document_sync: Some(TextDocumentSyncCapability::Kind(
+          TextDocumentSyncKind::Incremental,
+      )),
+      hover_provider: Some(true),
+      completion_provider: Some(CompletionOptions {
+          resolve_provider: Some(true),
+          trigger_characters: Some(vec![&quot;.&quot;.to_string(), &quot;:&quot;.to_string()]),
+      }),
+      definition_provider: Some(true),
+      type_definition_provider: None,
+      implementation_provider: Some(ImplementationProviderCapability::Simple(true)),
+      references_provider: Some(true),
+      document_highlight_provider: Some(true),
+      document_symbol_provider: Some(true),
+      workspace_symbol_provider: Some(true),
+      code_action_provider: Some(CodeActionProviderCapability::Simple(true)),
+      document_formatting_provider: Some(true),
+      execute_command_provider: Some(ExecuteCommandOptions {
+          // We append our pid to the command so that if there are multiple
+          // instances of the RLS then they will have unique names for the
+          // commands.
+          commands: vec![
+              format!(&quot;rls.applySuggestion-{}&quot;, ctx.pid()),
+              format!(&quot;rls.deglobImports-{}&quot;, ctx.pid()),
+          ],
+      }),
+      rename_provider: Some(RenameProviderCapability::Simple(true)),
+      color_provider: None,
+
+      // These are supported if the `unstable_features` option is set.
+      // We'll update these capabilities dynamically when we get config
+      // info from the client.
+      document_range_formatting_provider: Some(false),
+
+      code_lens_provider: Some(CodeLensOptions { resolve_provider: Some(false) }),
+      document_on_type_formatting_provider: None,
+      signature_help_provider: None,
+
+      folding_range_provider: None,
+      workspace: None,
+  }
+</code></pre>
+
+<p>だの、みんな<strong>request parameterなんて見ていません</strong>!!!<br />
+つまり、「initialize時に送られてくるパラメータは大部分無視する」というのがどうも半ば標準化しているようです。悲しいなぁ。。。</p>
+</blockquote>
+
+<p>ということでそこら辺をすっきり無視するようにしたらあっさり解決。<br />
+forkして直したものは<a href="https://github.com/Sobaya007/dls">こちら</a>の<code>fix-initialize</code>ブランチになります。<br />
+PR送るの怖くてやってないけど、送ったほうがいいんだろうか&hellip;</p>
+
+            
+
+        </div>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f&text=DLS%e3%82%92%e7%9b%b4%e3%81%97%e3%81%9f%e8%a9%b1&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f&title=DLS%e3%82%92%e7%9b%b4%e3%81%97%e3%81%9f%e8%a9%b1" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f&title=DLS%e3%82%92%e7%9b%b4%e3%81%97%e3%81%9f%e8%a9%b1" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f&title=DLS%e3%82%92%e7%9b%b4%e3%81%97%e3%81%9f%e8%a9%b1" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f&description=DLS%e3%82%92%e7%9b%b4%e3%81%97%e3%81%9f%e8%a9%b1" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f09%2fdls%25E3%2582%2592%25E7%259B%25B4%25E3%2581%2597%25E3%2581%259F%25E8%25A9%25B1%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
+    </div>
+    
+
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でgoldを使ってリンクを高速化してみた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/">D言語でgoldを使ってリンクを高速化してみた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">D言語で継承&#43;配列のバグがずっと残ってる件について</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">D言語でgoldを使ってリンクを高速化してみた</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+
+    </section>
+
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="https://github.com/statnmap/hugo-statnmap-theme">statnmap</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://sobaya007.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://sobaya007.github.io/js/script.js"></script>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/rust.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
