@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>DMD2.085.0で謎のエラーが出てビルドできなくなる件について &middot; そばやのブログ</title>
+    <title>D言語でLLDも使ってリンクを高速化してみた &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,7 +25,7 @@
       <meta name="description" content="">
     
     
-    <link rel="canonical" href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -40,48 +40,60 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" />
-<meta property="og:description" content="実は前から気づいていたが、dmd2.085.0でとあるプロジェクトをビルドしようとしたところtym = x27とかいう謎のエラーを吐いてビルドできなくなってしまった。 ggってみても関連するものが見当たらない。 ブチキレたので調査をしてみた。
-とりあえず現状報告。
-OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
-ということで見つけた最小コードがこちら↓
- app.d
-struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;" />
+    <meta property="og:title" content="D言語でLLDも使ってリンクを高速化してみた" />
+<meta property="og:description" content="GOLDの続きです。
+LLDとはなんぞや LLDとはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。
+多分OS標準のpackage managerで普通にインストールできる。
+今回のモチベーション 前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。
+TL;DR LLDはld.lldという名前の実行ファイルになっている。
+-fuse-ld=lldとすれば置き換わると書いてあったので、試しに
+&gt; dmd test.d -L-fuse-ld=lld  としてみる。確かにコンパイルは通る。
+しかし本当にLLDが使われているのかわからない。
+LLDの「Using LLD」の項をよく読んでみると、
+ LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run readelf --string-dump .comment &lt;output-file&gt; and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
-<meta property="article:published_time" content="2019-04-11T20:59:06&#43;09:00"/>
-<meta property="article:modified_time" content="2019-04-11T20:59:06&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" />
+<meta property="article:published_time" content="2019-05-13T11:32:01&#43;09:00"/>
+<meta property="article:modified_time" content="2019-05-13T11:32:01&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="DMD2.085.0で謎のエラーが出てビルドできなくなる件について">
-<meta itemprop="description" content="実は前から気づいていたが、dmd2.085.0でとあるプロジェクトをビルドしようとしたところtym = x27とかいう謎のエラーを吐いてビルドできなくなってしまった。 ggってみても関連するものが見当たらない。 ブチキレたので調査をしてみた。
-とりあえず現状報告。
-OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
-ということで見つけた最小コードがこちら↓
- app.d
-struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;">
+<meta itemprop="name" content="D言語でLLDも使ってリンクを高速化してみた">
+<meta itemprop="description" content="GOLDの続きです。
+LLDとはなんぞや LLDとはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。
+多分OS標準のpackage managerで普通にインストールできる。
+今回のモチベーション 前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。
+TL;DR LLDはld.lldという名前の実行ファイルになっている。
+-fuse-ld=lldとすれば置き換わると書いてあったので、試しに
+&gt; dmd test.d -L-fuse-ld=lld  としてみる。確かにコンパイルは通る。
+しかし本当にLLDが使われているのかわからない。
+LLDの「Using LLD」の項をよく読んでみると、
+ LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run readelf --string-dump .comment &lt;output-file&gt; and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD.">
 
 
-<meta itemprop="datePublished" content="2019-04-11T20:59:06&#43;09:00" />
-<meta itemprop="dateModified" content="2019-04-11T20:59:06&#43;09:00" />
-<meta itemprop="wordCount" content="29">
+<meta itemprop="datePublished" content="2019-05-13T11:32:01&#43;09:00" />
+<meta itemprop="dateModified" content="2019-05-13T11:32:01&#43;09:00" />
+<meta itemprop="wordCount" content="351">
 
 
 
-<meta itemprop="keywords" content="D言語,バグ," />
+<meta itemprop="keywords" content="D言語,linker," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="DMD2.085.0で謎のエラーが出てビルドできなくなる件について"/>
-<meta name="twitter:description" content="実は前から気づいていたが、dmd2.085.0でとあるプロジェクトをビルドしようとしたところtym = x27とかいう謎のエラーを吐いてビルドできなくなってしまった。 ggってみても関連するものが見当たらない。 ブチキレたので調査をしてみた。
-とりあえず現状報告。
-OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
-ということで見つけた最小コードがこちら↓
- app.d
-struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;"/>
+<meta name="twitter:title" content="D言語でLLDも使ってリンクを高速化してみた"/>
+<meta name="twitter:description" content="GOLDの続きです。
+LLDとはなんぞや LLDとはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。
+多分OS標準のpackage managerで普通にインストールできる。
+今回のモチベーション 前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。
+TL;DR LLDはld.lldという名前の実行ファイルになっている。
+-fuse-ld=lldとすれば置き換わると書いてあったので、試しに
+&gt; dmd test.d -L-fuse-ld=lld  としてみる。確かにコンパイルは通る。
+しかし本当にLLDが使われているのかわからない。
+LLDの「Using LLD」の項をよく読んでみると、
+ LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run readelf --string-dump .comment &lt;output-file&gt; and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD."/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -109,15 +121,19 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
              "@id": "https://sobaya007.github.io/"
         },
         "articleSection" : "post",
-        "name" : "DMD2.085.0で謎のエラーが出てビルドできなくなる件について",
-        "headline" : "DMD2.085.0で謎のエラーが出てビルドできなくなる件について",
-        "description" : "実は前から気づいていたが、dmd2.085.0でとあるプロジェクトをビルドしようとしたところtym = x27とかいう謎のエラーを吐いてビルドできなくなってしまった。 ggってみても関連するものが見当たらない。 ブチキレたので調査をしてみた。
-とりあえず現状報告。
-OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所の周辺コードを表示してくれるとかいう神機能を今更実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。 ところが本日pacman -Syuしたところ、dmd2.0850が(バグったまま)入ってきやがった。おい。
-ということで見つけた最小コードがこちら↓
- app.d
-struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;",
+        "name" : "D言語でLLDも使ってリンクを高速化してみた",
+        "headline" : "D言語でLLDも使ってリンクを高速化してみた",
+        "description" : "GOLDの続きです。
+LLDとはなんぞや LLDとはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。
+多分OS標準のpackage managerで普通にインストールできる。
+今回のモチベーション 前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。
+TL;DR LLDはld.lldという名前の実行ファイルになっている。
+-fuse-ld=lldとすれば置き換わると書いてあったので、試しに
+&gt; dmd test.d -L-fuse-ld=lld  としてみる。確かにコンパイルは通る。
+しかし本当にLLDが使われているのかわからない。
+LLDの「Using LLD」の項をよく読んでみると、
+ LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run readelf --string-dump .comment &lt;output-file&gt; and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD.",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -125,11 +141,11 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
         "accountablePerson" : "",
         "copyrightHolder" : "",
         "copyrightYear" : "2019",
-        "datePublished": "2019-04-11 20:59:06 &#43;0900 &#43;0900",
-        "dateModified" : "2019-04-11 20:59:06 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/",
-        "wordCount" : "29",
-        "keywords" : [ "D言語","バグ","Blog" ]
+        "datePublished": "2019-05-13 11:32:01 &#43;0900 &#43;0900",
+        "dateModified" : "2019-05-13 11:32:01 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/",
+        "wordCount" : "351",
+        "keywords" : [ "D言語","linker","Blog" ]
     }
 </script>
 
@@ -143,7 +159,7 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
         
       </a>
       <nav id="main-nav">
-         <div href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -557,9 +573,9 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
         
 
         <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
+    <a href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en">
     <h1 class="article-title" itemprop="name">
-        DMD2.085.0で謎のエラーが出てビルドできなくなる件について
+        D言語でLLDも使ってリンクを高速化してみた
     </h1>
     </a>
     <div class="article-meta">
@@ -567,12 +583,12 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
         
         <div class="article-date">
             <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-11 20:59:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-11</time>
+            <time datetime="2019-05-13 11:32:01 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-13</time>
             &middot;
-            29
+            351
             words.
             &middot;
-            1
+            2
             minute read.
         </div>
         
@@ -601,7 +617,7 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/linker">linker</a>
                 
                 
             </div>
@@ -613,33 +629,137 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>実は前から気づいていたが、dmd2.085.0で<a href="https://github.com/Sobaya007/sbylib-graphics">とあるプロジェクト</a>をビルドしようとしたところ<code>tym = x27</code>とかいう謎のエラーを吐いてビルドできなくなってしまった。
-ggってみても関連するものが見当たらない。
-ブチキレたので調査をしてみた。</p>
+            
 
-<p>とりあえず現状報告。</p>
+<p><a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/">GOLD</a>の続きです。</p>
 
-<p>OSはArch Linux。
-dmdが2.085.0になったとき、<a href="https://dlang.org/changelog/2.085.0.html#error-context">エラーが起きた箇所の周辺コードを表示してくれる</a>とかいう神機能を<del>今更</del>実装してくれたので試してみようと思い、使ってみたら上記の事態が発生。その時いろいろいじってはみたけどわからず。pacmanでバージョンを上げようとしても上がらなかったので「パッケージ管理者がバグに気づいて止めてるのかな？」と思いとりあえず放置。
-ところが本日<code>pacman -Syu</code>したところ、dmd2.0850が(バグったまま)入ってきやがった。おい。</p>
+<h1 id="lldとはなんぞや">LLDとはなんぞや</h1>
 
-<p>ということで見つけた最小コードがこちら↓</p>
+<p><a href="https://lld.llvm.org/">LLD</a>とはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。<br />
+多分OS標準のpackage managerで普通にインストールできる。</p>
+
+<h1 id="今回のモチベーション">今回のモチベーション</h1>
+
+<p>前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。<br />
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。</p>
+
+<h1 id="tl-dr">TL;DR</h1>
+
+<p>LLDは<code>ld.lld</code>という名前の実行ファイルになっている。<br />
+<code>-fuse-ld=lld</code>とすれば置き換わると書いてあったので、試しに</p>
+
+<pre><code class="language-bash">&gt; dmd test.d -L-fuse-ld=lld
+</code></pre>
+
+<p>としてみる。確かにコンパイルは通る。<br />
+しかし本当にLLDが使われているのかわからない。<br />
+LLDの「Using LLD」の項をよく読んでみると、</p>
 
 <blockquote>
-<p>app.d</p>
+<p>LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run <code>readelf --string-dump .comment &lt;output-file&gt;</code> and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD.</p>
 
-<pre><code class="language-d">struct A { float e; }
-struct B {
-   this(A[1]) {}
-}
-</code></pre>
+<p>LLDを使うと出力されたバイナリの.commentセクションに&rdquo;Linker: LLD&rdquo;と載るよ。気になったら<code>readelf --string-dump .comment &lt;output-file&gt;</code>すればわかるよ。</p>
 </blockquote>
 
-<p>これを<strong>dubのプロジェクトの中で</strong>ビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。</p>
+<p>と書かれている。どれどれ。</p>
 
-<p>ちなみに<code>A</code>のメンバーが浮動小数型だとバグりますが、整数型だと通ります。
-また、<code>B</code>のコンストラクタ引数の配列数を2以上にすると通ります。
-意味がわからん&hellip;</p>
+<pre><code class="language-bash">&gt; readelf --string-dupmp .comment test
+
+セクション '.comment' の文字列ダンプ:
+  [     0]  GCC: (GNU) 8.2.1 20181127
+  [    1a]  GCC: (GNU) 8.3.0
+</code></pre>
+
+<p>入ってなくね？？？？<br />
+とりあえずdmdの挙動を確認してみる。</p>
+
+<pre><code class="language-bash">&gt; dmd test.d -L-fuse-ld=lld -v
+
+predefs   DigitalMars Posix linux ELFv1 CRuntime_Glibc CppRuntime_Gcc LittleEndian D_Version2 all D_SIMD D_InlineAsm_X86_64 X86_64 D_LP64 D_PIC assert D_ModuleInfo D_Exceptions D_TypeInfo D_HardFloat
+binary    dmd
+version   v2.086.0
+~~中略~~
+cc test.o -o test -m64 -Xlinker -fuse-ld=lld -Xlinker --export-dynamic -L/usr/lib -Xlinker -Bstatic -lphobos2 -Xlinker -Bdynamic -lpthread -lm -lrt -ldl 
+</code></pre>
+
+<p>最後の行を見ると、確かにlinkerに<code>-fuse-ld=lld</code>を渡している。<strong>ccを使って。</strong><br />
+LLDのページには以下のように書かれている。</p>
+
+<blockquote>
+<p>If you don’t want to change the system setting, you can use clang’s <code>-fuse-ld</code> option. In this way, you want to set -fuse-ld=lld to LDFLAGS when building your programs.<br />
+システムの設定を変えたくなかったら、<strong>clangの</strong><code>-fuse-ld</code>オプションを使ってね。</p>
+</blockquote>
+
+<p>よく見たら<code>clang</code>で動くことしか書いてない。<code>cc</code>はサポート外なのでは？<br />
+実際ccを生で使ってみると</p>
+
+<pre><code class="language-bash">&gt; cc test.o -fuse-ld=lld
+cc: エラー: unrecognized command line option ‘-fuse-ld=lld’; did you mean ‘-fuse-ld=bfd’?
+</code></pre>
+
+<p>と言われる。<code>dmd</code>は<code>lld</code>へのfuseを握りつぶしているっぽい。<br />
+じゃあccを書き換えてからならどうだろう？</p>
+
+<pre><code class="language-bash">&gt; export cc=/usr/local/bin/clang
+&gt; dmd test.d -L-fuse-ld=lld -v
+predefs   DigitalMars Posix linux ELFv1 CRuntime_Glibc CppRuntime_Gcc LittleEndian D_Version2 all D_SIMD D_InlineAsm_X86_64 X86_64 D_LP64 D_PIC assert D_ModuleInfo D_Exceptions D_TypeInfo D_HardFloat
+binary    dmd
+version   v2.086.0
+~~中略~~
+/usr/local/bin/clang test.o -o test -m64 -Xlinker -fuse-ld=lld -Xlinker --export-dynamic -L/usr/lib -Xlinker -Bstatic -lphobos2 -Xlinker -Bdynamic -lpthread -lm -lrt -ldl 
+</code></pre>
+
+<p>ちゃんと<code>clang</code>を使ってるっぽい。やったか？？？</p>
+
+<pre><code class="language-bash">&gt; readelf --string-dupmp .comment test
+
+セクション '.comment' の文字列ダンプ:
+  [     0]  GCC: (GNU) 8.2.1 20181127
+  [    1a]  GCC: (GNU) 8.3.0
+</code></pre>
+
+<p>入ってなくね？？？？<br />
+これも<code>dmd</code>に握りつぶされるっぽい。<br />
+じゃあ<code>ldc</code>はどうだろう？<code>ldc</code>には<code>-linker=lld</code>とかいうお誂え向きなオプションがあるのだが、デフォルトではやっぱりgccを使うので<code>-fuse-ld=lld</code>でキレられる。<br />
+しかしccを設定した今ならいけるのでは？</p>
+
+<pre><code class="language-bash">&gt; export cc=/usr/local/bin/clang
+&gt; ldc test.d -linker=lld
+&gt; readelf --string-dupmp .comment test
+
+セクション '.comment' の文字列ダンプ:
+  [     0]  ldc version 1.15.0
+  [    13]  GCC: (GNU) 8.3.0
+  [    24]  Linker: LLD 8.0.0
+  [    36]  GCC: (GNU) 8.2.1 20181127
+</code></pre>
+
+<p>やったぜ。</p>
+
+<h1 id="結論">結論</h1>
+
+<ul>
+<li>ccに<code>clang</code>を指定する</li>
+<li><code>LDC</code>を使う</li>
+<li><code>-linker=lld</code>オプションを使う</li>
+</ul>
+
+<p>で動きます。</p>
+
+<h1 id="速度の比較">速度の比較</h1>
+
+<p>一応やります。<br />
+比較方法は前回と同様。</p>
+
+<pre><code class="language-bash">ld   : 2 secs, 982 ms, 825 μs, and 7 hnsecs
+gold : 1 sec, 64 ms, 881 μs, and 5 hnsecs
+lld : 763 ms, 647 μs, and 5 hnsecs
+</code></pre>
+
+<p>goldよりも1.4倍くらい速いかな？といったかんじ。<br />
+噂ほど速くはなってないかなぁという印象でしたが、少しでも速くしたいので今後はこちらを使っていきたいと思います。</p>
+
+<p>比較用のコードは<a href="https://gist.github.com/Sobaya007/b8bee8664529c00bc9316a5d5bcedd77">こちら</a>です。</p>
 
             
 
@@ -651,7 +771,7 @@ struct B {
 
 
 <li>
-  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&text=DMD2.085.0%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e3%81%8c%e5%87%ba%e3%81%a6%e3%83%93%e3%83%ab%e3%83%89%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%8f%e3%81%aa%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&via=sobaya007" target="_blank" class="share-btn twitter">
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&text=D%e8%a8%80%e8%aa%9e%e3%81%a7LLD%e3%82%82%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f&via=sobaya007" target="_blank" class="share-btn twitter">
     <i class="fab fa-twitter"></i>
     <p>Twitter</p>
     </a>
@@ -659,7 +779,7 @@ struct B {
 
 
 <li>
-  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn google-plus">
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn google-plus">
     <i class="fab fa-google-plus"></i>
     <p>Google+</p>
   </a>
@@ -667,7 +787,7 @@ struct B {
 
 
 <li>
-  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn facebook">
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn facebook">
     <i class="fab fa-facebook"></i>
     <p>Facebook</p>
     </a>
@@ -675,7 +795,7 @@ struct B {
 
 
 <li>
-  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=DMD2.085.0%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e3%81%8c%e5%87%ba%e3%81%a6%e3%83%93%e3%83%ab%e3%83%89%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%8f%e3%81%aa%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn reddit">
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7LLD%e3%82%82%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn reddit">
     <i class="fab fa-reddit-alien"></i>
     <p>Reddit</p>
   </a>
@@ -683,7 +803,7 @@ struct B {
 
 
 <li>
-  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=DMD2.085.0%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e3%81%8c%e5%87%ba%e3%81%a6%e3%83%93%e3%83%ab%e3%83%89%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%8f%e3%81%aa%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn linkedin">
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7LLD%e3%82%82%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn linkedin">
       <i class="fab fa-linkedin"></i>
       <p>LinkedIn</p>
     </a>
@@ -691,7 +811,7 @@ struct B {
 
 
 <li>
-  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=DMD2.085.0%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e3%81%8c%e5%87%ba%e3%81%a6%e3%83%93%e3%83%ab%e3%83%89%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%8f%e3%81%aa%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn stumbleupon">
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7LLD%e3%82%82%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn stumbleupon">
     <i class="fab fa-stumbleupon"></i>
     <p>StumbleUpon</p>
   </a>
@@ -699,7 +819,7 @@ struct B {
 
 
 <li>
-  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&description=DMD2.085.0%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e3%81%8c%e5%87%ba%e3%81%a6%e3%83%93%e3%83%ab%e3%83%89%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%8f%e3%81%aa%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn pinterest">
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f&description=D%e8%a8%80%e8%aa%9e%e3%81%a7LLD%e3%82%82%e4%bd%bf%e3%81%a3%e3%81%a6%e3%83%aa%e3%83%b3%e3%82%af%e3%82%92%e9%ab%98%e9%80%9f%e5%8c%96%e3%81%97%e3%81%a6%e3%81%bf%e3%81%9f" target="_blank" class="share-btn pinterest">
     <i class="fab fa-pinterest-p"></i>
     <p>Pinterest</p>
   </a>
@@ -707,7 +827,7 @@ struct B {
 
 
 <li>
-  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f11%2fdmd2.085.0%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25A8%25E3%2583%25A9%25E3%2583%25BC%25E3%2581%258C%25E5%2587%25BA%25E3%2581%25A6%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E3%2581%25A7%25E3%2581%258D%25E3%2581%25AA%25E3%2581%258F%25E3%2581%25AA%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn email">
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f13%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7lld%25E3%2582%2582%25E4%25BD%25BF%25E3%2581%25A3%25E3%2581%25A6%25E3%2583%25AA%25E3%2583%25B3%25E3%2582%25AF%25E3%2582%2592%25E9%25AB%2598%25E9%2580%259F%25E5%258C%2596%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2f" target="_blank" class="share-btn email">
     <i class="fas fa-envelope"></i>
     <p>Email</p>
   </a>
@@ -716,7 +836,7 @@ struct B {
     </ul>
   </section>
     
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/#disqus_thread" lang="en" class="article-comment-link">
+    <a href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/#disqus_thread" lang="en" class="article-comment-link">
         Comments
     </a>
     
@@ -735,14 +855,40 @@ struct B {
 	
 	  <ul>
   	<div class="item-banner">
-      <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="banner">
+      <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="banner">
         
-            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題" class="banner-image"></span>
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でgoldを使ってリンクを高速化してみた" class="banner-image"></span>
         
       </a>
     </div>
     <span class="title">
-  	  <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/">D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題</a>
+  	  <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/">D言語でgoldを使ってリンクを高速化してみた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="DLSを直した話" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/">DLSを直した話</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">D言語で継承&#43;配列のバグがずっと残ってる件について</a>
   	</span>
   	</ul>
 	
@@ -754,21 +900,14 @@ struct B {
     
 <nav id="article-nav">
     
-    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題</div>
+      <div class="article-nav-title">DLSを直した話</div>
     </a>
     
 
-    
-    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">D言語で継承&#43;配列のバグがずっと残ってる件について</div>
-    </a>
     
 </nav>
 

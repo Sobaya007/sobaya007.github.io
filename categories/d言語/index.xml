@@ -5,10 +5,29 @@
     <link>https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E/</link>
     <description>Recent content in D言語 on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 27 Apr 2019 23:33:31 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 13 May 2019 11:32:01 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>D言語でLLDも使ってリンクを高速化してみた</title>
+      <link>https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/</link>
+      <pubDate>Mon, 13 May 2019 11:32:01 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/</guid>
+      <description>GOLDの続きです。
+LLDとはなんぞや LLDとはリンカーの一種で、色々なアーキテクチャに対応している。goldより速いらしい。
+多分OS標準のpackage managerで普通にインストールできる。
+今回のモチベーション 前回の記事で「LLDが使えない!」という自体に陥り、仕方なくgoldを使う決意を固めていたのですが、諦めきれずにちょくちょく試しておりました。
+今回D言語でうまく使う方法を無事発見できたのでメモがてら書いておこうと思いました。
+TL;DR LLDはld.lldという名前の実行ファイルになっている。
+-fuse-ld=lldとすれば置き換わると書いてあったので、試しに
+&amp;gt; dmd test.d -L-fuse-ld=lld  としてみる。確かにコンパイルは通る。
+しかし本当にLLDが使われているのかわからない。
+LLDの「Using LLD」の項をよく読んでみると、
+ LLD leaves its name and version number to a .comment section in an output. If you are in doubt whether you are successfully using LLD or not, run readelf --string-dump .comment &amp;lt;output-file&amp;gt; and examine the output. If the string “Linker: LLD” is included in the output, you are using LLD.</description>
+    </item>
     
     <item>
       <title>D言語でgoldを使ってリンクを高速化してみた</title>
