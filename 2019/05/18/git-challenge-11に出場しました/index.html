@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>git challenge ♯11に出場しました！ &middot; そばやのブログ</title>
+    <meta name="generator" content="Hugo 0.54.0" />
+    
+    
+        
+    
+
+    
+
+    <link rel="apple-touch-icon-precomposed"
+        href='/favicon/favicon-250.png'>
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="32x32">
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="192x192">
+    <meta name="msapplication-TileImage" content="/favicon/favicon-300.png" />
+
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="そばや">
+    
+      <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/"/>
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
+    
+
+
+<link href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/vs2015.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="https://sobaya007.github.io/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="git challenge ♯11に出場しました！" />
+<meta property="og:description" content="git challengeとは mixiさんの運営している学生向けのイベント。
+gitにまつわるおもしろ問題を解く会。
+当日の流れ 時系列順にあったことを書いていこうと思います。
+10:40 受付開始 はい pic.twitter.com/27j23vc91W
+&mdash; そばや (@sobaya007) May 18, 2019  受付開始から15分ほど遅れること入場。
+既にほとんどの参加者はこの時点で集まっていたようです。
+ここで相方の青のりさんとのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。
+多分11:00すぎくらい 説明兼LT開始 さっそく本日のルール等の説明がはじまります。
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。 え、はやくない、今電車乗ったけど
+&mdash; やまだ (@ymdtr) May 18, 2019  犯人はこいつです。
+待っていても埒が明かないので説明は粛々と開始。
+この時点で問題の回答手順等がゆるふわにわかるようになります。
+ちなみに本大会からスコアボードが新システムに変わったそうで、見てみたら中身がHaskellとElm製でした。
+趣味が現れていて大変すばらしい！
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！
+たしか12:00くらい ランチタイム ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。 昼飯#mixi_git pic.twitter.com/lXDVVsofr2
+&mdash; そばや (@sobaya007) May 18, 2019 
+13:07 ~ 16:30 競技 Slackに残っていたのでこれは正確な時刻がわかりました。
+事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。
+最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&hellip;
+残念無念#mixi_git pic.twitter.com/gbMGNq0TJB
+&mdash; そばや (@sobaya007) May 18, 2019" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/" />
+<meta property="article:published_time" content="2019-05-18T20:58:11&#43;09:00"/>
+<meta property="article:modified_time" content="2019-05-18T20:58:11&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+
+    
+    
+<meta itemprop="name" content="git challenge ♯11に出場しました！">
+<meta itemprop="description" content="git challengeとは mixiさんの運営している学生向けのイベント。
+gitにまつわるおもしろ問題を解く会。
+当日の流れ 時系列順にあったことを書いていこうと思います。
+10:40 受付開始 はい pic.twitter.com/27j23vc91W
+&mdash; そばや (@sobaya007) May 18, 2019  受付開始から15分ほど遅れること入場。
+既にほとんどの参加者はこの時点で集まっていたようです。
+ここで相方の青のりさんとのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。
+多分11:00すぎくらい 説明兼LT開始 さっそく本日のルール等の説明がはじまります。
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。 え、はやくない、今電車乗ったけど
+&mdash; やまだ (@ymdtr) May 18, 2019  犯人はこいつです。
+待っていても埒が明かないので説明は粛々と開始。
+この時点で問題の回答手順等がゆるふわにわかるようになります。
+ちなみに本大会からスコアボードが新システムに変わったそうで、見てみたら中身がHaskellとElm製でした。
+趣味が現れていて大変すばらしい！
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！
+たしか12:00くらい ランチタイム ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。 昼飯#mixi_git pic.twitter.com/lXDVVsofr2
+&mdash; そばや (@sobaya007) May 18, 2019 
+13:07 ~ 16:30 競技 Slackに残っていたのでこれは正確な時刻がわかりました。
+事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。
+最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&hellip;
+残念無念#mixi_git pic.twitter.com/gbMGNq0TJB
+&mdash; そばや (@sobaya007) May 18, 2019">
+
+
+<meta itemprop="datePublished" content="2019-05-18T20:58:11&#43;09:00" />
+<meta itemprop="dateModified" content="2019-05-18T20:58:11&#43;09:00" />
+<meta itemprop="wordCount" content="114">
+
+
+
+<meta itemprop="keywords" content="git,mixi," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="git challenge ♯11に出場しました！"/>
+<meta name="twitter:description" content="git challengeとは mixiさんの運営している学生向けのイベント。
+gitにまつわるおもしろ問題を解く会。
+当日の流れ 時系列順にあったことを書いていこうと思います。
+10:40 受付開始 はい pic.twitter.com/27j23vc91W
+&mdash; そばや (@sobaya007) May 18, 2019  受付開始から15分ほど遅れること入場。
+既にほとんどの参加者はこの時点で集まっていたようです。
+ここで相方の青のりさんとのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。
+多分11:00すぎくらい 説明兼LT開始 さっそく本日のルール等の説明がはじまります。
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。 え、はやくない、今電車乗ったけど
+&mdash; やまだ (@ymdtr) May 18, 2019  犯人はこいつです。
+待っていても埒が明かないので説明は粛々と開始。
+この時点で問題の回答手順等がゆるふわにわかるようになります。
+ちなみに本大会からスコアボードが新システムに変わったそうで、見てみたら中身がHaskellとElm製でした。
+趣味が現れていて大変すばらしい！
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！
+たしか12:00くらい ランチタイム ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。 昼飯#mixi_git pic.twitter.com/lXDVVsofr2
+&mdash; そばや (@sobaya007) May 18, 2019 
+13:07 ~ 16:30 競技 Slackに残っていたのでこれは正確な時刻がわかりました。
+事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。
+最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&hellip;
+残念無念#mixi_git pic.twitter.com/gbMGNq0TJB
+&mdash; そばや (@sobaya007) May 18, 2019"/>
+<meta name="twitter:site" content="@sobaya007"/>
+
+    
+
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <script type="application/ld+json">
+    {
+        "@context" : "http://schema.org",
+        "@type" : "BlogPosting",
+        "mainEntityOfPage": {
+             "@type": "WebPage",
+             "@id": "https://sobaya007.github.io/"
+        },
+        "articleSection" : "post",
+        "name" : "git challenge ♯11に出場しました！",
+        "headline" : "git challenge ♯11に出場しました！",
+        "description" : "git challengeとは mixiさんの運営している学生向けのイベント。
+gitにまつわるおもしろ問題を解く会。
+当日の流れ 時系列順にあったことを書いていこうと思います。
+10:40 受付開始 はい pic.twitter.com/27j23vc91W
+&mdash; そばや (@sobaya007) May 18, 2019  受付開始から15分ほど遅れること入場。
+既にほとんどの参加者はこの時点で集まっていたようです。
+ここで相方の青のりさんとのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。
+多分11:00すぎくらい 説明兼LT開始 さっそく本日のルール等の説明がはじまります。
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。 え、はやくない、今電車乗ったけど
+&mdash; やまだ (@ymdtr) May 18, 2019  犯人はこいつです。
+待っていても埒が明かないので説明は粛々と開始。
+この時点で問題の回答手順等がゆるふわにわかるようになります。
+ちなみに本大会からスコアボードが新システムに変わったそうで、見てみたら中身がHaskellとElm製でした。
+趣味が現れていて大変すばらしい！
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！
+たしか12:00くらい ランチタイム ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。 昼飯#mixi_git pic.twitter.com/lXDVVsofr2
+&mdash; そばや (@sobaya007) May 18, 2019 
+13:07 ~ 16:30 競技 Slackに残っていたのでこれは正確な時刻がわかりました。
+事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。
+最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&hellip;
+残念無念#mixi_git pic.twitter.com/gbMGNq0TJB
+&mdash; そばや (@sobaya007) May 18, 2019",
+        "inLanguage" : "en",
+        "author" : "",
+        "creator" : "",
+        "publisher": "",
+        "accountablePerson" : "",
+        "copyrightHolder" : "",
+        "copyrightYear" : "2019",
+        "datePublished": "2019-05-18 20:58:11 &#43;0900 &#43;0900",
+        "dateModified" : "2019-05-18 20:58:11 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/",
+        "wordCount" : "114",
+        "keywords" : [ "git","mixi","Blog" ]
+    }
+</script>
+
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo">
+          
+          <span class="site-title">そばやのブログ</span>
+      </a>
+      <a href="/" id="logolong">
+        
+      </a>
+      <nav id="main-nav">
+         <div href="/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/" class="navbar-collapse collapse" id="navigation">
+            <ul class="nav navbar-nav navbar-right">
+              
+              <li class="main-dropdown">
+                
+                <a href="/">Home</a>
+                
+              </li>
+              
+              <li class="main-dropdown">
+                
+                <a href="/post/">Blog</a>
+                
+              </li>
+              
+            </ul>
+          </div>
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <nav class="right-nav">
+            
+        </nav>   
+    </div>     
+  </div> 
+  <div id="main-nav-mobile" class="header-sub header-inner">
+      <div class="navbar-collapse collapse" id="navigation">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li class="main-dropdown">
+            
+            <a href="/">Home</a>
+            
+          </li>
+          
+          <li class="main-dropdown">
+            
+            <a href="/post/">Blog</a>
+            
+          </li>
+          
+        </ul>
+      </div>
+  </div>  
+</header>
+
+
+   	
+ 	<div class="outer">
+    <div id="sideleft">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+        
+        <img id="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg">
+        
+        <h2 id="name">そばや</h2>
+      
+      <h3 id="title">徒然なるそばやの感想</h3>
+      <span id="location"><i class="fas fa-map-marker"></i>Japan</span>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/Sobaya007" target="_blank" title="GitHub"><i class="fab fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/sobaya007" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></td>
+
+
+
+
+
+
+
+
+
+<li><a href="mailto:sobaya007@gmail.com" title="Email" class="fas fa-envelope"></a></li>
+
+
+
+          <td><a href="https://sobaya007.github.io/index.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+   	
+    	<aside id="sidebar">
+    
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/gitchallenge.png)" alt="git challenge ♯11に出場しました！" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/" lang="en" class="title">git challenge ♯11に出場しました！</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/git">
+                        git
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-05-18 20:58:11 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でLLDも使ってリンクを高速化してみた" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="title">D言語でLLDも使ってリンクを高速化してみた</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-05-13 11:32:01 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-13</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="DLSを直した話" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="title">DLSを直した話</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/language-server">
+                        Language Server
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-05-09 12:03:42 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でgoldを使ってリンクを高速化してみた" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="title">D言語でgoldを使ってリンクを高速化してみた</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-27 23:33:31 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="title">D言語で継承&#43;配列のバグがずっと残ってる件について</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-04-19 22:38:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-19</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/git">
+                    git
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/git">
+                    git
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/linker">
+                    linker
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/mixi">
+                    mixi
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">
+                    バグ
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        
+        <a href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E" style="font-size: 12px;">d言語</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/git" style="font-size: 12px;">git</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/language-server" style="font-size: 12px;">language-server</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/linker" style="font-size: 12px;">linker</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/mixi" style="font-size: 12px;">mixi</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0" style="font-size: 12px;">バグ</a>
+        
+    </div>
+</div>
+
+
+
+
+
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+    
+    </div>
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/gitchallenge.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/" lang="en">
+    <h1 class="article-title" itemprop="name">
+        git challenge ♯11に出場しました！
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fas fa-calendar"></i>
+            <time datetime="2019-05-18 20:58:11 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-05-18</time>
+            &middot;
+            114
+            words.
+            &middot;
+            1
+            minute read.
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/categories/git">git</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/git">git</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/mixi">mixi</a>
+                
+                
+            </div>
+            
+        
+    </div>
+    
+
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<h1 id="git-challengeとは">git challengeとは</h1>
+
+<p><a href="https://mixi-recruit.snar.jp/">mixi</a>さんの運営している学生向けのイベント。<br />
+gitにまつわるおもしろ問題を解く会。</p>
+
+<h1 id="当日の流れ">当日の流れ</h1>
+
+<p>時系列順にあったことを書いていこうと思います。</p>
+
+<h2 id="10-40-受付開始">10:40 受付開始</h2>
+
+<p><blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">はい <a href="https://t.co/27j23vc91W">pic.twitter.com/27j23vc91W</a></p>&mdash; そばや (@sobaya007) <a href="https://twitter.com/sobaya007/status/1129565930877382656?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+受付開始から15分ほど遅れること入場。<br />
+既にほとんどの参加者はこの時点で集まっていたようです。<br />
+ここで相方の<a href="https://twitter.com/aonrjp">青のりさん</a>とのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。</p>
+
+<h2 id="多分11-00すぎくらい-説明兼lt開始">多分11:00すぎくらい 説明兼LT開始</h2>
+
+<p>さっそく本日のルール等の説明がはじまります。<br />
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">え、はやくない、今電車乗ったけど</p>&mdash; やまだ (@<em>ymdtr</em>) <a href="https://twitter.com/_ymdtr_/status/1129569412111953920?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+犯人はこいつです。<br />
+待っていても埒が明かないので説明は粛々と開始。<br />
+この時点で問題の回答手順等がゆるふわにわかるようになります。<br />
+ちなみに本大会からスコアボードが<a href="https://github.com/matsubara0507/git-plantation">新システム</a>に変わったそうで、見てみたら中身がHaskellとElm製でした。<br />
+趣味が現れていて大変すばらしい！<br />
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！</p>
+
+<h2 id="たしか12-00くらい-ランチタイム">たしか12:00くらい ランチタイム</h2>
+
+<p>ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。<br />
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。<br />
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">昼飯<a href="https://twitter.com/hashtag/mixi_git?src=hash&amp;ref_src=twsrc%5Etfw">#mixi_git</a> <a href="https://t.co/lXDVVsofr2">pic.twitter.com/lXDVVsofr2</a></p>&mdash; そばや (@sobaya007) <a href="https://twitter.com/sobaya007/status/1129585417341132801?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h2 id="13-07-16-30-競技">13:07 ~ 16:30 競技</h2>
+
+<p>Slackに残っていたのでこれは正確な時刻がわかりました。</p>
+
+<p>事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。</p>
+
+<p>最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&hellip;<br />
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">残念無念<a href="https://twitter.com/hashtag/mixi_git?src=hash&amp;ref_src=twsrc%5Etfw">#mixi_git</a> <a href="https://t.co/gbMGNq0TJB">pic.twitter.com/gbMGNq0TJB</a></p>&mdash; そばや (@sobaya007) <a href="https://twitter.com/sobaya007/status/1129651653701857280?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>問題の詳しい内容は書けないのですが、普段からgitで怪しいことをしていると問題に対処はしやすくなるのかな、とは漠然と思いました。</p>
+
+<h2 id="16-30-lt-結果発表">16:30 LT&amp;結果発表</h2>
+
+<p>LTがあったんですが、ここで私はトイレに行ってしまいほとんど聞いていませんでした&hellip;<br />
+話してくださったスタッフの方には申し訳ない。</p>
+
+<p>帰ってきたら結果発表フェーズだったのですが、結果はこんなかんじとなっておりました。<br />
+<img src="result.png" alt="" />
+私は下から3番目のJulietチームというのに所属しました。ポイントは22なので同率1位になれました。わーい。<br />
+1位のチームは3チームありましたが、景品が1チームぶんしか用意されていなかったらしく、速いもの順で1番だったうちのチームに商品贈呈という流れになりました。わーい。
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">俺の勝ち！<br>何で負けたか、明日まで考えといてください。<br>そしたら何かが見えてくるはずです。<br>ほな、いただきます。<a href="https://twitter.com/hashtag/mixi_git?src=hash&amp;ref_src=twsrc%5Etfw">#mixi_git</a> <a href="https://t.co/BTw2xhJHx3">pic.twitter.com/BTw2xhJHx3</a></p>&mdash; そばや (@sobaya007) <a href="https://twitter.com/sobaya007/status/1129698499698708480?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+調子に乗ったツイートですが酒入ってたんで許してください。</p>
+
+<p>景品はメダルとパーカーでした。
+<img src="front.png" alt="" />
+パーカーのほうは後ろに謎のコミットツリーが書いてありました。
+<img src="back.png" alt="" />
+やばそうなコミットツリー。私だったらこんなツリー怖くて触れないです。そもそもmergeコミットをrevertしないで欲しい。。。</p>
+
+<p>その後は問題解説です。<br />
+アンケートを取りみんなが解説してほしい問題を3,4問ほど解説していただきました。<br />
+私は結構邪道な方法でいくつか解いていたみたいで、解説を見てはじめて問題の意図を知る、なんてものもありました。</p>
+
+<h2 id="その後-19-30くらい">その後 ~ 19:30くらい</h2>
+
+<p>最後に懇親会があって解散、という流れでした。<br />
+料理が出たり、お酒が出たり、おしゃべりしたり、解説延長戦をやったりといったかんじでした。</p>
+
+<p>ケーキも出たのですが、見ての通りかわいいかんじで味も美味しかったです。
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr">ケーキ<a href="https://twitter.com/hashtag/mixi_git?src=hash&amp;ref_src=twsrc%5Etfw">#mixi_git</a> <a href="https://t.co/gacLz0hTt6">pic.twitter.com/gacLz0hTt6</a></p>&mdash; そばや (@sobaya007) <a href="https://twitter.com/sobaya007/status/1129680442884386816?ref_src=twsrc%5Etfw">May 18, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h1 id="感想">感想</h1>
+
+<p>一番にあるのは優勝できて嬉しかったなぁということです。<br />
+あまり賞みたいなものに縁がないので貴重なメダルとなりました。</p>
+
+<p>それと、問題を解くのは普通に面白かったですね。<br />
+問題の難易度設定として「ちょっと頭をひねれば解ける」ようなものが多かったのでどんどん解けていって気持ちよかったです。</p>
+
+<p>あとは参加者の方々とのお話が結構面白かったですね。<br />
+私自身はWeb系の人間ってかんじではないのですが、それでも社員さんのお話を聞いたり懇親会で参加者の方とお話するのは新鮮なものもあり慣れ親しんだものもありで楽しかったです。</p>
+
+<p>非常に満足だったので周りにも布教しておこうと思います。<br />
+mixiさん、ありがとうございました！</p>
+
+            
+
+        </div>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f&text=git%20challenge%20%e2%99%af11%e3%81%ab%e5%87%ba%e5%a0%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%ef%bc%81&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f&title=git%20challenge%20%e2%99%af11%e3%81%ab%e5%87%ba%e5%a0%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%ef%bc%81" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f&title=git%20challenge%20%e2%99%af11%e3%81%ab%e5%87%ba%e5%a0%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%ef%bc%81" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f&title=git%20challenge%20%e2%99%af11%e3%81%ab%e5%87%ba%e5%a0%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%ef%bc%81" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f&description=git%20challenge%20%e2%99%af11%e3%81%ab%e5%87%ba%e5%a0%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%ef%bc%81" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f05%2f18%2fgit-challenge-11%25E3%2581%25AB%25E5%2587%25BA%25E5%25A0%25B4%25E3%2581%2597%25E3%2581%25BE%25E3%2581%2597%25E3%2581%259F%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
+    </div>
+    
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">D言語でLLDも使ってリンクを高速化してみた</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+
+    </section>
+
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="https://github.com/statnmap/hugo-statnmap-theme">statnmap</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://sobaya007.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://sobaya007.github.io/js/script.js"></script>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/rust.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -5,10 +5,42 @@
     <link>https://sobaya007.github.io/post/</link>
     <description>Recent content in Posts on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 13 May 2019 11:32:01 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 18 May 2019 20:58:11 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>git challenge ♯11に出場しました！</title>
+      <link>https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/</link>
+      <pubDate>Sat, 18 May 2019 20:58:11 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/05/18/git-challenge-11%E3%81%AB%E5%87%BA%E5%A0%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/</guid>
+      <description>git challengeとは mixiさんの運営している学生向けのイベント。
+gitにまつわるおもしろ問題を解く会。
+当日の流れ 時系列順にあったことを書いていこうと思います。
+10:40 受付開始 はい pic.twitter.com/27j23vc91W
+&amp;mdash; そばや (@sobaya007) May 18, 2019  受付開始から15分ほど遅れること入場。
+既にほとんどの参加者はこの時点で集まっていたようです。
+ここで相方の青のりさんとのご挨拶タイム。後にわかったことですが、秋葉原でジャンク品を漁っては復元する系のプロの方でした。
+多分11:00すぎくらい 説明兼LT開始 さっそく本日のルール等の説明がはじまります。
+ルール説明に入るかなーというくらいのタイミングで、「参加者が一人来ていない」ということがわかりました。 え、はやくない、今電車乗ったけど
+&amp;mdash; やまだ (@ymdtr) May 18, 2019  犯人はこいつです。
+待っていても埒が明かないので説明は粛々と開始。
+この時点で問題の回答手順等がゆるふわにわかるようになります。
+ちなみに本大会からスコアボードが新システムに変わったそうで、見てみたら中身がHaskellとElm製でした。
+趣味が現れていて大変すばらしい！
+ついでにこれはOSSなので問題さえ作れば誰でもこれでgit challengeが開催できちゃうらしいです！やったね！
+たしか12:00くらい ランチタイム ランチは隣のチームとかチューターさんとか人事の人とかが合わさって6人で食べました。
+お弁当はなにやらお洒落で紐を引くと温まる系のアレです。
+写真を見ていただければわかると思いますが、非常に見た目も綺麗でおいしかったです。 昼飯#mixi_git pic.twitter.com/lXDVVsofr2
+&amp;mdash; そばや (@sobaya007) May 18, 2019 
+13:07 ~ 16:30 競技 Slackに残っていたのでこれは正確な時刻がわかりました。
+事前に戦略は練ってあって、最初の二問の割り振りはじゃんけんで適当に決めて、後は順次解けた人からどんどんやっていこう、みたいなかんじでした。
+最初のほうはペースが良かったのですが、3問ほど明らかに配点がやばい問題が存在し、その問題は1問も解けませんでした&amp;hellip;
+残念無念#mixi_git pic.twitter.com/gbMGNq0TJB
+&amp;mdash; そばや (@sobaya007) May 18, 2019</description>
+    </item>
     
     <item>
       <title>D言語でLLDも使ってリンクを高速化してみた</title>
