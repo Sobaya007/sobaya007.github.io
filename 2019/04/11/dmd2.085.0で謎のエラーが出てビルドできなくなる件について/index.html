@@ -47,7 +47,12 @@ OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所
 ということで見つけた最小コードがこちら↓
  app.d
 struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;" />
+ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;
+追記 2019/5/25
+この記事についてツイートをしたところ https://t.co/5HGn31UQcD これでなおるかもしれません、といっても最速で2.085.2リリースになってしまいますが。
+&mdash; 私にICEが舞い降りた！ (@shitsyndrome) April 16, 2019  とのお知らせが。
+実際にdmd2.086.0で動かしてみると、無事動きました！ありがとうございます！！
+BugzillaとかでIssue立てるのは私なんかにはハードルがめちゃめちゃ高いのでTwitterで反応してこうして直してくださると本当にありがたいですね。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
 <meta property="article:published_time" content="2019-04-11T20:59:06&#43;09:00"/>
@@ -62,12 +67,17 @@ OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所
 ということで見つけた最小コードがこちら↓
  app.d
 struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;">
+ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;
+追記 2019/5/25
+この記事についてツイートをしたところ https://t.co/5HGn31UQcD これでなおるかもしれません、といっても最速で2.085.2リリースになってしまいますが。
+&mdash; 私にICEが舞い降りた！ (@shitsyndrome) April 16, 2019  とのお知らせが。
+実際にdmd2.086.0で動かしてみると、無事動きました！ありがとうございます！！
+BugzillaとかでIssue立てるのは私なんかにはハードルがめちゃめちゃ高いのでTwitterで反応してこうして直してくださると本当にありがたいですね。">
 
 
 <meta itemprop="datePublished" content="2019-04-11T20:59:06&#43;09:00" />
 <meta itemprop="dateModified" content="2019-04-11T20:59:06&#43;09:00" />
-<meta itemprop="wordCount" content="29">
+<meta itemprop="wordCount" content="43">
 
 
 
@@ -81,7 +91,12 @@ OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所
 ということで見つけた最小コードがこちら↓
  app.d
 struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;"/>
+ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;
+追記 2019/5/25
+この記事についてツイートをしたところ https://t.co/5HGn31UQcD これでなおるかもしれません、といっても最速で2.085.2リリースになってしまいますが。
+&mdash; 私にICEが舞い降りた！ (@shitsyndrome) April 16, 2019  とのお知らせが。
+実際にdmd2.086.0で動かしてみると、無事動きました！ありがとうございます！！
+BugzillaとかでIssue立てるのは私なんかにはハードルがめちゃめちゃ高いのでTwitterで反応してこうして直してくださると本当にありがたいですね。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -117,7 +132,12 @@ OSはArch Linux。 dmdが2.085.0になったとき、エラーが起きた箇所
 ということで見つけた最小コードがこちら↓
  app.d
 struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;",
+ちなみにAのメンバーが浮動小数型だとバグりますが、整数型だと通ります。 また、Bのコンストラクタ引数の配列数を2以上にすると通ります。 意味がわからん&hellip;
+追記 2019/5/25
+この記事についてツイートをしたところ https://t.co/5HGn31UQcD これでなおるかもしれません、といっても最速で2.085.2リリースになってしまいますが。
+&mdash; 私にICEが舞い降りた！ (@shitsyndrome) April 16, 2019  とのお知らせが。
+実際にdmd2.086.0で動かしてみると、無事動きました！ありがとうございます！！
+BugzillaとかでIssue立てるのは私なんかにはハードルがめちゃめちゃ高いのでTwitterで反応してこうして直してくださると本当にありがたいですね。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -128,7 +148,7 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
         "datePublished": "2019-04-11 20:59:06 &#43;0900 &#43;0900",
         "dateModified" : "2019-04-11 20:59:06 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/",
-        "wordCount" : "29",
+        "wordCount" : "43",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -599,7 +619,7 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
             <i class="fas fa-calendar"></i>
             <time datetime="2019-04-11 20:59:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-11</time>
             &middot;
-            29
+            43
             words.
             &middot;
             1
@@ -643,7 +663,9 @@ struct A { float e; } struct B { this(A[1]) {} }   これをdubのプロジェ�
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>実は前から気づいていたが、dmd2.085.0で<a href="https://github.com/Sobaya007/sbylib-graphics">とあるプロジェクト</a>をビルドしようとしたところ<code>tym = x27</code>とかいう謎のエラーを吐いてビルドできなくなってしまった。
+            
+
+<p>実は前から気づいていたが、dmd2.085.0で<a href="https://github.com/Sobaya007/sbylib-graphics">とあるプロジェクト</a>をビルドしようとしたところ<code>tym = x27</code>とかいう謎のエラーを吐いてビルドできなくなってしまった。
 ggってみても関連するものが見当たらない。
 ブチキレたので調査をしてみた。</p>
 
@@ -670,6 +692,19 @@ struct B {
 <p>ちなみに<code>A</code>のメンバーが浮動小数型だとバグりますが、整数型だと通ります。
 また、<code>B</code>のコンストラクタ引数の配列数を2以上にすると通ります。
 意味がわからん&hellip;</p>
+
+<hr />
+
+<h2 id="追記">追記</h2>
+
+<p>2019/5/25</p>
+
+<p>この記事についてツイートをしたところ
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="ja" dir="ltr"><a href="https://t.co/5HGn31UQcD">https://t.co/5HGn31UQcD</a> これでなおるかもしれません、といっても最速で2.085.2リリースになってしまいますが。</p>&mdash; 私にICEが舞い降りた！ (@shitsyndrome) <a href="https://twitter.com/shitsyndrome/status/1117942300892487680?ref_src=twsrc%5Etfw">April 16, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+とのお知らせが。<br />
+実際にdmd2.086.0で動かしてみると、無事動きました！ありがとうございます！！<br />
+BugzillaとかでIssue立てるのは私なんかにはハードルがめちゃめちゃ高いのでTwitterで反応してこうして直してくださると本当にありがたいですね。</p>
 
             
 
