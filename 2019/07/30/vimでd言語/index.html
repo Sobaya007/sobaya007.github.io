@@ -50,6 +50,8 @@ dlsのインストール 敬虔なD言語erなら当然DUBはインストール�
 [[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { ... \ &#39;d&#39;: [&#39;~/.dub/packages/.bin/dls-latest/dls&#39;], ... \ } let g:LanguageClient_rootMarkers = { ... \ &#39;d&#39;: [&#39;dub.json&#39;, &#39;dub.sdl&#39;], ... \ } nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt; nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt; set hidden &quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" />
+
+<meta property="og:image" content="https://sobaya007.github.io/images/vman.png" />
 <meta property="article:published_time" content="2019-07-30T10:16:11&#43;09:00"/>
 <meta property="article:modified_time" content="2019-07-30T10:16:11&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
@@ -69,11 +71,15 @@ dlsのインストール 敬虔なD言語erなら当然DUBはインストール�
 <meta itemprop="dateModified" content="2019-07-30T10:16:11&#43;09:00" />
 <meta itemprop="wordCount" content="84">
 
+  <meta itemprop="image" content="https://sobaya007.github.io/images/vman.png">
+
 
 
 <meta itemprop="keywords" content="D言語,vim,language-server," />
 
-    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://sobaya007.github.io/images/vman.png"/>
+
 <meta name="twitter:title" content="VimでD言語"/>
 <meta name="twitter:description" content="多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語&#43;vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
 使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
