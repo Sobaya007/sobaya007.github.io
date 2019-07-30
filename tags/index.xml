@@ -5,7 +5,7 @@
     <link>https://sobaya007.github.io/tags/</link>
     <description>Recent content in Tags on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 09 Jun 2019 20:07:51 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jul 2019 10:16:11 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,7 +13,7 @@
     <item>
       <title>D言語</title>
       <link>https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E/</link>
-      <pubDate>Sun, 09 Jun 2019 20:07:51 +0900</pubDate>
+      <pubDate>Tue, 30 Jul 2019 10:16:11 +0900</pubDate>
       
       <guid>https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E/</guid>
       <description></description>
@@ -31,7 +31,7 @@
     <item>
       <title>Language Server</title>
       <link>https://sobaya007.github.io/tags/language-server/</link>
-      <pubDate>Thu, 09 May 2019 12:03:42 +0900</pubDate>
+      <pubDate>Tue, 30 Jul 2019 10:16:11 +0900</pubDate>
       
       <guid>https://sobaya007.github.io/tags/language-server/</guid>
       <description></description>
@@ -52,6 +52,15 @@
       <pubDate>Sat, 18 May 2019 20:58:11 +0900</pubDate>
       
       <guid>https://sobaya007.github.io/tags/mixi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Vim</title>
+      <link>https://sobaya007.github.io/tags/vim/</link>
+      <pubDate>Tue, 30 Jul 2019 10:16:11 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/tags/vim/</guid>
       <description></description>
     </item>
     

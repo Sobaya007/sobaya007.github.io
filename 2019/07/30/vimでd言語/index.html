@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>バグ &middot; そばやのブログ</title>
+    <title>VimでD言語 &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,10 +25,7 @@
       <meta name="description" content="">
     
     
-      <link href="/https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/index.xml" rel="alternate" type="application/rss+xml" title="そばやのブログ" />
-      <link href="/https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/index.xml" rel="feed" type="application/rss+xml" title="そばやのブログ" />
-    
-    <link rel="canonical" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -43,22 +40,48 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="バグ" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/" />
-
-<meta property="og:updated_time" content="2019-06-09T20:07:51&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+    <meta property="og:title" content="VimでD言語" />
+<meta property="og:description" content="多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語&#43;vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
+使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
+dls D言語のLanguage Serverです。割と活発に活動していていいかんじ。
+dlsのインストール 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
+&gt; dub fetch dls &gt; dub run dls:bootstrap  で終わりです。
+設定 私はdeinを使っているので、plugins.tomlに以下のような記述をしています。
+[[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { ... \ &#39;d&#39;: [&#39;~/.dub/packages/.bin/dls-latest/dls&#39;], ... \ } let g:LanguageClient_rootMarkers = { ... \ &#39;d&#39;: [&#39;dub.json&#39;, &#39;dub.sdl&#39;], ... \ } nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt; nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt; set hidden &quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" />
+<meta property="article:published_time" content="2019-07-30T10:16:11&#43;09:00"/>
+<meta property="article:modified_time" content="2019-07-30T10:16:11&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="バグ">
-<meta itemprop="description" content="">
+<meta itemprop="name" content="VimでD言語">
+<meta itemprop="description" content="多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語&#43;vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
+使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
+dls D言語のLanguage Serverです。割と活発に活動していていいかんじ。
+dlsのインストール 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
+&gt; dub fetch dls &gt; dub run dls:bootstrap  で終わりです。
+設定 私はdeinを使っているので、plugins.tomlに以下のような記述をしています。
+[[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { ... \ &#39;d&#39;: [&#39;~/.dub/packages/.bin/dls-latest/dls&#39;], ... \ } let g:LanguageClient_rootMarkers = { ... \ &#39;d&#39;: [&#39;dub.json&#39;, &#39;dub.sdl&#39;], ... \ } nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt; nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt; set hidden &quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。">
 
+
+<meta itemprop="datePublished" content="2019-07-30T10:16:11&#43;09:00" />
+<meta itemprop="dateModified" content="2019-07-30T10:16:11&#43;09:00" />
+<meta itemprop="wordCount" content="84">
+
+
+
+<meta itemprop="keywords" content="D言語,vim,language-server," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="バグ"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="VimでD言語"/>
+<meta name="twitter:description" content="多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語&#43;vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
+使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
+dls D言語のLanguage Serverです。割と活発に活動していていいかんじ。
+dlsのインストール 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
+&gt; dub fetch dls &gt; dub run dls:bootstrap  で終わりです。
+設定 私はdeinを使っているので、plugins.tomlに以下のような記述をしています。
+[[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { ... \ &#39;d&#39;: [&#39;~/.dub/packages/.bin/dls-latest/dls&#39;], ... \ } let g:LanguageClient_rootMarkers = { ... \ &#39;d&#39;: [&#39;dub.json&#39;, &#39;dub.sdl&#39;], ... \ } nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt; nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt; set hidden &quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -85,10 +108,16 @@
              "@type": "WebPage",
              "@id": "https://sobaya007.github.io/"
         },
-        "articleSection" : "tags",
-        "name" : "バグ",
-        "headline" : "バグ",
-        "description" : "",
+        "articleSection" : "post",
+        "name" : "VimでD言語",
+        "headline" : "VimでD言語",
+        "description" : "多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語+vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
+使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
+dls D言語のLanguage Serverです。割と活発に活動していていいかんじ。
+dlsのインストール 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
+&gt; dub fetch dls &gt; dub run dls:bootstrap  で終わりです。
+設定 私はdeinを使っているので、plugins.tomlに以下のような記述をしています。
+[[plugins]] repo = 'autozimu/LanguageClient-neovim' rev = 'next' build = 'bash install.sh' hook_add = ''' let g:LanguageClient_serverCommands = { ... \ 'd': ['~/.dub/packages/.bin/dls-latest/dls'], ... \ } let g:LanguageClient_rootMarkers = { ... \ 'd': ['dub.json', 'dub.sdl'], ... \ } nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt; nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt; nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt; set hidden &quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -96,11 +125,11 @@
         "accountablePerson" : "",
         "copyrightHolder" : "",
         "copyrightYear" : "2019",
-        "datePublished": "2019-06-09 20:07:51 &#43;0900 &#43;0900",
-        "dateModified" : "2019-06-09 20:07:51 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/",
-        "wordCount" : "0",
-        "keywords" : [ "Blog" ]
+        "datePublished": "2019-07-30 10:16:11 &#43;0900 &#43;0900",
+        "dateModified" : "2019-07-30 10:16:11 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/",
+        "wordCount" : "84",
+        "keywords" : [ "D言語","vim","language-server","Blog" ]
     }
 </script>
 
@@ -114,7 +143,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/tags/%E3%83%90%E3%82%B0/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -570,28 +599,16 @@
 
     <section id="main">
     
-    
-    
-    
-<section class="archives-wrap">
-  <div class="archive-category-wrap">
-      <span class="archive-category">バグ</span>
-  </div>
-  <div class="archives">
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/vman.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en">
     <h1 class="article-title" itemprop="name">
-        D言語のしょうもないバグをまたみつけた
+        VimでD言語
     </h1>
     </a>
     <div class="article-meta">
@@ -599,9 +616,9 @@
         
         <div class="article-date">
             <i class="fas fa-calendar"></i>
-            <time datetime="2019-06-09 20:07:51 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-06-09</time>
+            <time datetime="2019-07-30 10:16:11 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-07-30</time>
             &middot;
-            33
+            84
             words.
             &middot;
             1
@@ -616,6 +633,10 @@
                 
                 
                 <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/categories/vim">vim</a>
                 
                 
             </div>
@@ -633,7 +654,11 @@
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/vim">vim</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/language-server">language-server</a>
                 
                 
             </div>
@@ -644,278 +669,244 @@
 
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
+        <div class="article-entry" itemprop="articleBody">
+            
 
-                <p>今回見つけたバグコードはこちらになります
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
+<p>多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。
+しかしながらD言語+vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。</p>
+
+<h1 id="使うもの">使うもの</h1>
+
+<h2 id="autozimu-languageclient-neovim-https-github-com-autozimu-languageclient-neovim"><a href="https://github.com/autozimu/LanguageClient-neovim">autozimu/LanguageClient-neovim</a></h2>
+
+<p>言わずと知れたLSPのプラグインです。<a href="https://github.com/neoclide/coc.nvim">coc.nvim</a>も使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。</p>
+
+<h2 id="dls-https-github-com-d-language-server-dls"><a href="https://github.com/d-language-server/dls">dls</a></h2>
+
+<p>D言語のLanguage Serverです。割と活発に活動していていいかんじ。</p>
+
+<h1 id="dlsのインストール">dlsのインストール</h1>
+
+<p>敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば</p>
+
+<pre><code class="language-bash">&gt; dub fetch dls
+&gt; dub run dls:bootstrap
+</code></pre>
+
+<p>で終わりです。</p>
+
+<h1 id="設定">設定</h1>
+
+<p>私はdeinを使っているので、<code>plugins.toml</code>に以下のような記述をしています。</p>
+
+<pre><code class="language-toml">[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+build = 'bash install.sh'
+hook_add = '''
+let g:LanguageClient_serverCommands = {
+    ...
+    \ 'd': ['~/.dub/packages/.bin/dls-latest/dls'],
+    ...
+    \ }
+let g:LanguageClient_rootMarkers = {
+    ...
+    \ 'd': ['dub.json', 'dub.sdl'],
+    ...
+    \ }
+
+nnoremap &lt;F5&gt; :call LanguageClient_contextMenu()&lt;CR&gt;
+nnoremap &lt;silent&gt; K :call LanguageClient#textDocument_hover()&lt;CR&gt;
+nnoremap &lt;silent&gt; &lt;C-]&gt; :call LanguageClient#textDocument_definition()&lt;CR&gt;
+nnoremap &lt;silent&gt; &lt;F2&gt; :call LanguageClient#textDocument_rename()&lt;CR&gt;
+set hidden &quot;ないと失敗する操作が存在する(Renameとか)
+</code></pre>
+
+<p>こんなんで大体動きます。
+ショートカット系はお好みで。</p>
+
+<p>ただし<code>set hidden</code>はしておかないと(書いてあるとおりですが)いくつかの操作で失敗することがあるのでご注意を。</p>
+
+            
+
         </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        D言語で継承&#43;配列のバグがずっと残ってる件について
-    </h1>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f&text=Vim%e3%81%a7D%e8%a8%80%e8%aa%9e&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
     </a>
-    <div class="article-meta">
+</li>
 
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-19 22:38:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-19</time>
-            &middot;
-            48
-            words.
-            &middot;
-            1
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                
-                
-            </div>
-            
-        
 
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
-                
-                
-            </div>
-            
-        
-    </div>
-    
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
 
-</header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
-
-                <p>今回のバグはこんなかんじで発生します。
-[&hellip;] つまり、
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        DMD2.085.0で謎のエラーが出てビルドできなくなる件について
-    </h1>
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
     </a>
-    <div class="article-meta">
+</li>
 
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-11 20:59:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-11</time>
-            &middot;
-            43
-            words.
-            &middot;
-            1
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                
-                
-            </div>
-            
-        
 
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
-                
-                
-            </div>
-            
-        
-    </div>
-    
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f&title=Vim%e3%81%a7D%e8%a8%80%e8%aa%9e" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
 
-</header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
-
-                <p>とりあえず現状報告。
-[&hellip;] ということで見つけた最小コードがこちら↓
-[&hellip;] app.d
-[&hellip;] これをdubのプロジェクトの中でビルドしようとすると、少なくとも私の環境では落ちます。ぜひお試しあれ。
-[&hellip;] 2019/5/25
-[&hellip;] https://t.co/5HGn31UQcD これでなおるかもしれません、といっても最速 &hellip;</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="バグ" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題
-    </h1>
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f&title=Vim%e3%81%a7D%e8%a8%80%e8%aa%9e" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
     </a>
-    <div class="article-meta">
+</li>
 
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-10 16:27:25 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-10</time>
-            &middot;
-            220
-            words.
-            &middot;
-            2
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                
-                
-            </div>
-            
-        
 
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
-                
-                
-            </div>
-            
-        
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f&title=Vim%e3%81%a7D%e8%a8%80%e8%aa%9e" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f&description=Vim%e3%81%a7D%e8%a8%80%e8%aa%9e" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f07%2f30%2fvim%25E3%2581%25A7d%25E8%25A8%2580%25E8%25AA%259E%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
     </div>
     
 
-</header>
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語のしょうもないバグをまたみつけた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/">D言語のしょうもないバグをまたみつけた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でLLDも使ってリンクを高速化してみた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/05/13/d%E8%A8%80%E8%AA%9E%E3%81%A7lld%E3%82%82%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/">D言語でLLDも使ってリンクを高速化してみた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="DLSを直した話" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/05/09/dls%E3%82%92%E7%9B%B4%E3%81%97%E3%81%9F%E8%A9%B1/">DLSを直した話</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
 
-                <p>最近気づいた現象。(バグ？)
-あるインターフェースIがあって、これを実装したクラスCがShared library 1にある。
-これを型Iとして実行ファイル越しにShared library 2に送り、Cにダウンキャストする。
-この時、実行ファイル側にCの情報がないとダウンキャストが失敗する。
-具体的には以下のような状態。
-[&hellip;] type.d
-[&hellip;] dll1.d &hellip;</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
     
-  </div>
-</section>
-<nav id="page-nav">
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">D言語のしょうもないバグをまたみつけた</div>
+    </a>
+    
 
+    
 </nav>
 
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
 
     </section>
 

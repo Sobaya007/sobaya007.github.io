@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vim on そばやのブログ</title>
+    <link>https://sobaya007.github.io/tags/vim/</link>
+    <description>Recent content in Vim on そばやのブログ</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 30 Jul 2019 10:16:11 +0900</lastBuildDate>
+    
+	<atom:link href="https://sobaya007.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>VimでD言語</title>
+      <link>https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/</link>
+      <pubDate>Tue, 30 Jul 2019 10:16:11 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/</guid>
+      <description>多分D言語erさんの多くはVSCodeで開発してるんじゃないかと思うんですが、私は敬虔なvim教徒なのでnvimで日夜D言語を書いております。 しかしながらD言語+vimの環境構築の例がなかなかヒットしないのでメモ書き程度に残しておきます。
+使うもの autozimu/LanguageClient-neovim 言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
+dls D言語のLanguage Serverです。割と活発に活動していていいかんじ。
+dlsのインストール 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
+&amp;gt; dub fetch dls &amp;gt; dub run dls:bootstrap  で終わりです。
+設定 私はdeinを使っているので、plugins.tomlに以下のような記述をしています。
+[[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { ... \ &#39;d&#39;: [&#39;~/.dub/packages/.bin/dls-latest/dls&#39;], ... \ } let g:LanguageClient_rootMarkers = { ... \ &#39;d&#39;: [&#39;dub.json&#39;, &#39;dub.sdl&#39;], ... \ } nnoremap &amp;lt;F5&amp;gt; :call LanguageClient_contextMenu()&amp;lt;CR&amp;gt; nnoremap &amp;lt;silent&amp;gt; K :call LanguageClient#textDocument_hover()&amp;lt;CR&amp;gt; nnoremap &amp;lt;silent&amp;gt; &amp;lt;C-]&amp;gt; :call LanguageClient#textDocument_definition()&amp;lt;CR&amp;gt; nnoremap &amp;lt;silent&amp;gt; &amp;lt;F2&amp;gt; :call LanguageClient#textDocument_rename()&amp;lt;CR&amp;gt; set hidden &amp;quot;ないと失敗する操作が存在する(Renameとか)  こんなんで大体動きます。 ショートカット系はお好みで。</description>
+    </item>
+    
+  </channel>
+</rss>
