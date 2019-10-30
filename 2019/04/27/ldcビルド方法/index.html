@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>D言語で継承&#43;配列のバグがずっと残ってる件について &middot; そばやのブログ</title>
+    <title>LDCビルド方法 &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,7 +25,7 @@
       <meta name="description" content="">
     
     
-    <link rel="canonical" href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -40,39 +40,39 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について" />
-<meta property="og:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。" />
+    <meta property="og:title" content="LDCビルド方法" />
+<meta property="og:description" content="結構難航しているのでまとめ。 一応Wikiは存在しているので困ったら参考までに。
+結論 git clone https://github.com/ldc-developers/ldc --recursive cd ldc mkdir build cd build cmake .. -DLDC_WITH_LLD=OFF make  詰まったところ CMakeが「Some (but not all) targets in this export set were already defined」みたいなエラーを出す  issue PR 2019年10月31日現在、masterではこのバグは解決済み。 リリースでいうとv1.18.0時点では直っていない。 一部のLLVMコンフィグだとうまくいかないときがあるらしく、それがこれ。  ビルド(makeとかninjaとか)の途中で「CommandLine Error: Option &lsquo;mc-relax-all&rsquo; registered more than once!」と言われる cmakeするときにちゃんと-DLDC_WITH_LLD=OFFをつけるといけるらしい。謎。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" />
-<meta property="article:published_time" content="2019-04-19T22:38:06&#43;09:00"/>
-<meta property="article:modified_time" content="2019-04-19T22:38:06&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/" />
+
+<meta property="og:image" content="https://sobaya007.github.io/images/ldc.png" />
+<meta property="article:published_time" content="2019-04-27T23:33:31&#43;09:00"/>
+<meta property="article:modified_time" content="2019-04-27T23:33:31&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="D言語で継承&#43;配列のバグがずっと残ってる件について">
-<meta itemprop="description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。">
+<meta itemprop="name" content="LDCビルド方法">
+<meta itemprop="description" content="結構難航しているのでまとめ。 一応Wikiは存在しているので困ったら参考までに。
+結論 git clone https://github.com/ldc-developers/ldc --recursive cd ldc mkdir build cd build cmake .. -DLDC_WITH_LLD=OFF make  詰まったところ CMakeが「Some (but not all) targets in this export set were already defined」みたいなエラーを出す  issue PR 2019年10月31日現在、masterではこのバグは解決済み。 リリースでいうとv1.18.0時点では直っていない。 一部のLLVMコンフィグだとうまくいかないときがあるらしく、それがこれ。  ビルド(makeとかninjaとか)の途中で「CommandLine Error: Option &lsquo;mc-relax-all&rsquo; registered more than once!」と言われる cmakeするときにちゃんと-DLDC_WITH_LLD=OFFをつけるといけるらしい。謎。">
 
 
-<meta itemprop="datePublished" content="2019-04-19T22:38:06&#43;09:00" />
-<meta itemprop="dateModified" content="2019-04-19T22:38:06&#43;09:00" />
-<meta itemprop="wordCount" content="48">
+<meta itemprop="datePublished" content="2019-04-27T23:33:31&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-27T23:33:31&#43;09:00" />
+<meta itemprop="wordCount" content="44">
+
+  <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
 
 
 
-<meta itemprop="keywords" content="D言語,バグ," />
+<meta itemprop="keywords" content="D言語," />
 
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="D言語で継承&#43;配列のバグがずっと残ってる件について"/>
-<meta name="twitter:description" content="またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://sobaya007.github.io/images/ldc.png"/>
+
+<meta name="twitter:title" content="LDCビルド方法"/>
+<meta name="twitter:description" content="結構難航しているのでまとめ。 一応Wikiは存在しているので困ったら参考までに。
+結論 git clone https://github.com/ldc-developers/ldc --recursive cd ldc mkdir build cd build cmake .. -DLDC_WITH_LLD=OFF make  詰まったところ CMakeが「Some (but not all) targets in this export set were already defined」みたいなエラーを出す  issue PR 2019年10月31日現在、masterではこのバグは解決済み。 リリースでいうとv1.18.0時点では直っていない。 一部のLLVMコンフィグだとうまくいかないときがあるらしく、それがこれ。  ビルド(makeとかninjaとか)の途中で「CommandLine Error: Option &lsquo;mc-relax-all&rsquo; registered more than once!」と言われる cmakeするときにちゃんと-DLDC_WITH_LLD=OFFをつけるといけるらしい。謎。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -100,12 +100,10 @@
              "@id": "https://sobaya007.github.io/"
         },
         "articleSection" : "post",
-        "name" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
-        "headline" : "D言語で継承&#43;配列のバグがずっと残ってる件について",
-        "description" : "またバグの話ですね。 このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？
-今回のバグはこんなかんじで発生します。
- interface I { int x(); } class C : I { int x() { return 10; } } void main(){ I[] iList; C[] cList = [new C]; iList ~= cList; import std.stdio : writeln; writeln(iList[0].x); //私の環境では6と出た。 }   つまり、
- あるインターフェースIとそれを継承したクラスCがある。 I[]に対して、C[]を結合する(CでなくC[]!)。 I[]から取り出したI越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。  というもの。 いかがでしたか？ よくわかりませんが、バグっていることがわかりました！ 最後まで見ていただきありがとうございます。",
+        "name" : "LDCビルド方法",
+        "headline" : "LDCビルド方法",
+        "description" : "結構難航しているのでまとめ。 一応Wikiは存在しているので困ったら参考までに。
+結論 git clone https://github.com/ldc-developers/ldc --recursive cd ldc mkdir build cd build cmake .. -DLDC_WITH_LLD=OFF make  詰まったところ CMakeが「Some (but not all) targets in this export set were already defined」みたいなエラーを出す  issue PR 2019年10月31日現在、masterではこのバグは解決済み。 リリースでいうとv1.18.0時点では直っていない。 一部のLLVMコンフィグだとうまくいかないときがあるらしく、それがこれ。  ビルド(makeとかninjaとか)の途中で「CommandLine Error: Option &lsquo;mc-relax-all&rsquo; registered more than once!」と言われる cmakeするときにちゃんと-DLDC_WITH_LLD=OFFをつけるといけるらしい。謎。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -113,11 +111,11 @@
         "accountablePerson" : "",
         "copyrightHolder" : "",
         "copyrightYear" : "2019",
-        "datePublished": "2019-04-19 22:38:06 &#43;0900 &#43;0900",
-        "dateModified" : "2019-04-19 22:38:06 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/",
-        "wordCount" : "48",
-        "keywords" : [ "D言語","バグ","Blog" ]
+        "datePublished": "2019-04-27 23:33:31 &#43;0900 &#43;0900",
+        "dateModified" : "2019-04-27 23:33:31 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/",
+        "wordCount" : "44",
+        "keywords" : [ "D言語","Blog" ]
     }
 </script>
 
@@ -131,7 +129,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -590,13 +588,13 @@
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="https://sobaya007.github.io/images/dman.png" class="article-banner">
+            <img src="https://sobaya007.github.io/images/ldc.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en">
+    <a href="https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/" lang="en">
     <h1 class="article-title" itemprop="name">
-        D言語で継承&#43;配列のバグがずっと残ってる件について
+        LDCビルド方法
     </h1>
     </a>
     <div class="article-meta">
@@ -604,9 +602,9 @@
         
         <div class="article-date">
             <i class="fas fa-calendar"></i>
-            <time datetime="2019-04-19 22:38:06 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-19</time>
+            <time datetime="2019-04-27 23:33:31 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-04-27</time>
             &middot;
-            48
+            44
             words.
             &middot;
             1
@@ -635,10 +633,6 @@
                 
                 
                 <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
                 
                 
             </div>
@@ -650,45 +644,36 @@
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>またバグの話ですね。
-このバグは結構前に発見していて、issueも投げた&hellip;気がするんですが、一向に直りませんね。かなり頻繁に出くわすんですが、他の環境だと違うのでしょうか？</p>
+            
 
-<p>今回のバグはこんなかんじで発生します。</p>
+<p>結構難航しているのでまとめ。
+一応<a href="https://wiki.dlang.org/Building_LDC_from_source">Wiki</a>は存在しているので困ったら参考までに。</p>
 
-<blockquote>
-<pre><code class="language-d">interface I {
-   int x();
-}
+<h1 id="結論">結論</h1>
 
-class C : I {
-   int x() { return 10; }
-}
-
-void main(){
-
-   I[] iList;
-   C[] cList = [new C];
-
-   iList ~= cList;
-
-   import std.stdio : writeln;
-   writeln(iList[0].x); //私の環境では6と出た。
-}
+<pre><code class="language-bash">git clone https://github.com/ldc-developers/ldc --recursive
+cd ldc
+mkdir build
+cd build
+cmake .. -DLDC_WITH_LLD=OFF
+make
 </code></pre>
-</blockquote>
 
-<p>つまり、</p>
+<h1 id="詰まったところ">詰まったところ</h1>
+
+<h2 id="cmakeが-some-but-not-all-targets-in-this-export-set-were-already-defined-みたいなエラーを出す">CMakeが「Some (but not all) targets in this export set were already defined」みたいなエラーを出す</h2>
 
 <ul>
-<li>あるインターフェース<code>I</code>とそれを継承したクラス<code>C</code>がある。</li>
-<li><code>I[]</code>に対して、<code>C[]</code>を結合する(<code>C</code>でなく<code>C[]</code>!)。</li>
-<li><code>I[]</code>から取り出した<code>I</code>越しに仮想関数を呼ぶと、だいたい壊れている(変な値を返したり、SEGVしたりする)。</li>
+<li><a href="https://github.com/ldc-developers/ldc/issues/3079">issue</a></li>
+<li><a href="https://github.com/ldc-developers/ldc/pull/3198">PR</a>
+2019年10月31日現在、masterではこのバグは解決済み。
+リリースでいうとv1.18.0時点では直っていない。
+一部のLLVMコンフィグだとうまくいかないときがあるらしく、それがこれ。</li>
 </ul>
 
-<p>というもの。
-いかがでしたか？
-よくわかりませんが、バグっていることがわかりました！
-最後まで見ていただきありがとうございます。</p>
+<h2 id="ビルド-makeとかninjaとか-の途中で-commandline-error-option-mc-relax-all-registered-more-than-once-と言われる">ビルド(makeとかninjaとか)の途中で「CommandLine Error: Option &lsquo;mc-relax-all&rsquo; registered more than once!」と言われる</h2>
+
+<p><code>cmake</code>するときにちゃんと<code>-DLDC_WITH_LLD=OFF</code>をつけるといけるらしい。謎。</p>
 
             
 
@@ -700,7 +685,7 @@ void main(){
 
 
 <li>
-  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&text=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&via=sobaya007" target="_blank" class="share-btn twitter">
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f&text=LDC%e3%83%93%e3%83%ab%e3%83%89%e6%96%b9%e6%b3%95&via=sobaya007" target="_blank" class="share-btn twitter">
     <i class="fab fa-twitter"></i>
     <p>Twitter</p>
     </a>
@@ -708,7 +693,7 @@ void main(){
 
 
 <li>
-  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn google-plus">
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f" target="_blank" class="share-btn google-plus">
     <i class="fab fa-google-plus"></i>
     <p>Google+</p>
   </a>
@@ -716,7 +701,7 @@ void main(){
 
 
 <li>
-  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn facebook">
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f" target="_blank" class="share-btn facebook">
     <i class="fab fa-facebook"></i>
     <p>Facebook</p>
     </a>
@@ -724,7 +709,7 @@ void main(){
 
 
 <li>
-  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn reddit">
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f&title=LDC%e3%83%93%e3%83%ab%e3%83%89%e6%96%b9%e6%b3%95" target="_blank" class="share-btn reddit">
     <i class="fab fa-reddit-alien"></i>
     <p>Reddit</p>
   </a>
@@ -732,7 +717,7 @@ void main(){
 
 
 <li>
-  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn linkedin">
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f&title=LDC%e3%83%93%e3%83%ab%e3%83%89%e6%96%b9%e6%b3%95" target="_blank" class="share-btn linkedin">
       <i class="fab fa-linkedin"></i>
       <p>LinkedIn</p>
     </a>
@@ -740,7 +725,7 @@ void main(){
 
 
 <li>
-  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&title=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn stumbleupon">
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f&title=LDC%e3%83%93%e3%83%ab%e3%83%89%e6%96%b9%e6%b3%95" target="_blank" class="share-btn stumbleupon">
     <i class="fab fa-stumbleupon"></i>
     <p>StumbleUpon</p>
   </a>
@@ -748,7 +733,7 @@ void main(){
 
 
 <li>
-  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f&description=D%e8%a8%80%e8%aa%9e%e3%81%a7%e7%b6%99%e6%89%bf%2b%e9%85%8d%e5%88%97%e3%81%ae%e3%83%90%e3%82%b0%e3%81%8c%e3%81%9a%e3%81%a3%e3%81%a8%e6%ae%8b%e3%81%a3%e3%81%a6%e3%82%8b%e4%bb%b6%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" target="_blank" class="share-btn pinterest">
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f&description=LDC%e3%83%93%e3%83%ab%e3%83%89%e6%96%b9%e6%b3%95" target="_blank" class="share-btn pinterest">
     <i class="fab fa-pinterest-p"></i>
     <p>Pinterest</p>
   </a>
@@ -756,7 +741,7 @@ void main(){
 
 
 <li>
-  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f19%2fd%25E8%25A8%2580%25E8%25AA%259E%25E3%2581%25A7%25E7%25B6%2599%25E6%2589%25BF-%25E9%2585%258D%25E5%2588%2597%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%258C%25E3%2581%259A%25E3%2581%25A3%25E3%2581%25A8%25E6%25AE%258B%25E3%2581%25A3%25E3%2581%25A6%25E3%2582%258B%25E4%25BB%25B6%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%2f" target="_blank" class="share-btn email">
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f04%2f27%2fldc%25E3%2583%2593%25E3%2583%25AB%25E3%2583%2589%25E6%2596%25B9%25E6%25B3%2595%2f" target="_blank" class="share-btn email">
     <i class="fas fa-envelope"></i>
     <p>Email</p>
   </a>
@@ -765,7 +750,7 @@ void main(){
     </ul>
   </section>
     
-    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/#disqus_thread" lang="en" class="article-comment-link">
+    <a href="https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/#disqus_thread" lang="en" class="article-comment-link">
         Comments
     </a>
     
@@ -784,6 +769,32 @@ void main(){
 	
 	  <ul>
   	<div class="item-banner">
+      <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語でgoldを使ってリンクを高速化してみた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/">D言語でgoldを使ってリンクを高速化してみた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">D言語で継承&#43;配列のバグがずっと残ってる件について</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
       <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
         
             <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" class="banner-image"></span>
@@ -795,19 +806,6 @@ void main(){
   	</span>
   	</ul>
 	
-	  <ul>
-  	<div class="item-banner">
-      <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" lang="en" class="banner">
-        
-            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題" class="banner-image"></span>
-        
-      </a>
-    </div>
-    <span class="title">
-  	  <a href="/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/">D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題</a>
-  	</span>
-  	</ul>
-	
 	</li>	
 </ul>
 </div>
@@ -816,20 +814,20 @@ void main(){
     
 <nav id="article-nav">
     
-    <a href="https://sobaya007.github.io/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://sobaya007.github.io/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</div>
+      <div class="article-nav-title">D言語で継承&#43;配列のバグがずっと残ってる件について</div>
     </a>
     
 
     
-    <a href="https://sobaya007.github.io/2019/04/27/ldc%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95/" lang="en" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="https://sobaya007.github.io/2019/04/27/d%E8%A8%80%E8%AA%9E%E3%81%A7gold%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" lang="en" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
-      <div class="article-nav-title">LDCビルド方法</div>
+      <div class="article-nav-title">D言語でgoldを使ってリンクを高速化してみた</div>
     </a>
     
 </nav>
