@@ -5,10 +5,20 @@
     <link>https://sobaya007.github.io/</link>
     <description>Recent content on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 30 Jul 2019 10:16:11 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 01 Nov 2019 10:35:12 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OpenCLと格闘した話</title>
+      <link>https://sobaya007.github.io/2019/11/01/opencl%E3%81%A8%E6%A0%BC%E9%97%98%E3%81%97%E3%81%9F%E8%A9%B1/</link>
+      <pubDate>Fri, 01 Nov 2019 10:35:12 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/11/01/opencl%E3%81%A8%E6%A0%BC%E9%97%98%E3%81%97%E3%81%9F%E8%A9%B1/</guid>
+      <description>私はArch Linuxを使っているんですが、OpenCLの2.1のAPI、もっと言えばSPIR-Vサポート周りが使えなくって奮闘していました。 ArchWiki曰く、intel-compute-runtimeなるものを入れれば良いということでやってみたけど動かず。 調べてみると、GitHubにサポートバージョンが書いてありました。曰く、第8世代以上のCPUじゃないとダメっぽい。。。 一方私のCPUはというと、
+&amp;gt; lscpu ... 中略 ... モデル名: Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz ...  とのこと。どう見ても第4世代です。本当にありがとうございました。 Intelの対応表を見ても、4600はOpenCL1.2までしか対応していない。完。</description>
+    </item>
     
     <item>
       <title>VimでD言語</title>
