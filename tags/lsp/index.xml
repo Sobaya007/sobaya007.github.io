@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lsp on そばやのブログ</title>
+    <link>https://sobaya007.github.io/tags/lsp/</link>
+    <description>Recent content in Lsp on そばやのブログ</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 04 Nov 2019 17:09:47 +0900</lastBuildDate>
+    
+	<atom:link href="https://sobaya007.github.io/tags/lsp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>VimでLSPでC&#43;&#43;</title>
+      <link>https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/</link>
+      <pubDate>Mon, 04 Nov 2019 17:09:47 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/</guid>
+      <description>やったこと neovimでC++のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
+環境  OS: ArchLinux プラグイン: LanguageClient-neovim プラグインマネージャ: dein Language Server: clang  なお、CMakeすることを前提にしています。
+deinの設定 [[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { \ &#39;c&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], \ &#39;cpp&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], ... \ } &#39;&#39;&#39;  使う時 cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。</description>
+    </item>
+    
+  </channel>
+</rss>

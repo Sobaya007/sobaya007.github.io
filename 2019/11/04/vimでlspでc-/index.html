@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Vim &middot; そばやのブログ</title>
+    <title>VimでLSPでC&#43;&#43; &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,10 +25,7 @@
       <meta name="description" content="">
     
     
-      <link href="/https://sobaya007.github.io/tags/vim/index.xml" rel="alternate" type="application/rss+xml" title="そばやのブログ" />
-      <link href="/https://sobaya007.github.io/tags/vim/index.xml" rel="feed" type="application/rss+xml" title="そばやのブログ" />
-    
-    <link rel="canonical" href="https://sobaya007.github.io/tags/vim/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -43,22 +40,36 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Vim" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sobaya007.github.io/tags/vim/" />
-
-<meta property="og:updated_time" content="2019-11-04T17:09:47&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+    <meta property="og:title" content="VimでLSPでC&#43;&#43;" />
+<meta property="og:description" content="やったこと neovimでC&#43;&#43;のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
+環境  OS: ArchLinux プラグイン: LanguageClient-neovim プラグインマネージャ: dein Language Server: clang  なお、CMakeすることを前提にしています。
+deinの設定 [[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { \ &#39;c&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], \ &#39;cpp&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], ... \ } &#39;&#39;&#39;  使う時 cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" />
+<meta property="article:published_time" content="2019-11-04T17:09:47&#43;09:00"/>
+<meta property="article:modified_time" content="2019-11-04T17:09:47&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="Vim">
-<meta itemprop="description" content="">
+<meta itemprop="name" content="VimでLSPでC&#43;&#43;">
+<meta itemprop="description" content="やったこと neovimでC&#43;&#43;のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
+環境  OS: ArchLinux プラグイン: LanguageClient-neovim プラグインマネージャ: dein Language Server: clang  なお、CMakeすることを前提にしています。
+deinの設定 [[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { \ &#39;c&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], \ &#39;cpp&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], ... \ } &#39;&#39;&#39;  使う時 cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。">
 
+
+<meta itemprop="datePublished" content="2019-11-04T17:09:47&#43;09:00" />
+<meta itemprop="dateModified" content="2019-11-04T17:09:47&#43;09:00" />
+<meta itemprop="wordCount" content="54">
+
+
+
+<meta itemprop="keywords" content="LSP,C&#43;&#43;,vim," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Vim"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="VimでLSPでC&#43;&#43;"/>
+<meta name="twitter:description" content="やったこと neovimでC&#43;&#43;のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
+環境  OS: ArchLinux プラグイン: LanguageClient-neovim プラグインマネージャ: dein Language Server: clang  なお、CMakeすることを前提にしています。
+deinの設定 [[plugins]] repo = &#39;autozimu/LanguageClient-neovim&#39; rev = &#39;next&#39; build = &#39;bash install.sh&#39; hook_add = &#39;&#39;&#39; let g:LanguageClient_serverCommands = { \ &#39;c&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], \ &#39;cpp&#39;: [&#39;clangd&#39;, &#39;-compile-commands-dir=&#39; . getcwd() . &#39;/build&#39;], ... \ } &#39;&#39;&#39;  使う時 cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -85,10 +96,12 @@
              "@type": "WebPage",
              "@id": "https://sobaya007.github.io/"
         },
-        "articleSection" : "tags",
-        "name" : "Vim",
-        "headline" : "Vim",
-        "description" : "",
+        "articleSection" : "post",
+        "name" : "VimでLSPでC&#43;&#43;",
+        "headline" : "VimでLSPでC&#43;&#43;",
+        "description" : "やったこと neovimでC++のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
+環境  OS: ArchLinux プラグイン: LanguageClient-neovim プラグインマネージャ: dein Language Server: clang  なお、CMakeすることを前提にしています。
+deinの設定 [[plugins]] repo = 'autozimu/LanguageClient-neovim' rev = 'next' build = 'bash install.sh' hook_add = ''' let g:LanguageClient_serverCommands = { \ 'c': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'], \ 'cpp': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'], ... \ } '''  使う時 cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -98,9 +111,9 @@
         "copyrightYear" : "2019",
         "datePublished": "2019-11-04 17:09:47 &#43;0900 &#43;0900",
         "dateModified" : "2019-11-04 17:09:47 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/tags/vim/",
-        "wordCount" : "0",
-        "keywords" : [ "Blog" ]
+        "url" : "https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/",
+        "wordCount" : "54",
+        "keywords" : [ "LSP","C&#43;&#43;","vim","Blog" ]
     }
 </script>
 
@@ -114,7 +127,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/tags/vim/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -638,25 +651,13 @@
 
     <section id="main">
     
-    
-    
-    
-<section class="archives-wrap">
-  <div class="archive-category-wrap">
-      <span class="archive-category">Vim</span>
-  </div>
-  <div class="archives">
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/llvm.png)" alt="Vim" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/llvm.png" class="article-banner">
+        
+
+        <header class="article-header">
     <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en">
     <h1 class="article-title" itemprop="name">
         VimでLSPでC&#43;&#43;
@@ -720,121 +721,197 @@
 
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
+        <div class="article-entry" itemprop="articleBody">
+            
 
-                <p>neovimでC++のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
-[&hellip;] なお、CMakeすることを前提にしています。
-[&hellip;] cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
+<h1 id="やったこと">やったこと</h1>
+
+<p><a href="https://neovim.io/">neovim</a>でC++のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。</p>
+
+<h1 id="環境">環境</h1>
+
+<ul>
+<li>OS: ArchLinux</li>
+<li>プラグイン: <a href="https://github.com/autozimu/LanguageClient-neovim">LanguageClient-neovim</a></li>
+<li>プラグインマネージャ: <a href="https://github.com/Shougo/dein.vim">dein</a></li>
+<li>Language Server: clang</li>
+</ul>
+
+<p>なお、<a href="https://cmake.org/">CMake</a>することを前提にしています。</p>
+
+<h1 id="deinの設定">deinの設定</h1>
+
+<pre><code class="language-toml">[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+build = 'bash install.sh'
+hook_add = '''
+let g:LanguageClient_serverCommands = {
+    \ 'c': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'],
+    \ 'cpp': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'],
+    ...
+    \ }
+'''
+</code></pre>
+
+<h1 id="使う時">使う時</h1>
+
+<p><code>cmake</code>するときに、オプションとして<code>-DCMAKE_EXPORT_COMPILE_COMMANDS=ON</code>をつける。</p>
+
+            
+
         </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/vman.png)" alt="Vim" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        VimでD言語
-    </h1>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f&text=Vim%e3%81%a7LSP%e3%81%a7C%2b%2b&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
     </a>
-    <div class="article-meta">
+</li>
 
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-07-30 10:16:11 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-07-30</time>
-            &middot;
-            84
-            words.
-            &middot;
-            1
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/vim">vim</a>
-                
-                
-            </div>
-            
-        
 
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/vim">vim</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/language-server">language-server</a>
-                
-                
-            </div>
-            
-        
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f&title=Vim%e3%81%a7LSP%e3%81%a7C%2b%2b" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f&title=Vim%e3%81%a7LSP%e3%81%a7C%2b%2b" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f&title=Vim%e3%81%a7LSP%e3%81%a7C%2b%2b" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f&description=Vim%e3%81%a7LSP%e3%81%a7C%2b%2b" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f11%2f04%2fvim%25E3%2581%25A7lsp%25E3%2581%25A7c-%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
     </div>
     
 
-</header>
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/vman.png)" alt="VimでD言語" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/">VimでD言語</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
 
-                <p>言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
-[&hellip;] D言語のLanguage Serverです。割と活発に活動していていいかんじ。
-[&hellip;] 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
-[&hellip;] で終わりです。
-[&hellip;] 私はdein &hellip;</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
     
-  </div>
-</section>
-<nav id="page-nav">
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/11/01/opencl%E3%81%A8%E6%A0%BC%E9%97%98%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">OpenCLと格闘した話</div>
+    </a>
+    
 
+    
 </nav>
 
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
 
     </section>
 
