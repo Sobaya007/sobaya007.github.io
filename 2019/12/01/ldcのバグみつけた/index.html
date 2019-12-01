@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Stickies &middot; そばやのブログ</title>
+    <title>LDCのバグみつけた &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,10 +25,7 @@
       <meta name="description" content="">
     
     
-      <link href="/https://sobaya007.github.io/stickies/index.xml" rel="alternate" type="application/rss+xml" title="そばやのブログ" />
-      <link href="/https://sobaya007.github.io/stickies/index.xml" rel="feed" type="application/rss+xml" title="そばやのブログ" />
-    
-    <link rel="canonical" href="https://sobaya007.github.io/stickies/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -43,21 +40,51 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Stickies" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sobaya007.github.io/stickies/" />
-<meta property="og:site_name" content="そばやのブログ" />
+    <meta property="og:title" content="LDCのバグみつけた" />
+<meta property="og:description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
+まず2つパッケージを用意します。
+├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
+ app/source/app.d
+&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" />
+
+<meta property="og:image" content="https://sobaya007.github.io/images/ldc.png" />
+<meta property="article:published_time" content="2019-12-01T23:10:16&#43;09:00"/>
+<meta property="article:modified_time" content="2019-12-01T23:10:16&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="Stickies">
-<meta itemprop="description" content="">
+<meta itemprop="name" content="LDCのバグみつけた">
+<meta itemprop="description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
+まず2つパッケージを用意します。
+├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
+ app/source/app.d
+&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e.">
 
 
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Stickies"/>
-<meta name="twitter:description" content=""/>
+<meta itemprop="datePublished" content="2019-12-01T23:10:16&#43;09:00" />
+<meta itemprop="dateModified" content="2019-12-01T23:10:16&#43;09:00" />
+<meta itemprop="wordCount" content="157">
+
+  <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
+
+
+
+<meta itemprop="keywords" content="D言語,バグ," />
+
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://sobaya007.github.io/images/ldc.png"/>
+
+<meta name="twitter:title" content="LDCのバグみつけた"/>
+<meta name="twitter:description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
+まず2つパッケージを用意します。
+├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
+ app/source/app.d
+&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e."/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -84,22 +111,27 @@
              "@type": "WebPage",
              "@id": "https://sobaya007.github.io/"
         },
-        "articleSection" : "stickies",
-        "name" : "Stickies",
-        "headline" : "Stickies",
-        "description" : "",
+        "articleSection" : "post",
+        "name" : "LDCのバグみつけた",
+        "headline" : "LDCのバグみつけた",
+        "description" : "久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
+まず2つパッケージを用意します。
+├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
+ app/source/app.d
+&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e.",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
         "publisher": "",
         "accountablePerson" : "",
         "copyrightHolder" : "",
-        "copyrightYear" : "0001",
-        "datePublished": "0001-01-01 00:00:00 &#43;0000 UTC",
-        "dateModified" : "0001-01-01 00:00:00 &#43;0000 UTC",
-        "url" : "https://sobaya007.github.io/stickies/",
-        "wordCount" : "0",
-        "keywords" : [ "Blog" ]
+        "copyrightYear" : "2019",
+        "datePublished": "2019-12-01 23:10:16 &#43;0900 &#43;0900",
+        "dateModified" : "2019-12-01 23:10:16 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/",
+        "wordCount" : "157",
+        "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
 
@@ -113,7 +145,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/stickies/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -637,19 +669,331 @@
 
     <section id="main">
     
-<section class="layout-wrap">
-    <div class="layout-title">
-        <span>Stickies</span>
-    </div>
-    <div class="layout-wrap-inner list-categories">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/ldc.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en">
+    <h1 class="article-title" itemprop="name">
+        LDCのバグみつけた
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fas fa-calendar"></i>
+            <time datetime="2019-12-01 23:10:16 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-01</time>
+            &middot;
+            157
+            words.
+            &middot;
+            1
+            minute read.
+        </div>
+        
         
             
-              
-        <ul class="category-list">
-          
-        </ul>
+            
+            <div class="article-category">
+                <i class="fas fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">D言語</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
+                
+                
+            </div>
+            
+        
+    </div>
+    
+
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<p>久しぶりにバグ見つけました。
+端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。</p>
+
+<h1 id="中身">中身</h1>
+
+<p>ちょっと複雑です。
+<a href="https://github.com/Sobaya007/LDC-Bug">こちら</a>に出来上がったものを置いておいたので、よければどうぞ。</p>
+
+<p>まず2つパッケージを用意します。</p>
+
+<pre><code>├── app
+│   ├── dub.sdl
+│   └── source
+│       └── app.d
+└── lib
+    ├── dub.sdl
+    └── source
+        ├── foo
+        │   └── main.d
+        └── tmp.d
+</code></pre>
+
+<p>ここでは<code>app</code>と<code>lib</code>としました。
+ソースファイルは全部で3つです。</p>
+
+<blockquote>
+<p>app/source/app.d</p>
+
+<pre><code class="language-d">&gt; import std : writeln;
+&gt; 
+&gt; void main() {}
+&gt; ```
+
+&gt; lib/source/foo/main.d
+&gt; ```d
+&gt; import std.file;
+&gt; void main() {}
+&gt; ```
+
+&gt; lib/source/tmp.d
+&gt; ```d
+&gt; import std.conv;
+&gt; 
+&gt; enum E { M }
+&gt; 
+&gt; string func(E e) {
+&gt;     return e.to!string;
+&gt; }
+&gt; ```
+
+`dub.sdl`の中身はシンプルで、単純に`app`が`lib`に依存しているだけです。
+
+いろいろ試したのですが、これが結構最小に近いです。
+
+# 起きること
+これで`app`パッケージをLinux上で実行しようとすると、
+```bash
+Performing &quot;debug&quot; build using ldc2 for x86_64.
+lib ~master: building configuration &quot;library&quot;...
+app ~master: building configuration &quot;application&quot;...
+Linking...
+/usr/bin/ld.gold: エラー: ../lib/.dub/build/library-debug-linux.posix-x86_64-ldc_2089-217E062EC8407754E513C83FC65AD834/liblib.a(main.o): multiple definition of '_d_execBssBegAddr'
+/usr/bin/ld.gold: .dub/build/application-debug-linux.posix-x86_64-ldc_2089-963EDD342BD81E418D33E01A7E3025F1/app.o: previous definition here
+/usr/bin/ld.gold: エラー: ../lib/.dub/build/library-debug-linux.posix-x86_64-ldc_2089-217E062EC8407754E513C83FC65AD834/liblib.a(main.o): multiple definition of '_d_execBssEndAddr'
+/usr/bin/ld.gold: .dub/build/application-debug-linux.posix-x86_64-ldc_2089-963EDD342BD81E418D33E01A7E3025F1/app.o: previous definition here
+collect2: エラー: ld はステータス 1 で終了しました
+Error: /usr/bin/cc failed with status: 1
+ldc2 failed with exit code 1.
+</code></pre>
+
+<p>といった形で<code>_d_execBssBegAddr</code>と<code>_d_execBssEndAddr</code>というシンボルが多重定義されていてリンクに失敗します。</p>
+</blockquote>
+
+<h1 id="原因について">原因について</h1>
+
+<p><a href="https://github.com/ldc-developers/ldc/blob/ad80f004aeede0b1582bf9831133c000fecfef07/driver/codegenerator.cpp#L341">LDCのソースコード</a>を見ると、Linux上でmainのモジュールをビルドするときにこの謎のシンボルを埋め込むようです。
+どうも<code>lib</code>パッケージをライブラリとしてビルドしているのに何らかの勘違いを起こしてここを踏んでしまい、<code>app</code>パッケージのそれと衝突しているようです。
+なぜ勘違いしてしまっているかは不明。
+この状況をIssueに上げるのがめんどい&hellip;</p>
+
+            
+
+        </div>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f&text=LDC%e3%81%ae%e3%83%90%e3%82%b0%e3%81%bf%e3%81%a4%e3%81%91%e3%81%9f&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f&title=LDC%e3%81%ae%e3%83%90%e3%82%b0%e3%81%bf%e3%81%a4%e3%81%91%e3%81%9f" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f&title=LDC%e3%81%ae%e3%83%90%e3%82%b0%e3%81%bf%e3%81%a4%e3%81%91%e3%81%9f" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f&title=LDC%e3%81%ae%e3%83%90%e3%82%b0%e3%81%bf%e3%81%a4%e3%81%91%e3%81%9f" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f&description=LDC%e3%81%ae%e3%83%90%e3%82%b0%e3%81%bf%e3%81%a4%e3%81%91%e3%81%9f" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f01%2fldc%25E3%2581%25AE%25E3%2583%2590%25E3%2582%25B0%25E3%2581%25BF%25E3%2581%25A4%25E3%2581%2591%25E3%2581%259F%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
+    </div>
+    
+
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語のしょうもないバグをまたみつけた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/">D言語のしょうもないバグをまたみつけた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dman.png)" alt="D言語で継承&#43;配列のバグがずっと残ってる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/19/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%B6%99%E6%89%BF-%E9%85%8D%E5%88%97%E3%81%AE%E3%83%90%E3%82%B0%E3%81%8C%E3%81%9A%E3%81%A3%E3%81%A8%E6%AE%8B%E3%81%A3%E3%81%A6%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">D言語で継承&#43;配列のバグがずっと残ってる件について</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="DMD2.085.0で謎のエラーが出てビルドできなくなる件について" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/04/11/dmd2.085.0%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E5%87%BA%E3%81%A6%E3%83%93%E3%83%AB%E3%83%89%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BB%B6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/">DMD2.085.0で謎のエラーが出てビルドできなくなる件について</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">VimでLSPでC&#43;&#43;</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
 </section>
+
+
 
     </section>
 

@@ -5,10 +5,24 @@
     <link>https://sobaya007.github.io/</link>
     <description>Recent content on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 04 Nov 2019 17:09:47 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 01 Dec 2019 23:10:16 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>LDCのバグみつけた</title>
+      <link>https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/</link>
+      <pubDate>Sun, 01 Dec 2019 23:10:16 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/</guid>
+      <description>久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
+まず2つパッケージを用意します。
+├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
+ app/source/app.d
+&amp;gt; import std : writeln; &amp;gt; &amp;gt; void main() {} &amp;gt; ``` &amp;gt; lib/source/foo/main.d &amp;gt; ```d &amp;gt; import std.file; &amp;gt; void main() {} &amp;gt; ``` &amp;gt; lib/source/tmp.d &amp;gt; ```d &amp;gt; import std.conv; &amp;gt; &amp;gt; enum E { M } &amp;gt; &amp;gt; string func(E e) { &amp;gt; return e.</description>
+    </item>
     
     <item>
       <title>VimでLSPでC&#43;&#43;</title>
