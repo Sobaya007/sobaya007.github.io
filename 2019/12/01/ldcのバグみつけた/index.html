@@ -41,7 +41,8 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="LDCのバグみつけた" />
-<meta property="og:description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+<meta property="og:description" content="久しぶりにバグ見つけました。
+端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
@@ -61,7 +62,8 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
     
     
 <meta itemprop="name" content="LDCのバグみつけた">
-<meta itemprop="description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+<meta itemprop="description" content="久しぶりにバグ見つけました。
+端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
@@ -87,7 +89,8 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
 <meta name="twitter:image" content="https://sobaya007.github.io/images/ldc.png"/>
 
 <meta name="twitter:title" content="LDCのバグみつけた"/>
-<meta name="twitter:description" content="久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+<meta name="twitter:description" content="久しぶりにバグ見つけました。
+端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
@@ -126,7 +129,8 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
         "articleSection" : "post",
         "name" : "LDCのバグみつけた",
         "headline" : "LDCのバグみつけた",
-        "description" : "久しぶりにバグ見つけました。 端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
+        "description" : "久しぶりにバグ見つけました。
+端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
@@ -750,8 +754,9 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
         <div class="article-entry" itemprop="articleBody">
             
 
-<p>久しぶりにバグ見つけました。
-端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。</p>
+<p>久しぶりにバグ見つけました。</p>
+
+<p>端的に言うと、Linux上かつLDCを使って以下に示すような構成のアプリケーションをビルドしようとすると失敗するというものです。</p>
 
 <h1 id="中身">中身</h1>
 
@@ -824,10 +829,12 @@ ldc2 failed with exit code 1.
 
 <h1 id="原因について">原因について</h1>
 
-<p><a href="https://github.com/ldc-developers/ldc/blob/ad80f004aeede0b1582bf9831133c000fecfef07/driver/codegenerator.cpp#L341">LDCのソースコード</a>を見ると、Linux上でmainのモジュールをビルドするときにこの謎のシンボルを埋め込むようです。
-どうも<code>lib</code>パッケージをライブラリとしてビルドしているのに何らかの勘違いを起こしてここを踏んでしまい、<code>app</code>パッケージのそれと衝突しているようです。
-なぜ勘違いしてしまっているかは不明。
-この状況をIssueに上げるのがめんどい&hellip;</p>
+<p><a href="https://github.com/ldc-developers/ldc/blob/ad80f004aeede0b1582bf9831133c000fecfef07/driver/codegenerator.cpp#L341">LDCのソースコード</a>を見ると、Linux上でmainのモジュールをビルドするときにこの謎のシンボルを埋め込むようです。</p>
+
+<p>どうも<code>lib</code>パッケージをライブラリとしてビルドしているのに何らかの勘違いを起こしてここを踏んでしまい、<code>app</code>パッケージのそれと衝突しているようです。
+なぜ勘違いしてしまっているかは不明。</p>
+
+<p>この状況をIssueに上げるのがめんどい&hellip;</p>
 
             
 
