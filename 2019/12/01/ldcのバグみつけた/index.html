@@ -45,8 +45,12 @@
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
- app/source/app.d
-&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e." />
+app/source/app.d
+import std : writeln; void main() {}  lib/source/foo/main.d
+import std.file; void main() {}  lib/source/tmp.d
+import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+起きること これでappパッケージをLinux上で実行しようとすると、" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" />
 
@@ -61,13 +65,17 @@
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
- app/source/app.d
-&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e.">
+app/source/app.d
+import std : writeln; void main() {}  lib/source/foo/main.d
+import std.file; void main() {}  lib/source/tmp.d
+import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+起きること これでappパッケージをLinux上で実行しようとすると、">
 
 
 <meta itemprop="datePublished" content="2019-12-01T23:10:16&#43;09:00" />
 <meta itemprop="dateModified" content="2019-12-01T23:10:16&#43;09:00" />
-<meta itemprop="wordCount" content="157">
+<meta itemprop="wordCount" content="131">
 
   <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
 
@@ -83,8 +91,12 @@
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
- app/source/app.d
-&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e."/>
+app/source/app.d
+import std : writeln; void main() {}  lib/source/foo/main.d
+import std.file; void main() {}  lib/source/tmp.d
+import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+起きること これでappパッケージをLinux上で実行しようとすると、"/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -118,8 +130,12 @@
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
- app/source/app.d
-&gt; import std : writeln; &gt; &gt; void main() {} &gt; ``` &gt; lib/source/foo/main.d &gt; ```d &gt; import std.file; &gt; void main() {} &gt; ``` &gt; lib/source/tmp.d &gt; ```d &gt; import std.conv; &gt; &gt; enum E { M } &gt; &gt; string func(E e) { &gt; return e.",
+app/source/app.d
+import std : writeln; void main() {}  lib/source/foo/main.d
+import std.file; void main() {}  lib/source/tmp.d
+import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+起きること これでappパッケージをLinux上で実行しようとすると、",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -130,7 +146,7 @@
         "datePublished": "2019-12-01 23:10:16 &#43;0900 &#43;0900",
         "dateModified" : "2019-12-01 23:10:16 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/",
-        "wordCount" : "157",
+        "wordCount" : "131",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -688,7 +704,7 @@
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-01 23:10:16 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-01</time>
             &middot;
-            157
+            131
             words.
             &middot;
             1
@@ -759,39 +775,39 @@
 <p>ここでは<code>app</code>と<code>lib</code>としました。
 ソースファイルは全部で3つです。</p>
 
-<blockquote>
 <p>app/source/app.d</p>
 
-<pre><code class="language-d">&gt; import std : writeln;
-&gt; 
-&gt; void main() {}
-&gt; ```
+<pre><code class="language-d">import std : writeln;
 
-&gt; lib/source/foo/main.d
-&gt; ```d
-&gt; import std.file;
-&gt; void main() {}
-&gt; ```
+void main() {}
+</code></pre>
 
-&gt; lib/source/tmp.d
-&gt; ```d
-&gt; import std.conv;
-&gt; 
-&gt; enum E { M }
-&gt; 
-&gt; string func(E e) {
-&gt;     return e.to!string;
-&gt; }
-&gt; ```
+<p>lib/source/foo/main.d</p>
 
-`dub.sdl`の中身はシンプルで、単純に`app`が`lib`に依存しているだけです。
+<pre><code class="language-d">import std.file;
+void main() {}
+</code></pre>
 
-いろいろ試したのですが、これが結構最小に近いです。
+<p>lib/source/tmp.d</p>
 
-# 起きること
-これで`app`パッケージをLinux上で実行しようとすると、
-```bash
-Performing &quot;debug&quot; build using ldc2 for x86_64.
+<pre><code class="language-d">import std.conv;
+
+enum E { M }
+
+string func(E e) {
+    return e.to!string;
+}
+</code></pre>
+
+<p><code>dub.sdl</code>の中身はシンプルで、単純に<code>app</code>が<code>lib</code>に依存しているだけです。</p>
+
+<p>いろいろ試したのですが、これが結構最小に近いです。</p>
+
+<h1 id="起きること">起きること</h1>
+
+<p>これで<code>app</code>パッケージをLinux上で実行しようとすると、</p>
+
+<pre><code class="language-bash">Performing &quot;debug&quot; build using ldc2 for x86_64.
 lib ~master: building configuration &quot;library&quot;...
 app ~master: building configuration &quot;application&quot;...
 Linking...
@@ -805,7 +821,6 @@ ldc2 failed with exit code 1.
 </code></pre>
 
 <p>といった形で<code>_d_execBssBegAddr</code>と<code>_d_execBssEndAddr</code>というシンボルが多重定義されていてリンクに失敗します。</p>
-</blockquote>
 
 <h1 id="原因について">原因について</h1>
 
@@ -1031,13 +1046,6 @@ ldc2 failed with exit code 1.
 
 
 
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-</script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
 

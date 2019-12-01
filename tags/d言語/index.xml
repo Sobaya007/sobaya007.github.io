@@ -20,8 +20,12 @@
 中身 ちょっと複雑です。 こちらに出来上がったものを置いておいたので、よければどうぞ。
 まず2つパッケージを用意します。
 ├── app │ ├── dub.sdl │ └── source │ └── app.d └── lib ├── dub.sdl └── source ├── foo │ └── main.d └── tmp.d  ここではappとlibとしました。 ソースファイルは全部で3つです。
- app/source/app.d
-&amp;gt; import std : writeln; &amp;gt; &amp;gt; void main() {} &amp;gt; ``` &amp;gt; lib/source/foo/main.d &amp;gt; ```d &amp;gt; import std.file; &amp;gt; void main() {} &amp;gt; ``` &amp;gt; lib/source/tmp.d &amp;gt; ```d &amp;gt; import std.conv; &amp;gt; &amp;gt; enum E { M } &amp;gt; &amp;gt; string func(E e) { &amp;gt; return e.</description>
+app/source/app.d
+import std : writeln; void main() {}  lib/source/foo/main.d
+import std.file; void main() {}  lib/source/tmp.d
+import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+起きること これでappパッケージをLinux上で実行しようとすると、</description>
     </item>
     
     <item>

@@ -669,7 +669,7 @@
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-01 23:10:16 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-01</time>
             &middot;
-            157
+            131
             words.
             &middot;
             1
@@ -718,8 +718,11 @@
 
                 <p>まず2つパッケージを用意します。
 [&hellip;] app/source/app.d
-[&hellip;] といった形で_d_execBssBegAddrと_d_execBssEndAddrというシンボルが多重定義されていてリンクに失敗します。
-</p>
+[&hellip;] lib/source/foo/main.d
+[&hellip;] lib/source/tmp.d
+[&hellip;] dub.sdlの中身はシンプルで、単純にappがlibに依存しているだけです。
+いろいろ試したのですが、これが結構最小に近いです。
+[&hellip;] これでapp &hellip;</p>
                 <p class="article-more-link">
                     <a href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en">
                         Read more
@@ -1103,13 +1106,6 @@
 
 
 
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-</script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
 
