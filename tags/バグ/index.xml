@@ -5,10 +5,22 @@
     <link>https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/</link>
     <description>Recent content in バグ on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 01 Dec 2019 23:10:16 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 05 Dec 2019 13:38:33 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>LDCのバグみつけた - その2 -</title>
+      <link>https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/</link>
+      <pubDate>Thu, 05 Dec 2019 13:38:33 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/</guid>
+      <description>またみつけてしまった。。。 今度のやつはまた微妙で、私が自分でビルドしたLDCでのみ起きた現象なので、私が悪い可能性も多分にあります。
+一応起こったことをご紹介。
+struct Q { auto func(uint[3] a, uint[3] b, uint c) { return this; } } void main() { Q q; q.func([1,1,1],[1,1,1],1); }  これをビルドすると、
+ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;amp;, IrFuncTyArg&amp;amp;, {anonymous}::RegCount&amp;amp;): Assertion `originalLType-&amp;gt;isStructTy()&#39; failed. #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;amp;) (/usr/lib/libLLVM-9.so+0xb08b7b) #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so+0xb06a44) #2 0x00007ff128103bd6 (/usr/lib/libLLVM-9.so+0xb06bd6) #3 0x00007ff1275df930 __restore_rt (/usr/lib/libpthread.so.0+0x14930) #4 0x00007ff1270f3f25 raise (/usr/lib/libc.so.6+0x3bf25) #5 0x00007ff1270dd897 abort (/usr/lib/libc.so.6+0x25897) #6 0x00007ff1270dd767 _nl_load_domain.cold (/usr/lib/libc.so.6+0x25767) #7 0x00007ff1270ec526 (/usr/lib/libc.so.6+0x34526) #8 0x000055f8e421b48f X86_64TargetABI::rewriteArgument(IrFuncTy&amp;amp;, IrFuncTyArg&amp;amp;, (anonymous namespace)::RegCount&amp;amp;) (/usr/local/bin/ldc2+0xc9348f) #9 0x000055f8e421b7ca X86_64TargetABI::rewriteFunctionType(IrFuncTy&amp;amp;) (/usr/local/bin/ldc2+0xc937ca) #10 0x000055f8e40a77c8 DtoFunctionType(Type*, IrFuncTy&amp;amp;, Type*, Type*, FuncDeclaration*) (/usr/local/bin/ldc2+0xb1f7c8) #11 0x000055f8e40a820d DtoFunctionType(FuncDeclaration*) (/usr/local/bin/ldc2+0xb2020d) #12 0x000055f8e40a875d DtoResolveFunction(FuncDeclaration*) (/usr/local/bin/ldc2+0xb2075d) #13 0x000055f8e40aa79a DtoDefineFunction(FuncDeclaration*, bool) (/usr/local/bin/ldc2+0xb2279a) #14 0x000055f8e40983f9 CodegenVisitor::visit(FuncDeclaration*) (/usr/local/bin/ldc2+0xb103f9) #15 0x000055f8e40977a5 CodegenVisitor::visit(StructDeclaration*) (/usr/local/bin/ldc2+0xb0f7a5) #16 0x000055f8e4093fdd Declaration_codegen(Dsymbol*, IRState*) (/usr/local/bin/ldc2+0xb0bfdd) #17 0x000055f8e4093f8a Declaration_codegen(Dsymbol*) (/usr/local/bin/ldc2+0xb0bf8a) #18 0x000055f8e40d3100 codegenModule(IRState*, Module*) (/usr/local/bin/ldc2+0xb4b100) #19 0x000055f8e420ce27 ldc::CodeGenerator::emit(Module*) (/usr/local/bin/ldc2+0xc84e27) #20 0x000055f8e41cc700 codegenModules(Array&amp;lt;Module*&amp;gt;&amp;amp;) (/usr/local/bin/ldc2+0xc44700) #21 0x000055f8e3f1239a mars_mainBody(Param&amp;amp;, Array&amp;lt;char const*&amp;gt;&amp;amp;, Array&amp;lt;char const*&amp;gt;&amp;amp;) (/usr/local/bin/ldc2+0x98a39a) #22 0x000055f8e41cc529 cppmain() (/usr/local/bin/ldc2+0xc44529) #23 0x000055f8e450ef30 _D2rt6dmain212_d_run_main2UAAamPUQgZiZ6runAllMFZv (/usr/local/bin/ldc2+0xf86f30) #24 0x000055f8e450ed3f _d_run_main2 (/usr/local/bin/ldc2+0xf86d3f) #25 0x000055f8e450eb9e _d_run_main (/usr/local/bin/ldc2+0xf86b9e) #26 0x000055f8e420686f args::forwardToDruntime(int, char const**) (/usr/local/bin/ldc2+0xc7e86f) #27 0x000055f8e41cbd0d main (/usr/local/bin/ldc2+0xc43d0d) #28 0x00007ff1270df153 __libc_start_main (/usr/lib/libc.</description>
+    </item>
     
     <item>
       <title>LDCのバグみつけた</title>
