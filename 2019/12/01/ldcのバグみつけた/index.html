@@ -77,7 +77,7 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
 
 <meta itemprop="datePublished" content="2019-12-01T23:10:16&#43;09:00" />
 <meta itemprop="dateModified" content="2019-12-01T23:10:16&#43;09:00" />
-<meta itemprop="wordCount" content="131">
+<meta itemprop="wordCount" content="139">
 
   <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
 
@@ -150,7 +150,7 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
         "datePublished": "2019-12-01 23:10:16 &#43;0900 &#43;0900",
         "dateModified" : "2019-12-01 23:10:16 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/",
-        "wordCount" : "131",
+        "wordCount" : "139",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -708,7 +708,7 @@ import std.conv; enum E { M } string func(E e) { return e.to!string; }  dub.sdl�
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-01 23:10:16 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-01</time>
             &middot;
-            131
+            139
             words.
             &middot;
             1
@@ -835,6 +835,22 @@ ldc2 failed with exit code 1.
 なぜ勘違いしてしまっているかは不明。</p>
 
 <p>この状況をIssueに上げるのがめんどい&hellip;</p>
+
+<h1 id="追記">追記</h1>
+
+<p><a href="https://twitter.com/shitsyndrome">kubo39</a>さんが対応してくださりました！(いつもありがとうございます！！)</p>
+
+<p><a href="https://kubo39.hatenablog.com/entry/2019/12/05/LDC%E3%81%AB%E3%81%8A%E3%81%84%E3%81%A6%E3%82%82%E3%81%AF%E3%82%84%E5%BF%85%E8%A6%81%E3%81%AA%E3%81%8F%E3%81%AA%E3%81%A3%E3%81%9Fcopy-relocation_check%E3%82%92%E6%B6%88%E3%81%97%E3%81%9F%E8%A9%B1">kubo39さんによる解説</a></p>
+
+<p>私なりにまとめると、</p>
+
+<ul>
+<li>結局これを引き起こしていた奴はレガシーで要らない子だったっぽい。</li>
+<li>とはいえこの仕様に依存している外部ライブラリの存在が考えられるので、次回リリースにはこのパッチは載らないらしい。</li>
+</ul>
+
+<p>ということっぽい。
+自前でビルドしているぶんには問題なさそうなのでとりあえず満足ですね。</p>
 
             
 
@@ -1060,13 +1076,6 @@ ldc2 failed with exit code 1.
 
 
 
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-</script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
 
