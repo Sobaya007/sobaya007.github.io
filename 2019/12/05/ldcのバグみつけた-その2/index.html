@@ -42,9 +42,9 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="LDCのバグみつけた - その2 -" />
 <meta property="og:description" content="またみつけてしまった。。。 今度のやつはまた微妙で、私が自分でビルドしたLDCでのみ起きた現象なので、私が悪い可能性も多分にあります。
-一応起こったことをご紹介。
-struct Q { auto func(uint[3] a, uint[3] b, uint c) { return this; } } void main() { Q q; q.func([1,1,1],[1,1,1],1); }  これをビルドすると、
-ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()&#39; failed. #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so&#43;0xb08b7b) #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so&#43;0xb06a44) #2 0x00007ff128103bd6 (/usr/lib/libLLVM-9.so&#43;0xb06bd6) #3 0x00007ff1275df930 __restore_rt (/usr/lib/libpthread.so.0&#43;0x14930) #4 0x00007ff1270f3f25 raise (/usr/lib/libc.so.6&#43;0x3bf25) #5 0x00007ff1270dd897 abort (/usr/lib/libc.so.6&#43;0x25897) #6 0x00007ff1270dd767 _nl_load_domain.cold (/usr/lib/libc.so.6&#43;0x25767) #7 0x00007ff1270ec526 (/usr/lib/libc.so.6&#43;0x34526) #8 0x000055f8e421b48f X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, (anonymous namespace)::RegCount&amp;) (/usr/local/bin/ldc2&#43;0xc9348f) #9 0x000055f8e421b7ca X86_64TargetABI::rewriteFunctionType(IrFuncTy&amp;) (/usr/local/bin/ldc2&#43;0xc937ca) #10 0x000055f8e40a77c8 DtoFunctionType(Type*, IrFuncTy&amp;, Type*, Type*, FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb1f7c8) #11 0x000055f8e40a820d DtoFunctionType(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2020d) #12 0x000055f8e40a875d DtoResolveFunction(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2075d) #13 0x000055f8e40aa79a DtoDefineFunction(FuncDeclaration*, bool) (/usr/local/bin/ldc2&#43;0xb2279a) #14 0x000055f8e40983f9 CodegenVisitor::visit(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb103f9) #15 0x000055f8e40977a5 CodegenVisitor::visit(StructDeclaration*) (/usr/local/bin/ldc2&#43;0xb0f7a5) #16 0x000055f8e4093fdd Declaration_codegen(Dsymbol*, IRState*) (/usr/local/bin/ldc2&#43;0xb0bfdd) #17 0x000055f8e4093f8a Declaration_codegen(Dsymbol*) (/usr/local/bin/ldc2&#43;0xb0bf8a) #18 0x000055f8e40d3100 codegenModule(IRState*, Module*) (/usr/local/bin/ldc2&#43;0xb4b100) #19 0x000055f8e420ce27 ldc::CodeGenerator::emit(Module*) (/usr/local/bin/ldc2&#43;0xc84e27) #20 0x000055f8e41cc700 codegenModules(Array&lt;Module*&gt;&amp;) (/usr/local/bin/ldc2&#43;0xc44700) #21 0x000055f8e3f1239a mars_mainBody(Param&amp;, Array&lt;char const*&gt;&amp;, Array&lt;char const*&gt;&amp;) (/usr/local/bin/ldc2&#43;0x98a39a) #22 0x000055f8e41cc529 cppmain() (/usr/local/bin/ldc2&#43;0xc44529) #23 0x000055f8e450ef30 _D2rt6dmain212_d_run_main2UAAamPUQgZiZ6runAllMFZv (/usr/local/bin/ldc2&#43;0xf86f30) #24 0x000055f8e450ed3f _d_run_main2 (/usr/local/bin/ldc2&#43;0xf86d3f) #25 0x000055f8e450eb9e _d_run_main (/usr/local/bin/ldc2&#43;0xf86b9e) #26 0x000055f8e420686f args::forwardToDruntime(int, char const**) (/usr/local/bin/ldc2&#43;0xc7e86f) #27 0x000055f8e41cbd0d main (/usr/local/bin/ldc2&#43;0xc43d0d) #28 0x00007ff1270df153 __libc_start_main (/usr/lib/libc." />
+作業環境  OS: Arch Linux LLVM: 9.0.0 LDC: v1.19.0-beta2(hash = ad80f004aeede0b1582bf9831133c000fecfef07)  起こったこと まず自前でLDCをビルドします。
+&gt; git clone --recursive git@github.com:ldc-developers/ldc.git &gt; git checkout v1.19.0-beta2 &gt; git submodule update --recursive &gt; mkdir build &gt; cd build &gt; cmake .. -G Ninja &gt; ninja &gt; sudo ninja install  できあがったLDCはこんなかんじ。
+&gt; ldc2 --version LDC - the LLVM D compiler (1.19.0-beta2): based on DMD v2.089.0 and LLVM 9.0.0 built with LDC - the LLVM D compiler (1." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/" />
 
@@ -56,14 +56,14 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
     
 <meta itemprop="name" content="LDCのバグみつけた - その2 -">
 <meta itemprop="description" content="またみつけてしまった。。。 今度のやつはまた微妙で、私が自分でビルドしたLDCでのみ起きた現象なので、私が悪い可能性も多分にあります。
-一応起こったことをご紹介。
-struct Q { auto func(uint[3] a, uint[3] b, uint c) { return this; } } void main() { Q q; q.func([1,1,1],[1,1,1],1); }  これをビルドすると、
-ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()&#39; failed. #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so&#43;0xb08b7b) #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so&#43;0xb06a44) #2 0x00007ff128103bd6 (/usr/lib/libLLVM-9.so&#43;0xb06bd6) #3 0x00007ff1275df930 __restore_rt (/usr/lib/libpthread.so.0&#43;0x14930) #4 0x00007ff1270f3f25 raise (/usr/lib/libc.so.6&#43;0x3bf25) #5 0x00007ff1270dd897 abort (/usr/lib/libc.so.6&#43;0x25897) #6 0x00007ff1270dd767 _nl_load_domain.cold (/usr/lib/libc.so.6&#43;0x25767) #7 0x00007ff1270ec526 (/usr/lib/libc.so.6&#43;0x34526) #8 0x000055f8e421b48f X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, (anonymous namespace)::RegCount&amp;) (/usr/local/bin/ldc2&#43;0xc9348f) #9 0x000055f8e421b7ca X86_64TargetABI::rewriteFunctionType(IrFuncTy&amp;) (/usr/local/bin/ldc2&#43;0xc937ca) #10 0x000055f8e40a77c8 DtoFunctionType(Type*, IrFuncTy&amp;, Type*, Type*, FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb1f7c8) #11 0x000055f8e40a820d DtoFunctionType(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2020d) #12 0x000055f8e40a875d DtoResolveFunction(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2075d) #13 0x000055f8e40aa79a DtoDefineFunction(FuncDeclaration*, bool) (/usr/local/bin/ldc2&#43;0xb2279a) #14 0x000055f8e40983f9 CodegenVisitor::visit(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb103f9) #15 0x000055f8e40977a5 CodegenVisitor::visit(StructDeclaration*) (/usr/local/bin/ldc2&#43;0xb0f7a5) #16 0x000055f8e4093fdd Declaration_codegen(Dsymbol*, IRState*) (/usr/local/bin/ldc2&#43;0xb0bfdd) #17 0x000055f8e4093f8a Declaration_codegen(Dsymbol*) (/usr/local/bin/ldc2&#43;0xb0bf8a) #18 0x000055f8e40d3100 codegenModule(IRState*, Module*) (/usr/local/bin/ldc2&#43;0xb4b100) #19 0x000055f8e420ce27 ldc::CodeGenerator::emit(Module*) (/usr/local/bin/ldc2&#43;0xc84e27) #20 0x000055f8e41cc700 codegenModules(Array&lt;Module*&gt;&amp;) (/usr/local/bin/ldc2&#43;0xc44700) #21 0x000055f8e3f1239a mars_mainBody(Param&amp;, Array&lt;char const*&gt;&amp;, Array&lt;char const*&gt;&amp;) (/usr/local/bin/ldc2&#43;0x98a39a) #22 0x000055f8e41cc529 cppmain() (/usr/local/bin/ldc2&#43;0xc44529) #23 0x000055f8e450ef30 _D2rt6dmain212_d_run_main2UAAamPUQgZiZ6runAllMFZv (/usr/local/bin/ldc2&#43;0xf86f30) #24 0x000055f8e450ed3f _d_run_main2 (/usr/local/bin/ldc2&#43;0xf86d3f) #25 0x000055f8e450eb9e _d_run_main (/usr/local/bin/ldc2&#43;0xf86b9e) #26 0x000055f8e420686f args::forwardToDruntime(int, char const**) (/usr/local/bin/ldc2&#43;0xc7e86f) #27 0x000055f8e41cbd0d main (/usr/local/bin/ldc2&#43;0xc43d0d) #28 0x00007ff1270df153 __libc_start_main (/usr/lib/libc.">
+作業環境  OS: Arch Linux LLVM: 9.0.0 LDC: v1.19.0-beta2(hash = ad80f004aeede0b1582bf9831133c000fecfef07)  起こったこと まず自前でLDCをビルドします。
+&gt; git clone --recursive git@github.com:ldc-developers/ldc.git &gt; git checkout v1.19.0-beta2 &gt; git submodule update --recursive &gt; mkdir build &gt; cd build &gt; cmake .. -G Ninja &gt; ninja &gt; sudo ninja install  できあがったLDCはこんなかんじ。
+&gt; ldc2 --version LDC - the LLVM D compiler (1.19.0-beta2): based on DMD v2.089.0 and LLVM 9.0.0 built with LDC - the LLVM D compiler (1.">
 
 
 <meta itemprop="datePublished" content="2019-12-05T13:38:33&#43;09:00" />
 <meta itemprop="dateModified" content="2019-12-05T13:38:33&#43;09:00" />
-<meta itemprop="wordCount" content="378">
+<meta itemprop="wordCount" content="637">
 
   <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
 
@@ -76,9 +76,9 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
 
 <meta name="twitter:title" content="LDCのバグみつけた - その2 -"/>
 <meta name="twitter:description" content="またみつけてしまった。。。 今度のやつはまた微妙で、私が自分でビルドしたLDCでのみ起きた現象なので、私が悪い可能性も多分にあります。
-一応起こったことをご紹介。
-struct Q { auto func(uint[3] a, uint[3] b, uint c) { return this; } } void main() { Q q; q.func([1,1,1],[1,1,1],1); }  これをビルドすると、
-ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()&#39; failed. #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so&#43;0xb08b7b) #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so&#43;0xb06a44) #2 0x00007ff128103bd6 (/usr/lib/libLLVM-9.so&#43;0xb06bd6) #3 0x00007ff1275df930 __restore_rt (/usr/lib/libpthread.so.0&#43;0x14930) #4 0x00007ff1270f3f25 raise (/usr/lib/libc.so.6&#43;0x3bf25) #5 0x00007ff1270dd897 abort (/usr/lib/libc.so.6&#43;0x25897) #6 0x00007ff1270dd767 _nl_load_domain.cold (/usr/lib/libc.so.6&#43;0x25767) #7 0x00007ff1270ec526 (/usr/lib/libc.so.6&#43;0x34526) #8 0x000055f8e421b48f X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, (anonymous namespace)::RegCount&amp;) (/usr/local/bin/ldc2&#43;0xc9348f) #9 0x000055f8e421b7ca X86_64TargetABI::rewriteFunctionType(IrFuncTy&amp;) (/usr/local/bin/ldc2&#43;0xc937ca) #10 0x000055f8e40a77c8 DtoFunctionType(Type*, IrFuncTy&amp;, Type*, Type*, FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb1f7c8) #11 0x000055f8e40a820d DtoFunctionType(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2020d) #12 0x000055f8e40a875d DtoResolveFunction(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb2075d) #13 0x000055f8e40aa79a DtoDefineFunction(FuncDeclaration*, bool) (/usr/local/bin/ldc2&#43;0xb2279a) #14 0x000055f8e40983f9 CodegenVisitor::visit(FuncDeclaration*) (/usr/local/bin/ldc2&#43;0xb103f9) #15 0x000055f8e40977a5 CodegenVisitor::visit(StructDeclaration*) (/usr/local/bin/ldc2&#43;0xb0f7a5) #16 0x000055f8e4093fdd Declaration_codegen(Dsymbol*, IRState*) (/usr/local/bin/ldc2&#43;0xb0bfdd) #17 0x000055f8e4093f8a Declaration_codegen(Dsymbol*) (/usr/local/bin/ldc2&#43;0xb0bf8a) #18 0x000055f8e40d3100 codegenModule(IRState*, Module*) (/usr/local/bin/ldc2&#43;0xb4b100) #19 0x000055f8e420ce27 ldc::CodeGenerator::emit(Module*) (/usr/local/bin/ldc2&#43;0xc84e27) #20 0x000055f8e41cc700 codegenModules(Array&lt;Module*&gt;&amp;) (/usr/local/bin/ldc2&#43;0xc44700) #21 0x000055f8e3f1239a mars_mainBody(Param&amp;, Array&lt;char const*&gt;&amp;, Array&lt;char const*&gt;&amp;) (/usr/local/bin/ldc2&#43;0x98a39a) #22 0x000055f8e41cc529 cppmain() (/usr/local/bin/ldc2&#43;0xc44529) #23 0x000055f8e450ef30 _D2rt6dmain212_d_run_main2UAAamPUQgZiZ6runAllMFZv (/usr/local/bin/ldc2&#43;0xf86f30) #24 0x000055f8e450ed3f _d_run_main2 (/usr/local/bin/ldc2&#43;0xf86d3f) #25 0x000055f8e450eb9e _d_run_main (/usr/local/bin/ldc2&#43;0xf86b9e) #26 0x000055f8e420686f args::forwardToDruntime(int, char const**) (/usr/local/bin/ldc2&#43;0xc7e86f) #27 0x000055f8e41cbd0d main (/usr/local/bin/ldc2&#43;0xc43d0d) #28 0x00007ff1270df153 __libc_start_main (/usr/lib/libc."/>
+作業環境  OS: Arch Linux LLVM: 9.0.0 LDC: v1.19.0-beta2(hash = ad80f004aeede0b1582bf9831133c000fecfef07)  起こったこと まず自前でLDCをビルドします。
+&gt; git clone --recursive git@github.com:ldc-developers/ldc.git &gt; git checkout v1.19.0-beta2 &gt; git submodule update --recursive &gt; mkdir build &gt; cd build &gt; cmake .. -G Ninja &gt; ninja &gt; sudo ninja install  できあがったLDCはこんなかんじ。
+&gt; ldc2 --version LDC - the LLVM D compiler (1.19.0-beta2): based on DMD v2.089.0 and LLVM 9.0.0 built with LDC - the LLVM D compiler (1."/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -109,9 +109,9 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
         "name" : "LDCのバグみつけた - その2 -",
         "headline" : "LDCのバグみつけた - その2 -",
         "description" : "またみつけてしまった。。。 今度のやつはまた微妙で、私が自分でビルドしたLDCでのみ起きた現象なので、私が悪い可能性も多分にあります。
-一応起こったことをご紹介。
-struct Q { auto func(uint[3] a, uint[3] b, uint c) { return this; } } void main() { Q q; q.func([1,1,1],[1,1,1],1); }  これをビルドすると、
-ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()' failed. #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so+0xb08b7b) #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so+0xb06a44) #2 0x00007ff128103bd6 (/usr/lib/libLLVM-9.so+0xb06bd6) #3 0x00007ff1275df930 __restore_rt (/usr/lib/libpthread.so.0+0x14930) #4 0x00007ff1270f3f25 raise (/usr/lib/libc.so.6+0x3bf25) #5 0x00007ff1270dd897 abort (/usr/lib/libc.so.6+0x25897) #6 0x00007ff1270dd767 _nl_load_domain.cold (/usr/lib/libc.so.6+0x25767) #7 0x00007ff1270ec526 (/usr/lib/libc.so.6+0x34526) #8 0x000055f8e421b48f X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, (anonymous namespace)::RegCount&amp;) (/usr/local/bin/ldc2+0xc9348f) #9 0x000055f8e421b7ca X86_64TargetABI::rewriteFunctionType(IrFuncTy&amp;) (/usr/local/bin/ldc2+0xc937ca) #10 0x000055f8e40a77c8 DtoFunctionType(Type*, IrFuncTy&amp;, Type*, Type*, FuncDeclaration*) (/usr/local/bin/ldc2+0xb1f7c8) #11 0x000055f8e40a820d DtoFunctionType(FuncDeclaration*) (/usr/local/bin/ldc2+0xb2020d) #12 0x000055f8e40a875d DtoResolveFunction(FuncDeclaration*) (/usr/local/bin/ldc2+0xb2075d) #13 0x000055f8e40aa79a DtoDefineFunction(FuncDeclaration*, bool) (/usr/local/bin/ldc2+0xb2279a) #14 0x000055f8e40983f9 CodegenVisitor::visit(FuncDeclaration*) (/usr/local/bin/ldc2+0xb103f9) #15 0x000055f8e40977a5 CodegenVisitor::visit(StructDeclaration*) (/usr/local/bin/ldc2+0xb0f7a5) #16 0x000055f8e4093fdd Declaration_codegen(Dsymbol*, IRState*) (/usr/local/bin/ldc2+0xb0bfdd) #17 0x000055f8e4093f8a Declaration_codegen(Dsymbol*) (/usr/local/bin/ldc2+0xb0bf8a) #18 0x000055f8e40d3100 codegenModule(IRState*, Module*) (/usr/local/bin/ldc2+0xb4b100) #19 0x000055f8e420ce27 ldc::CodeGenerator::emit(Module*) (/usr/local/bin/ldc2+0xc84e27) #20 0x000055f8e41cc700 codegenModules(Array&lt;Module*&gt;&amp;) (/usr/local/bin/ldc2+0xc44700) #21 0x000055f8e3f1239a mars_mainBody(Param&amp;, Array&lt;char const*&gt;&amp;, Array&lt;char const*&gt;&amp;) (/usr/local/bin/ldc2+0x98a39a) #22 0x000055f8e41cc529 cppmain() (/usr/local/bin/ldc2+0xc44529) #23 0x000055f8e450ef30 _D2rt6dmain212_d_run_main2UAAamPUQgZiZ6runAllMFZv (/usr/local/bin/ldc2+0xf86f30) #24 0x000055f8e450ed3f _d_run_main2 (/usr/local/bin/ldc2+0xf86d3f) #25 0x000055f8e450eb9e _d_run_main (/usr/local/bin/ldc2+0xf86b9e) #26 0x000055f8e420686f args::forwardToDruntime(int, char const**) (/usr/local/bin/ldc2+0xc7e86f) #27 0x000055f8e41cbd0d main (/usr/local/bin/ldc2+0xc43d0d) #28 0x00007ff1270df153 __libc_start_main (/usr/lib/libc.",
+作業環境  OS: Arch Linux LLVM: 9.0.0 LDC: v1.19.0-beta2(hash = ad80f004aeede0b1582bf9831133c000fecfef07)  起こったこと まず自前でLDCをビルドします。
+&gt; git clone --recursive git@github.com:ldc-developers/ldc.git &gt; git checkout v1.19.0-beta2 &gt; git submodule update --recursive &gt; mkdir build &gt; cd build &gt; cmake .. -G Ninja &gt; ninja &gt; sudo ninja install  できあがったLDCはこんなかんじ。
+&gt; ldc2 --version LDC - the LLVM D compiler (1.19.0-beta2): based on DMD v2.089.0 and LLVM 9.0.0 built with LDC - the LLVM D compiler (1.",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -122,7 +122,7 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
         "datePublished": "2019-12-05 13:38:33 &#43;0900 &#43;0900",
         "dateModified" : "2019-12-05 13:38:33 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/",
-        "wordCount" : "378",
+        "wordCount" : "637",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -680,10 +680,10 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-05 13:38:33 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-05</time>
             &middot;
-            378
+            637
             words.
             &middot;
-            2
+            3
             minute read.
         </div>
         
@@ -724,10 +724,86 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>またみつけてしまった。。。
+            
+
+<p>またみつけてしまった。。。
 今度のやつはまた微妙で、<strong>私が自分でビルドしたLDCでのみ</strong>起きた現象なので、私が悪い可能性も多分にあります。</p>
 
-<p>一応起こったことをご紹介。</p>
+<h1 id="作業環境">作業環境</h1>
+
+<ul>
+<li>OS: Arch Linux</li>
+<li>LLVM: 9.0.0</li>
+<li>LDC: v1.19.0-beta2(hash = ad80f004aeede0b1582bf9831133c000fecfef07)</li>
+</ul>
+
+<h1 id="起こったこと">起こったこと</h1>
+
+<p>まず自前でLDCをビルドします。</p>
+
+<pre><code class="language-bash">&gt; git clone --recursive git@github.com:ldc-developers/ldc.git
+&gt; git checkout v1.19.0-beta2
+&gt; git submodule update --recursive
+&gt; mkdir build
+&gt; cd build
+&gt; cmake .. -G Ninja
+&gt; ninja
+&gt; sudo ninja install
+</code></pre>
+
+<p>できあがったLDCはこんなかんじ。</p>
+
+<pre><code class="language-bash">&gt; ldc2 --version
+
+LDC - the LLVM D compiler (1.19.0-beta2):
+  based on DMD v2.089.0 and LLVM 9.0.0
+  built with LDC - the LLVM D compiler (1.19.0-beta2)
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: haswell
+  http://dlang.org - http://wiki.dlang.org/LDC
+
+  Registered Targets:
+    aarch64    - AArch64 (little endian)
+    aarch64_32 - AArch64 (little endian ILP32)
+    aarch64_be - AArch64 (big endian)
+    amdgcn     - AMD GCN GPUs
+    arm        - ARM
+    arm64      - ARM64 (little endian)
+    arm64_32   - ARM64 (little endian ILP32)
+    armeb      - ARM (big endian)
+    avr        - Atmel AVR Microcontroller
+    bpf        - BPF (host endian)
+    bpfeb      - BPF (big endian)
+    bpfel      - BPF (little endian)
+    hexagon    - Hexagon
+    lanai      - Lanai
+    mips       - MIPS (32-bit big endian)
+    mips64     - MIPS (64-bit big endian)
+    mips64el   - MIPS (64-bit little endian)
+    mipsel     - MIPS (32-bit little endian)
+    msp430     - MSP430 [experimental]
+    nvptx      - NVIDIA PTX 32-bit
+    nvptx64    - NVIDIA PTX 64-bit
+    ppc32      - PowerPC 32
+    ppc64      - PowerPC 64
+    ppc64le    - PowerPC 64 LE
+    r600       - AMD GPUs HD2XXX-HD6XXX
+    riscv32    - 32-bit RISC-V
+    riscv64    - 64-bit RISC-V
+    sparc      - Sparc
+    sparcel    - Sparc LE
+    sparcv9    - Sparc V9
+    systemz    - SystemZ
+    thumb      - Thumb
+    thumbeb    - Thumb (big endian)
+    wasm32     - WebAssembly 32-bit
+    wasm64     - WebAssembly 64-bit
+    x86        - 32-bit X86: Pentium-Pro and above
+    x86-64     - 64-bit X86: EM64T and AMD64
+    xcore      - XCore
+</code></pre>
+
+<p>こうしてインストールされたLDCを用いて以下のソースコードをビルドします。</p>
 
 <pre><code class="language-d">struct Q {
     auto func(uint[3] a, uint[3] b, uint c) {
@@ -740,8 +816,6 @@ void main() {
     q.func([1,1,1],[1,1,1],1);
 }
 </code></pre>
-
-<p>これをビルドすると、</p>
 
 <pre><code class="language-bash">ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()' failed.
  #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so+0xb08b7b)
@@ -816,6 +890,10 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
 で、なんでここに構造体以外が来ることになっていないのかは不明。
 実際いまは<code>uint[3]</code>が来ているのでこれでassertionが起きている。
 う〜〜〜ん？？？</p>
+
+<h1 id="追記">追記</h1>
+
+<p>再現性がシビアみたいなので、環境をちゃんと記載しました。</p>
 
             
 
