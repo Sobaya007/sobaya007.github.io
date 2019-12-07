@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>環境構築 on そばやのブログ</title>
+    <link>https://sobaya007.github.io/categories/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89/</link>
+    <description>Recent content in 環境構築 on そばやのブログ</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 08 Dec 2019 02:49:47 +0900</lastBuildDate>
+    
+	<atom:link href="https://sobaya007.github.io/categories/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Arch Linuxインストールメモ</title>
+      <link>https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/</link>
+      <pubDate>Sun, 08 Dec 2019 02:49:47 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/</guid>
+      <description>もう完全に自分用メモ書き。
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。
+CPUはintel製。
+GPUはNvidia製。
+ブートマネージャはsystemd-bootです。
+デスクトップ環境はgnomeです。
+インストール作業中の通信はWi-Fiでした。
+これがベストかはわからないが、できたので良し。
+様々なところを参考にしましたが、どこも通しでは参考にしていません。
+ Live USBを作る。 私はrufusでやりました。 BIOSに行ってSecure Bootを切る。 Windowsとデュアルブートする場合は高速スタートアップを切る Arch用のパーティションを切る Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする Live USBからArchを起動 lsblkで各パーティションの名前を確認 bash nvme0n1 259:0 0 477G 0 disk ├─nvme0n1p1 259:1 0 260M 0 part /boot ├─nvme0n1p2 259:2 0 16M 0 part ├─nvme0n1p3 259:3 0 257.6G 0 part ├─nvme0n1p4 259:4 0 218.1G 0 part / └─nvme0n1p5 259:5 0 1000M 0 part  こんなかんじのノリでした。ここの名前は結構デバイスによって違う。
+ parted -lでパーティションの役割を確認
+1 1049kB 274MB 273MB fat32 EFI system partition boot, hidden, esp 2 274MB 290MB 16.</description>
+    </item>
+    
+  </channel>
+</rss>

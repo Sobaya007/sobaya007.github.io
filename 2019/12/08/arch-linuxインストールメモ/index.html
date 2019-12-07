@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Arch Linuxインストールメモ &middot; そばやのブログ</title>
+    <meta name="generator" content="Hugo 0.54.0" />
+    
+    
+        
+    
+
+    
+
+    <link rel="apple-touch-icon-precomposed"
+        href='/favicon/favicon-250.png'>
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="32x32">
+    <link rel="icon" href="/favicon/favicon-250.png" sizes="192x192">
+    <meta name="msapplication-TileImage" content="/favicon/favicon-300.png" />
+
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="そばや">
+    
+      <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/"/>
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
+    
+
+
+<link href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/vs2015.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="https://sobaya007.github.io/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Arch Linuxインストールメモ" />
+<meta property="og:description" content="もう完全に自分用メモ書き。
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。
+CPUはintel製。
+GPUはNvidia製。
+ブートマネージャはsystemd-bootです。
+デスクトップ環境はgnomeです。
+インストール作業中の通信はWi-Fiでした。
+これがベストかはわからないが、できたので良し。
+様々なところを参考にしましたが、どこも通しでは参考にしていません。
+ Live USBを作る。 私はrufusでやりました。 BIOSに行ってSecure Bootを切る。 Windowsとデュアルブートする場合は高速スタートアップを切る Arch用のパーティションを切る Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする Live USBからArchを起動 lsblkで各パーティションの名前を確認 bash nvme0n1 259:0 0 477G 0 disk ├─nvme0n1p1 259:1 0 260M 0 part /boot ├─nvme0n1p2 259:2 0 16M 0 part ├─nvme0n1p3 259:3 0 257.6G 0 part ├─nvme0n1p4 259:4 0 218.1G 0 part / └─nvme0n1p5 259:5 0 1000M 0 part  こんなかんじのノリでした。ここの名前は結構デバイスによって違う。
+ parted -lでパーティションの役割を確認
+1 1049kB 274MB 273MB fat32 EFI system partition boot, hidden, esp 2 274MB 290MB 16." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" />
+<meta property="article:published_time" content="2019-12-08T02:49:47&#43;09:00"/>
+<meta property="article:modified_time" content="2019-12-08T02:49:47&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+
+    
+    
+<meta itemprop="name" content="Arch Linuxインストールメモ">
+<meta itemprop="description" content="もう完全に自分用メモ書き。
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。
+CPUはintel製。
+GPUはNvidia製。
+ブートマネージャはsystemd-bootです。
+デスクトップ環境はgnomeです。
+インストール作業中の通信はWi-Fiでした。
+これがベストかはわからないが、できたので良し。
+様々なところを参考にしましたが、どこも通しでは参考にしていません。
+ Live USBを作る。 私はrufusでやりました。 BIOSに行ってSecure Bootを切る。 Windowsとデュアルブートする場合は高速スタートアップを切る Arch用のパーティションを切る Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする Live USBからArchを起動 lsblkで各パーティションの名前を確認 bash nvme0n1 259:0 0 477G 0 disk ├─nvme0n1p1 259:1 0 260M 0 part /boot ├─nvme0n1p2 259:2 0 16M 0 part ├─nvme0n1p3 259:3 0 257.6G 0 part ├─nvme0n1p4 259:4 0 218.1G 0 part / └─nvme0n1p5 259:5 0 1000M 0 part  こんなかんじのノリでした。ここの名前は結構デバイスによって違う。
+ parted -lでパーティションの役割を確認
+1 1049kB 274MB 273MB fat32 EFI system partition boot, hidden, esp 2 274MB 290MB 16.">
+
+
+<meta itemprop="datePublished" content="2019-12-08T02:49:47&#43;09:00" />
+<meta itemprop="dateModified" content="2019-12-08T02:49:47&#43;09:00" />
+<meta itemprop="wordCount" content="344">
+
+
+
+<meta itemprop="keywords" content="環境構築,OS," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Arch Linuxインストールメモ"/>
+<meta name="twitter:description" content="もう完全に自分用メモ書き。
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。
+CPUはintel製。
+GPUはNvidia製。
+ブートマネージャはsystemd-bootです。
+デスクトップ環境はgnomeです。
+インストール作業中の通信はWi-Fiでした。
+これがベストかはわからないが、できたので良し。
+様々なところを参考にしましたが、どこも通しでは参考にしていません。
+ Live USBを作る。 私はrufusでやりました。 BIOSに行ってSecure Bootを切る。 Windowsとデュアルブートする場合は高速スタートアップを切る Arch用のパーティションを切る Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする Live USBからArchを起動 lsblkで各パーティションの名前を確認 bash nvme0n1 259:0 0 477G 0 disk ├─nvme0n1p1 259:1 0 260M 0 part /boot ├─nvme0n1p2 259:2 0 16M 0 part ├─nvme0n1p3 259:3 0 257.6G 0 part ├─nvme0n1p4 259:4 0 218.1G 0 part / └─nvme0n1p5 259:5 0 1000M 0 part  こんなかんじのノリでした。ここの名前は結構デバイスによって違う。
+ parted -lでパーティションの役割を確認
+1 1049kB 274MB 273MB fat32 EFI system partition boot, hidden, esp 2 274MB 290MB 16."/>
+<meta name="twitter:site" content="@sobaya007"/>
+
+    
+
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <script type="application/ld+json">
+    {
+        "@context" : "http://schema.org",
+        "@type" : "BlogPosting",
+        "mainEntityOfPage": {
+             "@type": "WebPage",
+             "@id": "https://sobaya007.github.io/"
+        },
+        "articleSection" : "post",
+        "name" : "Arch Linuxインストールメモ",
+        "headline" : "Arch Linuxインストールメモ",
+        "description" : "もう完全に自分用メモ書き。
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。
+CPUはintel製。
+GPUはNvidia製。
+ブートマネージャはsystemd-bootです。
+デスクトップ環境はgnomeです。
+インストール作業中の通信はWi-Fiでした。
+これがベストかはわからないが、できたので良し。
+様々なところを参考にしましたが、どこも通しでは参考にしていません。
+ Live USBを作る。 私はrufusでやりました。 BIOSに行ってSecure Bootを切る。 Windowsとデュアルブートする場合は高速スタートアップを切る Arch用のパーティションを切る Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする Live USBからArchを起動 lsblkで各パーティションの名前を確認 bash nvme0n1 259:0 0 477G 0 disk ├─nvme0n1p1 259:1 0 260M 0 part /boot ├─nvme0n1p2 259:2 0 16M 0 part ├─nvme0n1p3 259:3 0 257.6G 0 part ├─nvme0n1p4 259:4 0 218.1G 0 part / └─nvme0n1p5 259:5 0 1000M 0 part  こんなかんじのノリでした。ここの名前は結構デバイスによって違う。
+ parted -lでパーティションの役割を確認
+1 1049kB 274MB 273MB fat32 EFI system partition boot, hidden, esp 2 274MB 290MB 16.",
+        "inLanguage" : "en",
+        "author" : "",
+        "creator" : "",
+        "publisher": "",
+        "accountablePerson" : "",
+        "copyrightHolder" : "",
+        "copyrightYear" : "2019",
+        "datePublished": "2019-12-08 02:49:47 &#43;0900 &#43;0900",
+        "dateModified" : "2019-12-08 02:49:47 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/",
+        "wordCount" : "344",
+        "keywords" : [ "環境構築","OS","Blog" ]
+    }
+</script>
+
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo">
+          
+          <span class="site-title">そばやのブログ</span>
+      </a>
+      <a href="/" id="logolong">
+        
+      </a>
+      <nav id="main-nav">
+         <div href="/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" class="navbar-collapse collapse" id="navigation">
+            <ul class="nav navbar-nav navbar-right">
+              
+              <li class="main-dropdown">
+                
+                <a href="/">Home</a>
+                
+              </li>
+              
+              <li class="main-dropdown">
+                
+                <a href="/post/">Blog</a>
+                
+              </li>
+              
+            </ul>
+          </div>
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <nav class="right-nav">
+            
+        </nav>   
+    </div>     
+  </div> 
+  <div id="main-nav-mobile" class="header-sub header-inner">
+      <div class="navbar-collapse collapse" id="navigation">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li class="main-dropdown">
+            
+            <a href="/">Home</a>
+            
+          </li>
+          
+          <li class="main-dropdown">
+            
+            <a href="/post/">Blog</a>
+            
+          </li>
+          
+        </ul>
+      </div>
+  </div>  
+</header>
+
+
+   	
+ 	<div class="outer">
+    <div id="sideleft">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+        
+        <img id="avatar" src="https://sobaya007.github.io/images/sobaya.jpeg">
+        
+        <h2 id="name">そばや</h2>
+      
+      <h3 id="title">徒然なるそばやの感想</h3>
+      <span id="location"><i class="fas fa-map-marker"></i>Japan</span>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/Sobaya007" target="_blank" title="GitHub"><i class="fab fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/sobaya007" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></td>
+
+
+
+
+
+
+
+
+
+<li><a href="mailto:sobaya007@gmail.com" title="Email" class="fas fa-envelope"></a></li>
+
+
+
+          <td><a href="https://sobaya007.github.io/index.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+   	
+    	<aside id="sidebar">
+    
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/arch.png)" alt="Arch Linuxインストールメモ" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" lang="en" class="title">Arch Linuxインストールメモ</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89">
+                        環境構築
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-12-08 02:49:47 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-08</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/ldc.png)" alt="LDCのバグみつけた - その2 -" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/" lang="en" class="title">LDCのバグみつけた - その2 -</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-12-05 13:38:33 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-05</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/ldc.png)" alt="LDCのバグみつけた" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="title">LDCのバグみつけた</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                        D言語
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-12-01 23:10:16 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-01</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/llvm.png)" alt="VimでLSPでC&#43;&#43;" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en" class="title">VimでLSPでC&#43;&#43;</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/lsp">
+                        LSP
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-11-04 17:09:47 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-11-04</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://sobaya007.github.io/2019/11/01/opencl%E3%81%A8%E6%A0%BC%E9%97%98%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="thumbnail">
+                    
+                        <span style="background-image:url(https://sobaya007.github.io/images/cl.png)" alt="OpenCLと格闘した話" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    <p class="item-title"><a href="https://sobaya007.github.io/2019/11/01/opencl%E3%81%A8%E6%A0%BC%E9%97%98%E3%81%97%E3%81%9F%E8%A9%B1/" lang="en" class="title">OpenCLと格闘した話</a></p>
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://sobaya007.github.io/categories/opencl">
+                        OpenCL
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-date">
+                        <time datetime="2019-11-01 10:35:12 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-11-01</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/git">
+                    git
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/intel%E5%85%A5%E3%81%A3%E3%81%A6%E3%82%8B">
+                    intel入ってる
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/lsp">
+                    lsp
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/opencl">
+                    opencl
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/vim">
+                    vim
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/categories/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89">
+                    環境構築
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/c&#43;&#43;">
+                    c&#43;&#43;
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E">
+                    d言語
+                </a>
+                <span class="category-list-count">11</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/git">
+                    git
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/gpgpu">
+                    gpgpu
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/language-server">
+                    language-server
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/linker">
+                    linker
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/lsp">
+                    lsp
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/mixi">
+                    mixi
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/opencl">
+                    opencl
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/os">
+                    os
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/vim">
+                    vim
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">
+                    バグ
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://sobaya007.github.io/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89">
+                    環境構築
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        
+        <a href="https://sobaya007.github.io/tags/c&#43;&#43;" style="font-size: 12px;">c&#43;&#43;</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/d%E8%A8%80%E8%AA%9E" style="font-size: 12px;">d言語</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/git" style="font-size: 12px;">git</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/gpgpu" style="font-size: 12px;">gpgpu</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/language-server" style="font-size: 12px;">language-server</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/linker" style="font-size: 12px;">linker</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/lsp" style="font-size: 12px;">lsp</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/mixi" style="font-size: 12px;">mixi</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/opencl" style="font-size: 12px;">opencl</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/os" style="font-size: 12px;">os</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/vim" style="font-size: 12px;">vim</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0" style="font-size: 12px;">バグ</a>
+        
+        
+        <a href="https://sobaya007.github.io/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89" style="font-size: 12px;">環境構築</a>
+        
+    </div>
+</div>
+
+
+
+
+
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+    
+    </div>
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/arch.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" lang="en">
+    <h1 class="article-title" itemprop="name">
+        Arch Linuxインストールメモ
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fas fa-calendar"></i>
+            <time datetime="2019-12-08 02:49:47 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-08</time>
+            &middot;
+            344
+            words.
+            &middot;
+            2
+            minute read.
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/categories/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89">環境構築</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fas fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89">環境構築</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/os">OS</a>
+                
+                
+            </div>
+            
+        
+    </div>
+    
+
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>もう完全に自分用メモ書き。<br />
+ちなみに私はUEFIブートでWin10とArchのデュアルブートにしています。<br />
+CPUはintel製。<br />
+GPUはNvidia製。<br />
+ブートマネージャはsystemd-bootです。<br />
+デスクトップ環境はgnomeです。<br />
+インストール作業中の通信はWi-Fiでした。<br />
+これがベストかはわからないが、できたので良し。<br />
+様々なところを参考にしましたが、どこも通しでは参考にしていません。</p>
+
+<ol>
+<li><a href="https://heruwakame.hatenablog.com/entry/2017/09/10/180923">Live USBを作る</a>。
+私はrufusでやりました。</li>
+<li>BIOSに行ってSecure Bootを切る。</li>
+<li>Windowsとデュアルブートする場合は<a href="https://121ware.com/qasearch/1007/app/servlet/relatedqa?QID=018214">高速スタートアップを切る</a></li>
+<li><a href="https://heruwakame.hatenablog.com/entry/2017/09/10/180923">Arch用のパーティションを切る</a></li>
+<li>Live USBを差してBIOSへ行き、Bootの優先順位のところでUSBっぽいのを最優先にする</li>
+<li>Live USBからArchを起動</li>
+<li><code>lsblk</code>で各パーティションの名前を確認
+<code>bash
+nvme0n1     259:0    0   477G  0 disk 
+├─nvme0n1p1 259:1    0   260M  0 part /boot
+├─nvme0n1p2 259:2    0    16M  0 part 
+├─nvme0n1p3 259:3    0 257.6G  0 part 
+├─nvme0n1p4 259:4    0 218.1G  0 part /
+└─nvme0n1p5 259:5    0  1000M  0 part 
+</code>
+こんなかんじのノリでした。ここの名前は結構デバイスによって違う。<br /></li>
+
+<li><p><code>parted -l</code>でパーティションの役割を確認</p>
+
+<pre><code class="language-bash">1    1049kB  274MB  273MB   fat32             EFI system partition          boot, hidden, esp
+2    274MB   290MB  16.8MB                    Microsoft reserved partition  msftres
+3    290MB   277GB  277GB   ntfs              Basic data partition          msftdata
+4    277GB   511GB  234GB   ext4              Basic data partition          msftdata
+5    511GB   512GB  1049MB  ntfs              Basic data partition          hidden, diag
+</code></pre>
+
+<p>こんなかんじになっていた。<br />
+1番がEFIパーティション。<br />
+2番がWindows用の謎領域。<br />
+3番がWindows10。<br />
+私はWindows10のメインパーティションを縮小してその後ろに空き領域を作ったので、4番の領域がArch用となった。<br />
+ということで以下EFIパーティションを<code>nvme0n1p1</code>、Arch用パーティションを<code>nvme0n1p4</code>としてしまうので、適宜そのときの状況に合わせて読み替えてください。</p></li>
+
+<li><p><code>mkfs.ext4 /dev/nvme0n1p4</code>でArch用パーティションをフォーマット</p></li>
+
+<li><p><code>mount /dev/nvme0n1p4 /mnt</code>でArch用パーティションをマウント</p></li>
+
+<li><p><code>mkdir /mnt/boot</code>でArch用パーティション内にEFIパーティションのマウントポイントを作成</p></li>
+
+<li><p><code>mount /dev/nvme0n1p1 /mnt/boot</code>でEFIパーティションをマウント</p></li>
+
+<li><p><code>wifi-menu</code>でwifiにつなぐ</p></li>
+
+<li><p><code>timedatectl set-ntp true</code>でシステムクロックを合わせる
+これが要るのかは私にはわからない</p></li>
+
+<li><p><code>vim /etc/pacman.d/mirrorlist</code>で<code>pacman</code>の使うミラーを選択する。<br />
+具体的にはJapanっぽいのを適当に選んで一番上の行に持っていけばよい。</p></li>
+
+<li><p><code>pacstrap /mnt base linux linux-firmware</code>でディレクトリ構築+ベースシステムのインストール</p></li>
+
+<li><p><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code>でfstabを生成
+よくわかっていないけどこれがないとあとで起動したときにマウントの仕方がわからなくなるっぽい。</p></li>
+
+<li><p><code>chroot /mnt</code>で作ったシステムに侵入</p></li>
+
+<li><p><code>ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime</code>でタイムゾーンを東京にする</p></li>
+
+<li><p><code>hwclock --systohc --utc</code>でなんか必要っぽいファイルを生成</p></li>
+
+<li><p><code>vim /etc/locale.gen</code>で<code>en_US.UTF-8 UTF-8</code>と<code>ja_JP.UTF-8 UTF-8</code>のコメントを外す</p></li>
+
+<li><p><code>locale-gen</code>でlocaleっぽいファイルを生成</p></li>
+
+<li><p><code>echo LANG=en_US.UTF-8 &gt; /etc/locale.conf</code>で使用するlocaleを設定。<br />
+ちなみに私はここでtypoしたためにめっちゃ面倒を被りました。</p></li>
+
+<li><p><code>echo KEYMAP=jp106 &gt; /etc/vconsole.conf</code>でキー配置を日本語用に。</p></li>
+
+<li><p>適当にコンピュータの名前を決めて<code>echo hoge &gt; /etc/hostname</code>
+私は<code>echo sobaya &gt; /etc/hostname</code>としました。</p></li>
+
+<li><p><code>vim /etc/hosts</code>で中身を以下のようにする。</p>
+
+<pre><code class="language-bash">127.0.0.1   localhost
+::1     localhost
+127.0.1.1   sobaya.localdomain  sobaya
+</code></pre></li>
+
+<li><p><code>pacman -S iputils netctl dhcpcd iw wpa_supplicant dialog</code>でネット系のいろいろを入れる<br />
+これで必要十分かは不明だが、とりあえずこんだけ入れとけばなんとかなる</p></li>
+
+<li><p><code>mkinitcpio -P</code>する</p></li>
+
+<li><p><code>passwd</code>でrootパスワードを設定</p></li>
+
+<li><p><code>bootctl --path=/boot install</code>でEFIパーティションに<code>systemd-boot</code>を突っ込む</p></li>
+
+<li><p><code>vim /boot/loader/loader.conf</code>で以下のようなファイルを作成</p>
+
+<pre><code class="language-bash">default  arch
+timeout  4
+editor   no
+</code></pre></li>
+
+<li><p><code>blkid /dev/nvme0n1p1 &gt; /boot/loader/entries/arch.conf</code>で適当に前準備</p></li>
+
+<li><p><code>vim /boot/loader/entries/arch.conf</code>で以下のようなファイルを作成</p>
+
+<pre><code>title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /intel-ucode.img
+initrd  /initramfs-linux.img
+options root=PARTUUID=hogehoge-foo-baz-hogehogehoge rw
+</code></pre>
+
+<p>hogehogeのところにはすでに書き込まれていた部分を使えば楽。</p></li>
+
+<li><p><code>pacman -S intel-ucode</code>で<code>intel-ucode.img</code>を突っ込む</p></li>
+
+<li><p><code>exit</code>で一段抜ける</p></li>
+
+<li><p><code>umount -R /mnt</code>でアンマウント</p></li>
+
+<li><p><code>shutdown now</code>で電源を落とす</p></li>
+
+<li><p>Live USBを引っこ抜いて電源を入れる</p></li>
+
+<li><p>systemd-bootが立ち上がるので、Arch Linuxを選択(or放置)</p></li>
+
+<li><p>ログインを求められるので、ユーザー名<code>root</code>でログイン</p></li>
+
+<li><p><code>wifi-menu</code>でもっかいWi-Fiに接続</p></li>
+
+<li><p><code>pacman -S gnome gnome-extra</code>でデスクトップ環境を突っ込む</p></li>
+
+<li><p><code>systemctl enable gdm</code>でgdmを登録</p></li>
+
+<li><p><code>pacman -S nvidia</code>でnvidiaドライバを突っ込む</p></li>
+
+<li><p><code>reboot</code>で再起動</p></li>
+
+<li><p>gnomeが立ち上がるので、ユーザー名<code>root</code>でログイン</p></li>
+
+<li><p>Superキー(Windowsキー？)を押して<code>term</code>とか打つとterminalが選択できるので、起動</p></li>
+
+<li><p><code>systemctl enable NetworkManager</code>でNetworkManagerを登録<br />
+これをしないとgnomeのGUIでWi-Fiが設定できない</p></li>
+
+<li><p>右上のほうからWi-Fiを接続</p></li>
+
+<li><p><code>useradd -d /home/sobaya -s /bin/bash -m sobaya</code>とかでユーザー作成<br />
+ちなみに私はfish派なので<code>pacman -S fish</code>してから<code>-s /usr/bin/fish</code>しました。
+あとなぜかfishの場所を見ようと思って<code>which fish</code>したらwhichが入っていなかったので<code>pacman -S which</code>しました。なぜwhichがないんだ。。。</p></li>
+
+<li><p><code>passwd sobaya</code>でパスワード設定</p></li>
+
+<li><p><code>usermod -aG wheel sobaya</code>でwheelグループ(sudoできるグループに登録)</p></li>
+
+<li><p><code>pacman -S neovim sudo</code></p></li>
+
+<li><p><code>nvim /etc/sudoers</code>でwheelの行のコメント解除</p></li>
+
+<li><p>一度ログアウトして、一般ユーザーで再度ログイン<br />
+私はここでnvidiaの魔の手にかかり、ログインループ現象をくらいました。<br />
+解決策として、ログイン画面の歯車ボタンを押してXorgのgnomeからログインするという手があります。
+どうもWaylandと相性が悪いらしい。。。</p></li>
+
+<li><p><code>sudo pacman -S base-devel git go</code></p></li>
+
+<li><p><code>git clone https://aur.archlinux.org/yay.git</code></p></li>
+
+<li><p><code>cd yay</code></p></li>
+
+<li><p><code>makepkg -si</code>でyayをインストール</p></li>
+
+<li><p><code>yay -S google-chrome</code>でchromeをインストール</p></li>
+
+<li><p><code>sudo pacman -S noto-fonts-cjk</code>でとりあえず日本語フォントをインストール</p></li>
+
+<li><p><code>sudo pacman -S fcitx-mozc fcitx-gtk3 fcitx-qt5</code>で日本語入力をインストール</p></li>
+
+<li><p>Super押してSettingで歯車を召喚し、「地域と言語」を「日本語」「日本」「日本語」にする</p></li>
+
+<li><p>Super押してfcitxでペンギン(設定のほう)を召喚し、入力メソッドがMozcになっているのを確認</p></li>
+
+<li><p><code>sudo pacman -S docker</code>でdockerをインストール</p></li>
+
+<li><p><code>systectl enable docker</code>でdockerを登録</p></li>
+
+<li><p><code>systemctl start docker</code>でdockerdを起動</p></li>
+
+<li><p><code>usermod -aG docker sobaya</code>でユーザーをdockerグループ追加</p></li>
+
+<li><p><code>newgrp docker</code>でdockerグループを有効化</p></li>
+
+<li><p><code>docker info</code>が出たら優勝</p></li>
+</ol>
+
+<p>ここまで来ると</p>
+
+<ul>
+<li>デスクトップ環境</li>
+<li>ブラウザ</li>
+<li>日本語表示/入力</li>
+<li>Nvidiaドライバインストール</li>
+<li>一般ユーザー(sudoerかつdocker権限持ち)の作成</li>
+</ul>
+
+<p>まで行っているのでどうにかなるでしょう。</p>
+
+            
+
+        </div>
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
+
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f&text=Arch%20Linux%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%83%a1%e3%83%a2&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f&title=Arch%20Linux%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%83%a1%e3%83%a2" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f&title=Arch%20Linux%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%83%a1%e3%83%a2" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f&title=Arch%20Linux%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%83%a1%e3%83%a2" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f&description=Arch%20Linux%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%83%a1%e3%83%a2" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f08%2farch-linux%25E3%2582%25A4%25E3%2583%25B3%25E3%2582%25B9%25E3%2583%2588%25E3%2583%25BC%25E3%2583%25AB%25E3%2583%25A1%25E3%2583%25A2%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
+    </div>
+    
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">LDCのバグみつけた - その2 -</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+
+    </section>
+
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="https://github.com/statnmap/hugo-statnmap-theme">statnmap</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://sobaya007.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://sobaya007.github.io/js/script.js"></script>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/toml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/rust.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+</script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+</body>
+</html>
