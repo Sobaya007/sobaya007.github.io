@@ -63,7 +63,7 @@
 
 <meta itemprop="datePublished" content="2019-12-05T13:38:33&#43;09:00" />
 <meta itemprop="dateModified" content="2019-12-05T13:38:33&#43;09:00" />
-<meta itemprop="wordCount" content="637">
+<meta itemprop="wordCount" content="642">
 
   <meta itemprop="image" content="https://sobaya007.github.io/images/ldc.png">
 
@@ -122,7 +122,7 @@
         "datePublished": "2019-12-05 13:38:33 &#43;0900 &#43;0900",
         "dateModified" : "2019-12-05 13:38:33 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/",
-        "wordCount" : "637",
+        "wordCount" : "642",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -710,10 +710,10 @@
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-05 13:38:33 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-05</time>
             &middot;
-            637
+            642
             words.
             &middot;
-            3
+            4
             minute read.
         </div>
         
@@ -847,6 +847,8 @@ void main() {
 }
 </code></pre>
 
+<p>すると以下のようなエラーが出ます。</p>
+
 <pre><code class="language-bash">ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&amp;, IrFuncTyArg&amp;, {anonymous}::RegCount&amp;): Assertion `originalLType-&gt;isStructTy()' failed.
  #0 0x00007ff128105b7b llvm::sys::PrintStackTrace(llvm::raw_ostream&amp;) (/usr/lib/libLLVM-9.so+0xb08b7b)
  #1 0x00007ff128103a44 llvm::sys::RunSignalHandlers() (/usr/lib/libLLVM-9.so+0xb06a44)
@@ -924,6 +926,12 @@ ldc2: ../gen/abi-x86-64.cpp:305: void X86_64TargetABI::rewriteArgument(IrFuncTy&
 <h1 id="追記">追記</h1>
 
 <p>再現性がシビアみたいなので、環境をちゃんと記載しました。</p>
+
+<h1 id="追追記">追追記</h1>
+
+<p>修正されました！<br />
+<a href="https://github.com/ldc-developers/ldc/commit/ff831b9394b8c12595b708902b0bec8a00b5d3a5">https://github.com/ldc-developers/ldc/commit/ff831b9394b8c12595b708902b0bec8a00b5d3a5</a><br />
+<a href="https://twitter.com/shitsyndrome">kubo39</a>さんありがとうございます！！！！</p>
 
             
 
