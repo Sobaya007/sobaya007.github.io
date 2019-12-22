@@ -53,6 +53,8 @@ import type; import dll1; void use(I i) { import std.stdio : writeln; writeln(ca
 import std.experimental.all; import core.runtime; import core.sys.posix.dlfcn : dlsym, dlerror; import type; void main() { execute([&quot;dmd&quot;, &quot;dll1." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://sobaya007.github.io/2019/04/10/d%E8%A8%80%E8%AA%9E-shared-library-down-cast%E3%81%A7%E5%9E%8B%E6%83%85%E5%A0%B1%E3%81%8C%E6%AD%BB%E3%81%AC%E5%95%8F%E9%A1%8C/" />
+
+<meta property="og:image" content="https://sobaya007.github.io/images/dman.png" />
 <meta property="article:published_time" content="2019-04-10T16:27:25&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-10T16:27:25&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
@@ -75,11 +77,15 @@ import std.experimental.all; import core.runtime; import core.sys.posix.dlfcn : 
 <meta itemprop="dateModified" content="2019-04-10T16:27:25&#43;09:00" />
 <meta itemprop="wordCount" content="220">
 
+  <meta itemprop="image" content="https://sobaya007.github.io/images/dman.png">
+
 
 
 <meta itemprop="keywords" content="D言語,バグ," />
 
-    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://sobaya007.github.io/images/dman.png"/>
+
 <meta name="twitter:title" content="D言語&#43;Shared Library&#43;Down castで型情報が死ぬ問題"/>
 <meta name="twitter:description" content="最近気づいた現象。(バグ？)
 あるインターフェースIがあって、これを実装したクラスCがShared library 1にある。
@@ -1069,13 +1075,6 @@ void main() {
 
 
 
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-</script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
 
