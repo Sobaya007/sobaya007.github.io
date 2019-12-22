@@ -42,7 +42,7 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ" />
 <meta property="og:description" content="もはやこれはバグなのかすら私にはわからない&hellip;
-※追記: 全然違うコード張ってました。
+※追記: 全然違うコード張ってました。 ※追追記: 直りしました。
 環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
  2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) Variant getThree() { int i = 3; return Variant(i); } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std." />
 <meta property="og:type" content="article" />
@@ -54,14 +54,14 @@
     
 <meta itemprop="name" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ">
 <meta itemprop="description" content="もはやこれはバグなのかすら私にはわからない&hellip;
-※追記: 全然違うコード張ってました。
+※追記: 全然違うコード張ってました。 ※追追記: 直りしました。
 環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
  2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) Variant getThree() { int i = 3; return Variant(i); } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std.">
 
 
 <meta itemprop="datePublished" content="2019-12-23T01:09:56&#43;09:00" />
 <meta itemprop="dateModified" content="2019-12-23T01:09:56&#43;09:00" />
-<meta itemprop="wordCount" content="217">
+<meta itemprop="wordCount" content="321">
 
 
 
@@ -70,7 +70,7 @@
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ"/>
 <meta name="twitter:description" content="もはやこれはバグなのかすら私にはわからない&hellip;
-※追記: 全然違うコード張ってました。
+※追記: 全然違うコード張ってました。 ※追追記: 直りしました。
 環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
  2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) Variant getThree() { int i = 3; return Variant(i); } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std."/>
 <meta name="twitter:site" content="@sobaya007"/>
@@ -103,7 +103,7 @@
         "name" : "Win32 &#43; D言語 &#43; DLLで謎のクラッシュ",
         "headline" : "Win32 &#43; D言語 &#43; DLLで謎のクラッシュ",
         "description" : "もはやこれはバグなのかすら私にはわからない&hellip;
-※追記: 全然違うコード張ってました。
+※追記: 全然違うコード張ってました。 ※追追記: 直りしました。
 環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
  2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) Variant getThree() { int i = 3; return Variant(i); } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std.",
         "inLanguage" : "en",
@@ -116,7 +116,7 @@
         "datePublished": "2019-12-23 01:09:56 &#43;0900 &#43;0900",
         "dateModified" : "2019-12-23 01:09:56 &#43;0900 &#43;0900",
         "url" : "https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/",
-        "wordCount" : "217",
+        "wordCount" : "321",
         "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
@@ -704,7 +704,7 @@
             <i class="fas fa-calendar"></i>
             <time datetime="2019-12-23 01:09:56 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-23</time>
             &middot;
-            217
+            321
             words.
             &middot;
             2
@@ -752,7 +752,8 @@
 
 <p>もはやこれはバグなのかすら私にはわからない&hellip;</p>
 
-<p>※追記: 全然違うコード張ってました。</p>
+<p>※追記: 全然違うコード張ってました。
+※追追記: 直りしました。</p>
 
 <h2 id="環境">環境</h2>
 
@@ -871,6 +872,68 @@ object.Error@(0): Access Violation
 
 <p>と、このように<strong><code>Variant</code>を返す関数は死ぬ</strong>。<code>void</code>関数は死なない。
 ちなみに<code>Tuple</code>とか別の構造体だと死なない。</p>
+
+<h2 id="解決編">解決編</h2>
+
+<p>Twitterにぶん投げたところあっさり解決。
+<a href="https://twitter.com/mono_shoo">@mono_shoo</a>さんありがとうございます！！！</p>
+
+<p>結局オチとしては「<code>extern(C)</code>も型に入れろ」ということだったようです。
+プラスのオモシロ話として、「<code>extern(C)</code>はcastの中に直接書けないので<code>alias</code>で分けてやるとよい」ということも教えていただきました。
+つまり結論はこういうことです。</p>
+
+<pre><code class="language-d">    ...
+
+    alias T = extern(C) Variant function();
+    auto func2 = cast(T)GetProcAddress(lib, &quot;getThree&quot;);
+    enforce(func2);
+    func2();
+</code></pre>
+
+<p>これで動きます！！！</p>
+
+<p>&hellip;って思うじゃん？</p>
+
+<h2 id="そして新たなバグへ">そして新たなバグへ</h2>
+
+<p>じゃあこれを<code>int</code>に戻せるかって話なんですけど、<strong>無理なんですよね</strong>。
+というかこれが一番最初に気づいたバグなんですけど、ここに至るまでにも様々な難所があったわけですね。
+つまりやりたいのはこうです。</p>
+
+<pre><code class="language-d">    ...
+
+    alias T = extern(C) Variant function();
+    auto func2 = cast(T)GetProcAddress(lib, &quot;getThree&quot;);
+    enforce(func2);
+    auto v = func2();
+    int i = v.get!int;
+</code></pre>
+
+<p>これを実行するとどうなるでしょうか？
+こうなります。</p>
+
+<pre><code class="language-bash">&gt; dmd -run test.d
+hello dll world
+
+std.variant.VariantException@std\variant.d(1715): Variant: attempting to use incompatible types int and int
+----------------
+0x004033B4 in std.socket.__ModuleInfo
+0x004023F9 in core.thread.__ModuleInfo
+0x00406693 in std.internal.windows.advapi32.__ModuleInfo
+0x0040660D in std.internal.windows.advapi32.__ModuleInfo
+0x004064A8 in std.internal.windows.advapi32.__ModuleInfo
+0x0040475E in std.regex.internal.kickstart.__ModuleInfo
+0x0040253B in std.concurrency.__ModuleInfo
+0x75746359 in BaseThreadInitThunk
+0x77AD7B74 in RtlGetAppContainerNamedObjectPath
+0x77AD7B44 in RtlGetAppContainerNamedObjectPath
+</code></pre>
+
+<p><code>int</code>から<code>int</code>には変換できないらしいです。
+へぇ。
+いやまぁたぶんTypeInfoのPoolか何かがDLL側とこっち側で違うとかだと思うんですけどね。
+ちなみにLinuxでは今のところだいたい動いています。
+なんだかなぁ&hellip;</p>
 
             
 
