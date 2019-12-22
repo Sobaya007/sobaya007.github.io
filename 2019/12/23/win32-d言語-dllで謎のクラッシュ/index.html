@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Vim &middot; そばやのブログ</title>
+    <title>Win32 &#43; D言語 &#43; DLLで謎のクラッシュ &middot; そばやのブログ</title>
     <meta name="generator" content="Hugo 0.54.0" />
     
     
@@ -25,10 +25,7 @@
       <meta name="description" content="">
     
     
-      <link href="/https://sobaya007.github.io/tags/vim/index.xml" rel="alternate" type="application/rss+xml" title="そばやのブログ" />
-      <link href="/https://sobaya007.github.io/tags/vim/index.xml" rel="feed" type="application/rss+xml" title="そばやのブログ" />
-    
-    <link rel="canonical" href="https://sobaya007.github.io/tags/vim/"/>
+    <link rel="canonical" href="https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/"/>
     <link rel="stylesheet" href="https://sobaya007.github.io/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://sobaya007.github.io/css/academicons.min.css">
@@ -43,22 +40,36 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Vim" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sobaya007.github.io/tags/vim/" />
-
-<meta property="og:updated_time" content="2019-11-04T17:09:47&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
+    <meta property="og:title" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ" />
+<meta property="og:description" content="もはやこれはバグなのかすら私にはわからない&hellip;
+環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
+ 2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) int getThree() { return 3; } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/" />
+<meta property="article:published_time" content="2019-12-23T01:09:56&#43;09:00"/>
+<meta property="article:modified_time" content="2019-12-23T01:09:56&#43;09:00"/><meta property="og:site_name" content="そばやのブログ" />
 
     
     
-<meta itemprop="name" content="Vim">
-<meta itemprop="description" content="">
+<meta itemprop="name" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ">
+<meta itemprop="description" content="もはやこれはバグなのかすら私にはわからない&hellip;
+環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
+ 2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) int getThree() { return 3; } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std.">
 
+
+<meta itemprop="datePublished" content="2019-12-23T01:09:56&#43;09:00" />
+<meta itemprop="dateModified" content="2019-12-23T01:09:56&#43;09:00" />
+<meta itemprop="wordCount" content="180">
+
+
+
+<meta itemprop="keywords" content="D言語,バグ," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Vim"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="Win32 &#43; D言語 &#43; DLLで謎のクラッシュ"/>
+<meta name="twitter:description" content="もはやこれはバグなのかすら私にはわからない&hellip;
+環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
+ 2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) int getThree() { return 3; } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std."/>
 <meta name="twitter:site" content="@sobaya007"/>
 
     
@@ -85,10 +96,12 @@
              "@type": "WebPage",
              "@id": "https://sobaya007.github.io/"
         },
-        "articleSection" : "tags",
-        "name" : "Vim",
-        "headline" : "Vim",
-        "description" : "",
+        "articleSection" : "post",
+        "name" : "Win32 &#43; D言語 &#43; DLLで謎のクラッシュ",
+        "headline" : "Win32 &#43; D言語 &#43; DLLで謎のクラッシュ",
+        "description" : "もはやこれはバグなのかすら私にはわからない&hellip;
+環境  Windows10 64bit DMD v2.089.1-dirty  バグったコード 実際にバグが起きたのは以下のコード。 ざっくり説明すると、
+ 2つの関数をexportするDのコードを作る コンパイルしてDLLにし、読み込む 1つの関数は普通に実行できるが、もう1つは実行できない いかがでしたか？  enum dllSource = q{ import core.sys.windows.windows; import core.sys.windows.dll; import core.stdc.stdio; import std; __gshared HINSTANCE g_hInst; export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); } export extern(C) int getThree() { return 3; } extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved) { switch (ulReason) { case DLL_PROCESS_ATTACH: g_hInst = hInstance; dll_process_attach( hInstance, true ); break; case DLL_PROCESS_DETACH: dll_process_detach( hInstance, true ); break; case DLL_THREAD_ATTACH: dll_thread_attach( true, true ); break; case DLL_THREAD_DETACH: dll_thread_detach( true, true ); break; default: } return true; } }; import std; import std.",
         "inLanguage" : "en",
         "author" : "",
         "creator" : "",
@@ -96,11 +109,11 @@
         "accountablePerson" : "",
         "copyrightHolder" : "",
         "copyrightYear" : "2019",
-        "datePublished": "2019-11-04 17:09:47 &#43;0900 &#43;0900",
-        "dateModified" : "2019-11-04 17:09:47 &#43;0900 &#43;0900",
-        "url" : "https://sobaya007.github.io/tags/vim/",
-        "wordCount" : "0",
-        "keywords" : [ "Blog" ]
+        "datePublished": "2019-12-23 01:09:56 &#43;0900 &#43;0900",
+        "dateModified" : "2019-12-23 01:09:56 &#43;0900 &#43;0900",
+        "url" : "https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/",
+        "wordCount" : "180",
+        "keywords" : [ "D言語","バグ","Blog" ]
     }
 </script>
 
@@ -114,7 +127,7 @@
         
       </a>
       <nav id="main-nav">
-         <div href="/tags/vim/" class="navbar-collapse collapse" id="navigation">
+         <div href="/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/" class="navbar-collapse collapse" id="navigation">
             <ul class="nav navbar-nav navbar-right">
               
               <li class="main-dropdown">
@@ -668,28 +681,16 @@
 
     <section id="main">
     
-    
-    
-    
-<section class="archives-wrap">
-  <div class="archive-category-wrap">
-      <span class="archive-category">Vim</span>
-  </div>
-  <div class="archives">
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/llvm.png)" alt="Vim" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://sobaya007.github.io/images/dman.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/" lang="en">
     <h1 class="article-title" itemprop="name">
-        VimでLSPでC&#43;&#43;
+        Win32 &#43; D言語 &#43; DLLで謎のクラッシュ
     </h1>
     </a>
     <div class="article-meta">
@@ -697,99 +698,9 @@
         
         <div class="article-date">
             <i class="fas fa-calendar"></i>
-            <time datetime="2019-11-04 17:09:47 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-11-04</time>
+            <time datetime="2019-12-23 01:09:56 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-12-23</time>
             &middot;
-            54
-            words.
-            &middot;
-            1
-            minute read.
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/lsp">LSP</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/vim">vim</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fas fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/lsp">LSP</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/c&#43;&#43;">C&#43;&#43;</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/vim">vim</a>
-                
-                
-            </div>
-            
-        
-    </div>
-    
-
-</header>
-
-            <div class="article-entry" itemprop="articleBody">
-                
-                
-
-                <p>neovimでC++のプロジェクトを読むときに定義ジャンプ等LSPの動作を行えるようにした。
-[&hellip;] なお、CMakeすることを前提にしています。
-[&hellip;] cmakeするときに、オプションとして-DCMAKE_EXPORT_COMPILE_COMMANDS=ONをつける。
-</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/11/04/vim%E3%81%A7lsp%E3%81%A7c-/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
-        </div>
-    </article>
-    
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="item-thumbnail">
-            <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en" class="thumbnail">
-                
-                    <span style="background-image:url(https://sobaya007.github.io/images/vman.png)" alt="Vim" class="thumbnail-image"></span>
-                
-            </a>
-        </div>
-        <div class="article-inner">
-            <header class="article-header">
-    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en">
-    <h1 class="article-title" itemprop="name">
-        VimでD言語
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fas fa-calendar"></i>
-            <time datetime="2019-07-30 10:16:11 &#43;0900 &#43;0900" itemprop="datePublished">Posted on 2019-07-30</time>
-            &middot;
-            84
+            180
             words.
             &middot;
             1
@@ -804,10 +715,6 @@
                 
                 
                 <a class="article-category-link" href="https://sobaya007.github.io/categories/d%E8%A8%80%E8%AA%9E">D言語</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/categories/vim">vim</a>
                 
                 
             </div>
@@ -825,11 +732,7 @@
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/vim">vim</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://sobaya007.github.io/tags/language-server">language-server</a>
+                <a class="article-category-link" href="https://sobaya007.github.io/tags/%E3%83%90%E3%82%B0">バグ</a>
                 
                 
             </div>
@@ -840,31 +743,293 @@
 
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
-                
+        <div class="article-entry" itemprop="articleBody">
+            
 
-                <p>言わずと知れたLSPのプラグインです。coc.nvimも使ってみたのですが、なぜか補間がうまくいかなかったため断念しました。
-[&hellip;] D言語のLanguage Serverです。割と活発に活動していていいかんじ。
-[&hellip;] 敬虔なD言語erなら当然DUBはインストールされていますよね？それさえあれば
-[&hellip;] で終わりです。
-[&hellip;] 私はdein &hellip;</p>
-                <p class="article-more-link">
-                    <a href="https://sobaya007.github.io/2019/07/30/vim%E3%81%A7d%E8%A8%80%E8%AA%9E/" lang="en">
-                        Read more
-                    </a>
-                </p>
-            </div>
+<p>もはやこれはバグなのかすら私にはわからない&hellip;</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows10 64bit</li>
+<li>DMD v2.089.1-dirty</li>
+</ul>
+
+<h2 id="バグったコード">バグったコード</h2>
+
+<p>実際にバグが起きたのは以下のコード。
+ざっくり説明すると、</p>
+
+<ol>
+<li>2つの関数をexportするDのコードを作る</li>
+<li>コンパイルしてDLLにし、読み込む</li>
+<li>1つの関数は普通に実行できるが、もう1つは実行できない</li>
+<li>いかがでしたか？</li>
+</ol>
+
+<pre><code class="language-d">enum dllSource = q{
+
+import core.sys.windows.windows;
+import core.sys.windows.dll;
+import core.stdc.stdio;
+import std;
+
+__gshared HINSTANCE g_hInst;
+
+export extern(C) void dllprint() { printf(&quot;hello dll world\n&quot;); }
+export extern(C) int getThree() { return 3; }
+
+extern (Windows)
+BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
+{
+    switch (ulReason)
+    {
+	case DLL_PROCESS_ATTACH:
+	    g_hInst = hInstance;
+	    dll_process_attach( hInstance, true );
+	    break;
+
+	case DLL_PROCESS_DETACH:
+	    dll_process_detach( hInstance, true );
+	    break;
+
+	case DLL_THREAD_ATTACH:
+	    dll_thread_attach( true, true );
+	    break;
+
+	case DLL_THREAD_DETACH:
+	    dll_thread_detach( true, true );
+	    break;
+
+        default:
+    }
+    return true;
+}
+};
+
+import std;
+import std.file : fwrite = write, fremove = remove;
+import core.thread;
+import core.runtime;
+import core.sys.windows.windows;
+void main()
+{
+    fwrite(&quot;mydll.d&quot;, dllSource);
+    scope (exit) {
+        fremove(&quot;mydll.d&quot;);
+    }
+    auto result = executeShell(&quot;dmd -ofmydll.dll mydll.d&quot;);
+    scope (exit) {
+        Thread.sleep(2.seconds);
+        fremove(&quot;mydll.dll&quot;);
+        fremove(&quot;mydll.obj&quot;);
+    }
+    enforce(result.status == 0, result.output);
+
+    auto lib = Runtime.loadLibrary(&quot;mydll.dll&quot;);
+    scope (exit) Runtime.unloadLibrary(lib);
+
+    auto func = cast(void function())GetProcAddress(lib, &quot;dllprint&quot;);
+    enforce(func);
+    func();
+
+    auto func2 = cast(Variant function())GetProcAddress(lib, &quot;getThree&quot;);
+    enforce(func2);
+    func2();  // &lt;-- crash here
+}
+</code></pre>
+
+<p>こいつを普通に実行する。</p>
+
+<pre><code class="language-bash">&gt; dmd -run test.d
+hello dll world
+
+object.Error@(0): Access Violation
+----------------
+</code></pre>
+
+<p>と、このように<strong><code>int</code>を返す関数は死ぬ</strong>。<code>void</code>関数は死なない。は？</p>
+
+            
+
         </div>
-    </article>
-    
-  </div>
-</section>
-<nav id="page-nav">
+        <footer class="article-footer">
+  <section id="social-share">
+    <ul class="icons">
+      
 
+
+<li>
+  <a href="//twitter.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f&text=Win32%20%2b%20D%e8%a8%80%e8%aa%9e%20%2b%20DLL%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%af%e3%83%a9%e3%83%83%e3%82%b7%e3%83%a5&via=sobaya007" target="_blank" class="share-btn twitter">
+    <i class="fab fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//plus.google.com/share?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f" target="_blank" class="share-btn google-plus">
+    <i class="fab fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f" target="_blank" class="share-btn facebook">
+    <i class="fab fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//reddit.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f&title=Win32%20%2b%20D%e8%a8%80%e8%aa%9e%20%2b%20DLL%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%af%e3%83%a9%e3%83%83%e3%82%b7%e3%83%a5" target="_blank" class="share-btn reddit">
+    <i class="fab fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f&title=Win32%20%2b%20D%e8%a8%80%e8%aa%9e%20%2b%20DLL%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%af%e3%83%a9%e3%83%83%e3%82%b7%e3%83%a5" target="_blank" class="share-btn linkedin">
+      <i class="fab fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f&title=Win32%20%2b%20D%e8%a8%80%e8%aa%9e%20%2b%20DLL%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%af%e3%83%a9%e3%83%83%e3%82%b7%e3%83%a5" target="_blank" class="share-btn stumbleupon">
+    <i class="fab fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f&description=Win32%20%2b%20D%e8%a8%80%e8%aa%9e%20%2b%20DLL%e3%81%a7%e8%ac%8e%e3%81%ae%e3%82%af%e3%83%a9%e3%83%83%e3%82%b7%e3%83%a5" target="_blank" class="share-btn pinterest">
+    <i class="fab fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by &body=https%3a%2f%2fsobaya007.github.io%2f2019%2f12%2f23%2fwin32-d%25E8%25A8%2580%25E8%25AA%259E-dll%25E3%2581%25A7%25E8%25AC%258E%25E3%2581%25AE%25E3%2582%25AF%25E3%2583%25A9%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%2f" target="_blank" class="share-btn email">
+    <i class="fas fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+    </ul>
+  </section>
+    
+    <a href="https://sobaya007.github.io/2019/12/23/win32-d%E8%A8%80%E8%AA%9E-dll%E3%81%A7%E8%AC%8E%E3%81%AE%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5/#disqus_thread" lang="en" class="article-comment-link">
+        Comments
+    </a>
+    
+    
+
+
+</footer>
+
+    </div>
+    
+
+<div class="related-articles">
+<h3>Related articles</h3>
+<ul>
+	<li>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/ldc.png)" alt="LDCのバグみつけた - その2 -" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/12/05/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F-%E3%81%9D%E3%81%AE2/">LDCのバグみつけた - その2 -</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/ldc.png)" alt="LDCのバグみつけた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/12/01/ldc%E3%81%AE%E3%83%90%E3%82%B0%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/">LDCのバグみつけた</a>
+  	</span>
+  	</ul>
+	
+	  <ul>
+  	<div class="item-banner">
+      <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/" lang="en" class="banner">
+        
+            <span style="background-image:url(https://sobaya007.github.io/images/dmd.jpeg)" alt="D言語のしょうもないバグをまたみつけた" class="banner-image"></span>
+        
+      </a>
+    </div>
+    <span class="title">
+  	  <a href="/2019/06/09/d%E8%A8%80%E8%AA%9E%E3%81%AE%E3%81%97%E3%82%87%E3%81%86%E3%82%82%E3%81%AA%E3%81%84%E3%83%90%E3%82%B0%E3%82%92%E3%81%BE%E3%81%9F%E3%81%BF%E3%81%A4%E3%81%91%E3%81%9F/">D言語のしょうもないバグをまたみつけた</a>
+  	</span>
+  	</ul>
+	
+	</li>	
+</ul>
+</div>
+
+
+    
+<nav id="article-nav">
+    
+    <a href="https://sobaya007.github.io/2019/12/08/arch-linux%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%A1%E3%83%A2/" lang="en" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Arch Linuxインストールメモ</div>
+    </a>
+    
+
+    
 </nav>
 
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "sobaya007noblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
 
     </section>
 
