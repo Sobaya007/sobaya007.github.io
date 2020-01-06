@@ -5,10 +5,37 @@
     <link>https://sobaya007.github.io/</link>
     <description>Recent content on そばやのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 23 Dec 2019 01:09:56 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jan 2020 15:11:03 +0900</lastBuildDate>
     
 	<atom:link href="https://sobaya007.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>D言語で白い三角形を出してみた話</title>
+      <link>https://sobaya007.github.io/2020/01/06/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%99%BD%E3%81%84%E4%B8%89%E8%A7%92%E5%BD%A2%E3%82%92%E5%87%BA%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F%E8%A9%B1/</link>
+      <pubDate>Mon, 06 Jan 2020 15:11:03 +0900</pubDate>
+      
+      <guid>https://sobaya007.github.io/2020/01/06/d%E8%A8%80%E8%AA%9E%E3%81%A7%E7%99%BD%E3%81%84%E4%B8%89%E8%A7%92%E5%BD%A2%E3%82%92%E5%87%BA%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F%E8%A9%B1/</guid>
+      <description>D言語でShaderを書いてみた 何言ってんだこいつってかんじですが、呼んで字のごとくです。
+本当は成果も中途半端で出し渋るレベルの状態なんですが、真面目にやっていくと流石に心が折れそうだったのでここらへんで報告記事を出して一区切りつけようかと思った次第です。
+kwsk つまり何をしたかということなんですが、こういうわけです
+ D言語でShaderっぽいコードを書く LDC(D言語のLLVMバックエンドコンパイラ)でLLVM-IRに変換 自作のトランスパイラを噛ませてLLVM-IRをSPIR-V(Vulkanとか用の中間言語)に変換  これでD言語で書いたコードがShaderとしてVulkan上で実行できるようになります。 実際にやってみた結果がこちらです。 コードはこちら。
+やっと出ました！！！#産地直送 pic.twitter.com/ALZ17AAC1h
+&amp;mdash; そばや (@sobaya007) December 31, 2019 
+私の顔のほうが目立ちますが、見てほしいのは白い三角形のほうです。こいつのフラグメントシェーダはこんなかんじになっています。
+import shader.builtin; import shader.attribute; import spirv.spv; import ldc.attributes; extern(C): @output { vec4 color; } @entryPoint(ExecutionModel.Fragment) @execMode(ExecutionMode.OriginUpperLeft) void fragMain() { color = vec4([1.0, 1.0, 1.0, 1.0]); }  確かにいいかんじにD言語で書けています。
+様々なサブ情報はUDAでゴリっています。 あと2020年1月6日現在、LDCでは変数に属性を仕込めないので、それ用の変更を施したLDCをビルドして使っています。
+まとめ とまぁこんなかんじの年末年始でした。
+こいつに関してはちょっと先行きが不安すぎるのでいい経験だったと思って手を引こうと思っています。暇な方いたらぜひ続きをどうぞ。 今年もどこへ向かうかはわからないけれど、少なくとも立ち止まらないようにはしていきたいですね。
+ということで、端的に内容が知りたい方はここまでで大丈夫です。 以下は見なくていいです。
+TL;DR 今回やったことの肝はLLVM-IRからSPIR-Vへの変換のところですね。
+実はLLVM-IRとSPIR-Vは結構instructionの単位とかが似通っており、パッと見変換は容易に見えます(少なくとも始める前の私にはそう見えました)し、実際LLVM-IRとSPIR-Vの相互変換ライブラリは存在します。
+かの悪名高きDComputeもOpenCLバックエンドモードのときは実はこいつを使っています。
+ではなぜ既に存在するソレを使わなかったのか。 それはなんと&amp;hellip;
+既存のライブラリではVulkan用のSPIR-Vは吐けないのです！！！ ぬぁぬぁぬぁぬぁんだっとぅぇぇええええええええええ??!!?!?!?!?
+そう、これが長年抱えていた悩みだったのです。
+この旨はちゃんと当局も把握しており、過去のレポジトリではVulkan、サポートせぇへんのか？というIssueが立っていたほどです。</description>
+    </item>
     
     <item>
       <title>Win32 &#43; D言語 &#43; DLLで謎のクラッシュ</title>
